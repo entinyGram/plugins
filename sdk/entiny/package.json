@@ -1,0 +1,15 @@
+{
+  "name": "@entiny/sdk",
+  "type": "module",
+  "version": "0.1.0-alpha",
+  "description": "entinyGram helpers for Inugram-engine plugins",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./maps": "./src/maps.ts",
+    "./embed": "./src/embed.ts"
+  },
+  "peerDependencies": {
+    "@inugram/cli": "*"
+  }
+}

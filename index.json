@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "id": "entinygram.2gis",
+      "name": "2GIS",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-07",
+          "notes": "",
+          "file": "plugins/dist/entinygram.2gis/1.0.0.inu.js",
+          "sha256": "0a441c9d048cc9f0272f01933321016044adb0f0a5130844d412117bd7264a45",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "2GIS map and location previews",
+      "icon": "plugins/2gis/icon.svg"
+    },
+    {
+      "id": "entinygram.calendar-systems",
+      "name": "Calendar systems",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-06",
+          "notes": "",
+          "file": "plugins/dist/entinygram.calendar-systems/1.0.0.inu.js",
+          "sha256": "3b96b463dd99f97990ae541c2b6d886e84a99555554eaf24a4c7e61c69aadc3e",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "Show dates in the Hijri, Persian, Indian and other calendars",
+      "icon": "plugins/calendar-systems/icon.svg"
+    },
+    {
+      "id": "entinygram.sdk",
+      "name": "entinyGram SDK",
+      "versions": [
+        {
+          "version": "0.1.0-alpha",
+          "date": "2026-10-06",
+          "notes": "",
+          "file": "plugins/dist/entinygram.sdk/0.1.0-alpha.inu.js",
+          "sha256": "6c0568798273247374164c589b8d637952fded010d113933fa56d8519c9ac5d6",
+          "requires": [],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "Needed by plugins that use the entinyGram SDK",
+      "icon": "plugins/entiny-sdk/icon.svg"
+    },
+    {
+      "id": "entinygram.text-animation",
+      "name": "Text animation",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-08",
+          "notes": "",
+          "file": "plugins/dist/entinygram.text-animation/1.0.0.inu.js",
+          "sha256": "f5a57b555355a5cc78b6db908cfc90526747a91e042e0408f606e42a9a884db8",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "Animated typing and deleting in the message input",
+      "icon": "plugins/text-animation/icon.svg"
+    },
+    {
+      "id": "entinygram.yandex",
+      "name": "Yandex",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-06",
+          "notes": "",
+          "file": "plugins/dist/entinygram.yandex/1.0.0.inu.js",
+          "sha256": "eea4aea6b1b57660147b93ae92af59ef8849d41e0bebe40b98712d30910384dc",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "Yandex Cloud Translate and Yandex static maps",
+      "icon": "plugins/yandex/icon.svg"
+    }
+  ]
+}

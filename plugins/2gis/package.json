@@ -1,0 +1,14 @@
+{
+  "name": "@entiny-plugins/2gis",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "inu build",
+    "check": "inu check"
+  },
+  "devDependencies": {
+    "@entiny/sdk": "workspace:*",
+    "@inugram/cli": "workspace:*",
+    "@inugram/plugin-types": "workspace:*"
+  }
+}

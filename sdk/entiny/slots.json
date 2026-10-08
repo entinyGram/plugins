@@ -1,0 +1,3135 @@
+{
+  "pages": [
+    {
+      "id": "account-order",
+      "class": "AccountOrderActivity",
+      "sections": [],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "additional",
+      "class": "AdditionalSettingsActivity",
+      "sections": [
+        {
+          "slot": "updates",
+          "string": "InuUpdates",
+          "title": "Updates"
+        },
+        {
+          "slot": "logs",
+          "string": "InuLogs",
+          "title": "Debug"
+        },
+        {
+          "slot": "push-header",
+          "string": "InuPushHeader",
+          "title": "Push notifications"
+        },
+        {
+          "slot": "data-backup",
+          "string": "InuDataBackup",
+          "title": "Backup &amp; Sync"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "donate-row",
+          "string": "InuDonateRow",
+          "title": "Support the project"
+        },
+        {
+          "slot": "hide-dev-badges",
+          "string": "InuHideDevBadges",
+          "title": "Disable entinyGram badges"
+        },
+        {
+          "slot": "auto-update-check",
+          "string": "InuAutoUpdateCheck",
+          "title": "Check for updates"
+        },
+        {
+          "slot": "updates-include-beta",
+          "string": "InuUpdatesIncludeBeta",
+          "title": "Catch beta updates"
+        },
+        {
+          "slot": "force-no-vibration",
+          "string": "InuForceNoVibration",
+          "title": "Disable all vibration"
+        },
+        {
+          "slot": "logs-enabled",
+          "string": "InuLogsEnabled",
+          "title": "Debug mode"
+        },
+        {
+          "slot": "unified-push",
+          "string": "InuUnifiedPush",
+          "title": "UnifiedPush"
+        },
+        {
+          "slot": "background-service",
+          "string": "InuBackgroundService",
+          "title": "Background service"
+        },
+        {
+          "slot": "background-service-hide-notification",
+          "string": "InuBackgroundServiceHideNotification",
+          "title": "Hide service notification"
+        },
+        {
+          "slot": "unified-push-distributor",
+          "string": "InuUnifiedPushDistributor",
+          "title": "Distributor"
+        },
+        {
+          "slot": "unified-push-gateway",
+          "string": "InuUnifiedPushGateway",
+          "title": "Gateway"
+        },
+        {
+          "slot": "cloud-sync",
+          "string": "InuCloudSync",
+          "title": "Sync settings"
+        },
+        {
+          "slot": "cache-management",
+          "string": "InuCacheManagement",
+          "title": "Cache Management"
+        },
+        {
+          "slot": "datacenter-status",
+          "string": "InuDatacenterStatus",
+          "title": "Datacenter status"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "class": "AiSettingsActivity",
+      "sections": [
+        {
+          "slot": "ai-features",
+          "string": "InuAiFeatures",
+          "title": "Features"
+        },
+        {
+          "slot": "ai-roles",
+          "string": "InuAiRoles",
+          "title": "Roles"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-providers-title",
+          "string": "InuAiProvidersTitle",
+          "title": "AI Providers"
+        },
+        {
+          "slot": "ai-transcribe",
+          "string": "InuAiTranscribe",
+          "title": "Voice-to-Text (Transcription)"
+        },
+        {
+          "slot": "ai-editor-title",
+          "string": "InuAiEditorTitle",
+          "title": "AI editor"
+        },
+        {
+          "slot": "ai-summary",
+          "string": "InuAiSummary",
+          "title": "AI summaries"
+        }
+      ]
+    },
+    {
+      "id": "ai-editor",
+      "class": "AiEditorSettingsActivity",
+      "sections": [
+        {
+          "slot": "ai-section-provider",
+          "string": "InuAiSectionProvider",
+          "title": "Provider and model"
+        },
+        {
+          "slot": "ai-section-generation",
+          "string": "InuAiSectionGeneration",
+          "title": "Answers"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-editor-title",
+          "string": "InuAiEditorTitle",
+          "title": "AI editor"
+        },
+        {
+          "slot": "ai-feature-provider",
+          "string": "InuAiFeatureProvider",
+          "title": "Provider"
+        },
+        {
+          "slot": "ai-transcribe-model",
+          "string": "InuAiTranscribeModel",
+          "title": "Model"
+        },
+        {
+          "slot": "ai-roles",
+          "string": "InuAiRoles",
+          "title": "Roles"
+        },
+        {
+          "slot": "ai-stream",
+          "string": "InuAiStream",
+          "title": "Streaming response"
+        },
+        {
+          "slot": "ai-only-answer",
+          "string": "InuAiOnlyAnswer",
+          "title": "Show only answer"
+        },
+        {
+          "slot": "ai-insert-quote",
+          "string": "InuAiInsertQuote",
+          "title": "Insert response as quote"
+        },
+        {
+          "slot": "ai-reasoning",
+          "string": "InuAiReasoning",
+          "title": "Reasoning effort"
+        }
+      ]
+    },
+    {
+      "id": "ai-model-picker",
+      "class": "AiModelPickerActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-model-enter-manually",
+          "string": "InuAiModelEnterManually",
+          "title": "Enter model manually"
+        }
+      ]
+    },
+    {
+      "id": "ai-provider-edit",
+      "class": "AiProviderEditActivity",
+      "sections": [
+        {
+          "slot": "ai-provider-connection",
+          "string": "InuAiProviderConnection",
+          "title": "Connection"
+        },
+        {
+          "slot": "ai-provider-models",
+          "string": "InuAiProviderModels",
+          "title": "Models"
+        },
+        {
+          "slot": "ai-provider-use-for",
+          "string": "InuAiProviderUseFor",
+          "title": "Use this provider"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-provider-name",
+          "string": "InuAiProviderName",
+          "title": "Name"
+        },
+        {
+          "slot": "ai-endpoint-url",
+          "string": "InuAiEndpointUrl",
+          "title": "Endpoint URL"
+        },
+        {
+          "slot": "ai-provider-detect",
+          "string": "InuAiProviderDetect",
+          "title": "Detect endpoint"
+        },
+        {
+          "slot": "ai-transcribe-account-id",
+          "string": "InuAiTranscribeAccountId",
+          "title": "Account ID"
+        },
+        {
+          "slot": "ai-provider-chat-model",
+          "string": "InuAiProviderChatModel",
+          "title": "Chat model"
+        },
+        {
+          "slot": "ai-provider-voice-model",
+          "string": "InuAiProviderVoiceModel",
+          "title": "Voice model"
+        },
+        {
+          "slot": "ai-providers-active-for-chat",
+          "string": "InuAiProvidersActiveForChat",
+          "title": "Active for Chat"
+        },
+        {
+          "slot": "ai-providers-active-for-voice",
+          "string": "InuAiProvidersActiveForVoice",
+          "title": "Active for Voice"
+        }
+      ]
+    },
+    {
+      "id": "ai-provider-picker",
+      "class": "AiProviderPickerActivity",
+      "sections": [],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "ai-providers",
+      "class": "AiProvidersSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-provider-add",
+          "string": "InuAiProviderAdd",
+          "title": "Add provider"
+        }
+      ]
+    },
+    {
+      "id": "ai-role-edit",
+      "class": "AiRoleEditActivity",
+      "sections": [
+        {
+          "slot": "ai-role-name-hint",
+          "string": "InuAiRoleNameHint",
+          "title": "Name"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-role-prompt",
+          "string": "InuAiRolePrompt",
+          "title": "Prompt"
+        },
+        {
+          "slot": "ai-role-use",
+          "string": "InuAiRoleUse",
+          "title": "Use this role"
+        }
+      ]
+    },
+    {
+      "id": "ai-roles",
+      "class": "AiRolesSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-role-add",
+          "string": "InuAiRoleAdd",
+          "title": "Add role"
+        },
+        {
+          "slot": "ai-role-new",
+          "string": "InuAiRoleNew",
+          "title": "New role"
+        }
+      ]
+    },
+    {
+      "id": "ai-summary",
+      "class": "AiSummarySettingsActivity",
+      "sections": [
+        {
+          "slot": "ai-section-provider",
+          "string": "InuAiSectionProvider",
+          "title": "Provider and model"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-summary",
+          "string": "InuAiSummary",
+          "title": "AI summaries"
+        },
+        {
+          "slot": "ai-feature-provider",
+          "string": "InuAiFeatureProvider",
+          "title": "Provider"
+        },
+        {
+          "slot": "ai-transcribe-model",
+          "string": "InuAiTranscribeModel",
+          "title": "Model"
+        }
+      ]
+    },
+    {
+      "id": "ai-voice",
+      "class": "AiVoiceSettingsActivity",
+      "sections": [
+        {
+          "slot": "ai-section-provider",
+          "string": "InuAiSectionProvider",
+          "title": "Provider and model"
+        },
+        {
+          "slot": "ai-section-recognition",
+          "string": "InuAiSectionRecognition",
+          "title": "Recognition"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ai-transcribe",
+          "string": "InuAiTranscribe",
+          "title": "Voice-to-Text (Transcription)"
+        },
+        {
+          "slot": "ai-feature-provider",
+          "string": "InuAiFeatureProvider",
+          "title": "Provider"
+        },
+        {
+          "slot": "ai-transcribe-model",
+          "string": "InuAiTranscribeModel",
+          "title": "Model"
+        },
+        {
+          "slot": "ai-transcribe-language",
+          "string": "InuAiTranscribeLanguage",
+          "title": "Spoken language"
+        },
+        {
+          "slot": "ai-transcribe-prompt",
+          "string": "InuAiTranscribePrompt",
+          "title": "Hint for recognition"
+        }
+      ]
+    },
+    {
+      "id": "annoyances",
+      "class": "AnnoyancesSettingsActivity",
+      "sections": [
+        {
+          "slot": "annoyances-chats",
+          "string": "InuAnnoyancesChats",
+          "title": "Chats"
+        },
+        {
+          "slot": "annoyances-stories",
+          "string": "InuAnnoyancesStories",
+          "title": "Stories"
+        },
+        {
+          "slot": "annoyances-profile",
+          "string": "InuAnnoyancesProfile",
+          "title": "Profile"
+        },
+        {
+          "slot": "annoyances-gifts",
+          "string": "InuAnnoyancesGifts",
+          "title": "Gifts &amp; Premium"
+        },
+        {
+          "slot": "annoyances-interface",
+          "string": "InuAnnoyancesInterface",
+          "title": "Chats &amp; Interface"
+        },
+        {
+          "slot": "annoyances-channels",
+          "string": "InuAnnoyancesChannels",
+          "title": "Channels &amp; Recommendations"
+        },
+        {
+          "slot": "annoyances-ai",
+          "string": "InuAnnoyancesAi",
+          "title": "Artificial Intelligence"
+        },
+        {
+          "slot": "annoyances-hints",
+          "string": "InuAnnoyancesHints",
+          "title": "Hints &amp; Prompts"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "hide-join-bar",
+          "string": "InuHideJoinBar",
+          "title": "Hide Join bar in channels"
+        },
+        {
+          "slot": "hide-bot-web-view",
+          "string": "InuHideBotWebView",
+          "title": "Hide bot Web App"
+        },
+        {
+          "slot": "hide-send-as-picker",
+          "string": "InuHideSendAsPicker",
+          "title": "Hide \\\"Send as\\\" picker"
+        },
+        {
+          "slot": "hide-call-action-button",
+          "string": "InuHideCallActionButton",
+          "title": "Hide call button in title"
+        },
+        {
+          "slot": "hide-reaction-entry",
+          "string": "InuHideReactionEntry",
+          "title": "Hide reaction appear animation"
+        },
+        {
+          "slot": "hide-stories",
+          "string": "InuHideStories",
+          "title": "Hide stories"
+        },
+        {
+          "slot": "hide-repost-to-story",
+          "string": "InuHideRepostToStory",
+          "title": "Hide \\\"Repost to Story\\\""
+        },
+        {
+          "slot": "hide-profile-story-button",
+          "string": "InuHideProfileStoryButton",
+          "title": "Hide story button"
+        },
+        {
+          "slot": "hide-profile-menu-archived-stories",
+          "string": "InuHideProfileMenuArchivedStories",
+          "title": "Hide \\\"Archived Stories\\\" in profile menu"
+        },
+        {
+          "slot": "hide-premium-badge",
+          "string": "InuHidePremiumBadge",
+          "title": "Hide Premium badge"
+        },
+        {
+          "slot": "hide-collectible-status",
+          "string": "InuHideCollectibleStatus",
+          "title": "Hide collectible status"
+        },
+        {
+          "slot": "hide-stars-rating",
+          "string": "InuHideStarsRating",
+          "title": "Hide Stars rating"
+        },
+        {
+          "slot": "hide-verification-badge",
+          "string": "InuHideVerificationBadge",
+          "title": "Hide organization verification badge"
+        },
+        {
+          "slot": "hide-profile-colorful-background",
+          "string": "InuHideProfileColorfulBackground",
+          "title": "Hide colorful profile background"
+        },
+        {
+          "slot": "hide-gifts-around-avatar",
+          "string": "InuHideGiftsAroundAvatar",
+          "title": "Hide gifts around avatar"
+        },
+        {
+          "slot": "hide-profile-icons",
+          "string": "InuHideProfileIcons",
+          "title": "Hide profile pattern icons"
+        },
+        {
+          "slot": "hide-profile-live-actions-button",
+          "string": "InuHideProfileLiveActionsButton",
+          "title": "Hide live stream &amp; voice chat buttons"
+        },
+        {
+          "slot": "disable-profile-music-autoplay",
+          "string": "InuDisableProfileMusicAutoplay",
+          "title": "Disable profile music auto-play"
+        },
+        {
+          "slot": "hide-profile-gifts-tab",
+          "string": "InuHideProfileGiftsTab",
+          "title": "Hide Gifts tab"
+        },
+        {
+          "slot": "hide-profile-gift-button",
+          "string": "InuHideProfileGiftButton",
+          "title": "Hide gift button"
+        },
+        {
+          "slot": "hide-profile-menu-send-gift",
+          "string": "InuHideProfileMenuSendGift",
+          "title": "Hide \\\"Send a Gift\\\" in profile menu"
+        },
+        {
+          "slot": "hide-gift-button-input",
+          "string": "InuHideGiftButtonInput",
+          "title": "Hide gift button in message field"
+        },
+        {
+          "slot": "hide-gift-cards-in-chat",
+          "string": "InuHideGiftCardsInChat",
+          "title": "Hide gifts in chat"
+        },
+        {
+          "slot": "hide-gift-auctions-hint",
+          "string": "InuHideGiftAuctionsHint",
+          "title": "Hide gift auction banner"
+        },
+        {
+          "slot": "hide-paid-reaction-upsell",
+          "string": "InuHidePaidReactionUpsell",
+          "title": "Hide paid reaction upsell"
+        },
+        {
+          "slot": "hide-giveaways",
+          "string": "InuHideGiveaways",
+          "title": "Hide giveaways"
+        },
+        {
+          "slot": "hide-attach-premium-badges",
+          "string": "InuHideAttachPremiumBadges",
+          "title": "Hide Premium badges in attach menu"
+        },
+        {
+          "slot": "hide-emoji-premium-upsell",
+          "string": "InuHideEmojiPremiumUpsell",
+          "title": "Hide emoji pack unlock buttons"
+        },
+        {
+          "slot": "hide-caption-limit-upsell",
+          "string": "InuHideCaptionLimitUpsell",
+          "title": "Hide caption limit upsell"
+        },
+        {
+          "slot": "hide-trending-stickers",
+          "string": "InuHideTrendingStickers",
+          "title": "Hide trending stickers"
+        },
+        {
+          "slot": "hide-group-sticker-pack",
+          "string": "InuHideGroupStickerPack",
+          "title": "Hide group emoji pack hint"
+        },
+        {
+          "slot": "hide-hashtag-suggestions",
+          "string": "InuHideHashtagSuggestions",
+          "title": "Hide hashtag suggestions"
+        },
+        {
+          "slot": "hide-rich-editor-button",
+          "string": "InuHideRichEditorButton",
+          "title": "Hide rich text editor button"
+        },
+        {
+          "slot": "hide-similar-channels-tab",
+          "string": "InuHideSimilarChannelsTab",
+          "title": "Hide Similar Channels tab"
+        },
+        {
+          "slot": "hide-channel-recommendations",
+          "string": "InuHideChannelRecommendations",
+          "title": "Hide similar channels card in chat"
+        },
+        {
+          "slot": "hide-channel-share-button",
+          "string": "InuHideChannelShareButton",
+          "title": "Hide channel share button"
+        },
+        {
+          "slot": "hide-psa-promo-chat",
+          "string": "InuHidePsaPromoChat",
+          "title": "Hide PSA promo chat"
+        },
+        {
+          "slot": "hide-cache-hint",
+          "string": "InuHideCacheHint",
+          "title": "Hide \\\"free up space\\\" card"
+        },
+        {
+          "slot": "disable-contacts-permission-nag",
+          "string": "InuDisableContactsPermissionNag",
+          "title": "Hide contacts permission request"
+        },
+        {
+          "slot": "disable-lockscreen-permission-nag",
+          "string": "InuDisableLockscreenPermissionNag",
+          "title": "Hide lockscreen permission alerts"
+        },
+        {
+          "slot": "disable-call-rating",
+          "string": "InuDisableCallRating",
+          "title": "Disable call rating"
+        },
+        {
+          "slot": "clear-hints",
+          "string": "InuClearHints",
+          "title": "Dismiss all hints"
+        }
+      ]
+    },
+    {
+      "id": "anti-censorship",
+      "class": "AntiCensorshipSettingsActivity",
+      "sections": [
+        {
+          "slot": "anti-censorship-transport",
+          "string": "InuAntiCensorshipTransport",
+          "title": "Connection"
+        },
+        {
+          "slot": "anti-censorship-privacy",
+          "string": "InuAntiCensorshipPrivacy",
+          "title": "Leak protection"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ws-tunnel",
+          "string": "InuWsTunnel",
+          "title": "WebSocket tunnel"
+        },
+        {
+          "slot": "leak-guard",
+          "string": "InuLeakGuard",
+          "title": "Block direct connections"
+        }
+      ]
+    },
+    {
+      "id": "anti-deletion",
+      "class": "AntiDeletionSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "save-deleted-messages",
+          "string": "InuSaveDeletedMessages",
+          "title": "Save deleted messages"
+        },
+        {
+          "slot": "prompt-keep-local-on-delete",
+          "string": "InuPromptKeepLocalOnDelete",
+          "title": "Keep local copy prompt"
+        },
+        {
+          "slot": "deleted-messages-transparent",
+          "string": "InuDeletedMessagesTransparent",
+          "title": "Semi-transparent deleted messages"
+        },
+        {
+          "slot": "deleted-mark",
+          "string": "InuDeletedMark",
+          "title": "Deleted Mark"
+        },
+        {
+          "slot": "save-edited-messages",
+          "string": "InuSaveEditedMessages",
+          "title": "Save edit history"
+        },
+        {
+          "slot": "edit-history-diff",
+          "string": "InuEditHistoryDiff",
+          "title": "Highlight Text Changes (Diff)"
+        },
+        {
+          "slot": "deleted-message-search",
+          "string": "InuDeletedMessageSearch",
+          "title": "Search archive"
+        },
+        {
+          "slot": "export-archive",
+          "string": "InuExportArchive",
+          "title": "Export archive"
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "class": "AppearanceSettingsActivity",
+      "sections": [
+        {
+          "slot": "typography-and-icons",
+          "string": "InuTypographyAndIcons",
+          "title": "Typography &amp; icons"
+        },
+        {
+          "slot": "interface-elements",
+          "string": "InuInterfaceElements",
+          "title": "Interface elements"
+        },
+        {
+          "slot": "motion",
+          "string": "InuMotion",
+          "title": "Motion"
+        },
+        {
+          "slot": "chat-background-section",
+          "string": "InuChatBackgroundSection",
+          "title": "Chat background"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "predictive-back",
+          "string": "InuPredictiveBack",
+          "title": "Predictive back"
+        }
+      ],
+      "items": [
+        {
+          "slot": "fonts",
+          "string": "InuFonts",
+          "title": "Fonts"
+        },
+        {
+          "slot": "icon-replacement",
+          "string": "InuIconReplacement",
+          "title": "Icon pack"
+        },
+        {
+          "slot": "ios-settings",
+          "string": "InuIosSettings",
+          "title": "iOS settings"
+        },
+        {
+          "slot": "message-design",
+          "string": "InuMessageDesign",
+          "title": "Message appearance"
+        },
+        {
+          "slot": "side-menu",
+          "string": "InuSideMenu",
+          "title": "Side menu"
+        },
+        {
+          "slot": "menus",
+          "string": "InuMenus",
+          "title": "Menus"
+        },
+        {
+          "slot": "monet-theme",
+          "string": "InuMonetTheme",
+          "title": "Monet theme"
+        },
+        {
+          "slot": "unified-corner-radius",
+          "string": "InuUnifiedCornerRadius",
+          "title": "Unified corner radius"
+        },
+        {
+          "slot": "non-island-folders-bar",
+          "string": "InuNonIslandFoldersBar",
+          "title": "Folders bar"
+        },
+        {
+          "slot": "non-island-shared-media-tabs",
+          "string": "InuNonIslandSharedMediaTabs",
+          "title": "Shared media tabs"
+        },
+        {
+          "slot": "non-island-global-search",
+          "string": "InuNonIslandGlobalSearch",
+          "title": "Global search"
+        },
+        {
+          "slot": "non-island-chat-elements",
+          "string": "InuNonIslandChatElements",
+          "title": "Chat elements"
+        },
+        {
+          "slot": "hide-fade-view",
+          "string": "InuHideFadeView",
+          "title": "Hide fade views"
+        },
+        {
+          "slot": "disable-profile-avatar-blur",
+          "string": "InuDisableProfileAvatarBlur",
+          "title": "Disable profile avatar blur"
+        },
+        {
+          "slot": "disable-scrim-blur",
+          "string": "InuDisableScrimBlur",
+          "title": "Disable scrim blur"
+        },
+        {
+          "slot": "reduce-menu-motion",
+          "string": "InuReduceMenuMotion",
+          "title": "Reduce menu motion"
+        },
+        {
+          "slot": "simple-attach-popup-animation",
+          "string": "InuSimpleAttachPopupAnimation",
+          "title": "Simple attach popup animation"
+        },
+        {
+          "slot": "predictive-back",
+          "string": "InuPredictiveBack",
+          "title": "Predictive back"
+        },
+        {
+          "slot": "disable-chat-backgrounds",
+          "string": "InuDisableChatBackgrounds",
+          "title": "Disable custom chat backgrounds"
+        },
+        {
+          "slot": "disable-chat-themes",
+          "string": "InuDisableChatThemes",
+          "title": "Disable custom chat themes"
+        },
+        {
+          "slot": "disable-bg-parallax",
+          "string": "InuDisableBgParallax",
+          "title": "Disable background parallax"
+        }
+      ]
+    },
+    {
+      "id": "backup",
+      "class": "BackupSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "cloud-sync-now",
+          "string": "InuCloudSyncNow",
+          "title": "Sync now"
+        },
+        {
+          "slot": "cloud-restore",
+          "string": "InuCloudRestore",
+          "title": "Restore from cloud"
+        },
+        {
+          "slot": "cloud-delete",
+          "string": "InuCloudDelete",
+          "title": "Delete cloud backup"
+        },
+        {
+          "slot": "backup-export",
+          "string": "InuBackupExport",
+          "title": "Export settings"
+        },
+        {
+          "slot": "backup-import",
+          "string": "InuBackupImport",
+          "title": "Import settings"
+        },
+        {
+          "slot": "backup-reset",
+          "string": "InuBackupReset",
+          "title": "Reset settings"
+        }
+      ]
+    },
+    {
+      "id": "behavior",
+      "class": "BehaviorSettingsActivity",
+      "sections": [
+        {
+          "slot": "user-profile",
+          "string": "InuUserProfile",
+          "title": "User profile"
+        },
+        {
+          "slot": "accounts-section",
+          "string": "InuAccountsSection",
+          "title": "Accounts"
+        },
+        {
+          "slot": "calls-section",
+          "string": "InuCallsSection",
+          "title": "Calls"
+        },
+        {
+          "slot": "formatting",
+          "string": "InuFormatting",
+          "title": "Formatting"
+        },
+        {
+          "slot": "chat-actions",
+          "string": "InuChatActions",
+          "title": "Chat actions"
+        },
+        {
+          "slot": "media-section",
+          "string": "InuMediaSection",
+          "title": "Media"
+        },
+        {
+          "slot": "links-and-browser",
+          "string": "InuLinksAndBrowser",
+          "title": "Links &amp; browser"
+        },
+        {
+          "slot": "maps-header",
+          "string": "InuMapsHeader",
+          "title": "Maps"
+        },
+        {
+          "slot": "device-section",
+          "string": "InuDeviceSection",
+          "title": "Device"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "profile-id-mode",
+          "string": "InuProfileIdMode",
+          "title": "Show ID in profile"
+        },
+        {
+          "slot": "download-directory",
+          "string": "InuDownloadDirectory",
+          "title": "Download folder"
+        },
+        {
+          "slot": "clock-format",
+          "string": "InuClockFormat",
+          "title": "Clock format"
+        },
+        {
+          "slot": "map-provider",
+          "string": "InuMapProvider",
+          "title": "Map view provider"
+        },
+        {
+          "slot": "map-preview-provider",
+          "string": "InuMapPreviewProvider",
+          "title": "Map preview provider"
+        }
+      ],
+      "items": [
+        {
+          "slot": "profile-photo-gradient-fade",
+          "string": "InuProfilePhotoGradientFade",
+          "title": "Disable profile photo blur"
+        },
+        {
+          "slot": "reduce-profile-motion",
+          "string": "InuReduceProfileMotion",
+          "title": "Reduce profile motion"
+        },
+        {
+          "slot": "disable-profile-scroll-snap",
+          "string": "InuDisableProfileScrollSnap",
+          "title": "Disable profile scroll snap"
+        },
+        {
+          "slot": "profile-prefer-media-tab",
+          "string": "InuProfilePreferMediaTab",
+          "title": "Prefer \\\"Media\\\" tab"
+        },
+        {
+          "slot": "profile-id-mode",
+          "string": "InuProfileIdMode",
+          "title": "Show ID in profile"
+        },
+        {
+          "slot": "show-profile-reg-date",
+          "string": "InuShowProfileRegDate",
+          "title": "Show registration date &amp; DC"
+        },
+        {
+          "slot": "disable-chat-title-phone",
+          "string": "InuDisableChatTitlePhone",
+          "title": "Never show phone number in title"
+        },
+        {
+          "slot": "open-by-user-id",
+          "string": "InuOpenByUserId",
+          "title": "Open by ID in search and messages"
+        },
+        {
+          "slot": "settings-show-accounts",
+          "string": "InuSettingsShowAccounts",
+          "title": "Show accounts in settings"
+        },
+        {
+          "slot": "account-switch-shortcut",
+          "string": "InuAccountSwitchShortcut",
+          "title": "Account switcher shortcut"
+        },
+        {
+          "slot": "call-confirmation",
+          "string": "InuCallConfirmation",
+          "title": "Ask before calling"
+        },
+        {
+          "slot": "hd-bluetooth-call-audio",
+          "string": "InuHdBluetoothCallAudio",
+          "title": "HD call audio on Bluetooth"
+        },
+        {
+          "slot": "call-rotation",
+          "string": "InuCallRotation",
+          "title": "Rotate the call screen"
+        },
+        {
+          "slot": "clock-format",
+          "string": "InuClockFormat",
+          "title": "Clock format"
+        },
+        {
+          "slot": "show-seconds",
+          "string": "InuShowSeconds",
+          "title": "Show seconds"
+        },
+        {
+          "slot": "disable-rounding",
+          "string": "InuDisableRounding",
+          "title": "Disable number rounding"
+        },
+        {
+          "slot": "chat-export",
+          "string": "InuChatExport",
+          "title": "Export chat"
+        },
+        {
+          "slot": "gif-seekbar",
+          "string": "InuGifSeekbar",
+          "title": "Seek bar for GIFs"
+        },
+        {
+          "slot": "send-mp4-document-as-video",
+          "string": "InuSendMp4DocumentAsVideo",
+          "title": "Send MP4 documents as videos"
+        },
+        {
+          "slot": "disable-motion-photos",
+          "string": "InuDisableMotionPhotos",
+          "title": "Disable motion photos"
+        },
+        {
+          "slot": "disable-intro-sticker",
+          "string": "InuDisableIntroSticker",
+          "title": "Don't send intro sticker"
+        },
+        {
+          "slot": "disable-volume-play-video",
+          "string": "InuDisableVolumePlayVideo",
+          "title": "Disable volume keys playing videos"
+        },
+        {
+          "slot": "disable-quick-share",
+          "string": "InuDisableQuickShare",
+          "title": "Disable quick share"
+        },
+        {
+          "slot": "memory-trim",
+          "string": "InuMemoryTrim",
+          "title": "Free memory in background"
+        },
+        {
+          "slot": "save-selected-files",
+          "string": "InuSaveSelectedFiles",
+          "title": "Save selected files"
+        },
+        {
+          "slot": "confirm-internal-links",
+          "string": "InuConfirmInternalLinks",
+          "title": "Confirm opening internal links"
+        },
+        {
+          "slot": "disable-browser-swipe-collapse",
+          "string": "InuDisableBrowserSwipeCollapse",
+          "title": "Disable swipe-down to minimize browser"
+        },
+        {
+          "slot": "web-preview-replacements",
+          "string": "InuWebPreviewReplacements",
+          "title": "Web preview replacements"
+        },
+        {
+          "slot": "auto-disable-proxy-on-vpn",
+          "string": "InuAutoDisableProxyOnVpn",
+          "title": "Disable proxy when VPN is active"
+        },
+        {
+          "slot": "keep-downloads-in-background",
+          "string": "InuKeepDownloadsInBackground",
+          "title": "Don't kill downloads on scroll/exit"
+        },
+        {
+          "slot": "block-sleep-while-downloading",
+          "string": "InuBlockSleepWhileDownloading",
+          "title": "Block sleep while downloading"
+        },
+        {
+          "slot": "faster-downloads",
+          "string": "InuFasterDownloads",
+          "title": "Faster downloads"
+        },
+        {
+          "slot": "faster-uploads",
+          "string": "InuFasterUploads",
+          "title": "Faster uploads"
+        },
+        {
+          "slot": "download-directory",
+          "string": "InuDownloadDirectory",
+          "title": "Download folder"
+        },
+        {
+          "slot": "map-provider",
+          "string": "InuMapProvider",
+          "title": "Map view provider"
+        },
+        {
+          "slot": "map-preview-provider",
+          "string": "InuMapPreviewProvider",
+          "title": "Map preview provider"
+        },
+        {
+          "slot": "performance-class",
+          "string": "InuPerformanceClass",
+          "title": "Performance class"
+        },
+        {
+          "slot": "text-classifier-mode",
+          "string": "InuTextClassifierMode",
+          "title": "Text classifier mode"
+        }
+      ]
+    },
+    {
+      "id": "cache-management",
+      "class": "CacheManagementSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "cache-ttl",
+          "string": "InuCacheTtl",
+          "title": "Auto-clear message cache"
+        },
+        {
+          "slot": "presence-logs-ttl",
+          "string": "InuPresenceLogsTtl",
+          "title": "Auto-clear presence logs"
+        },
+        {
+          "slot": "clear-deleted-cache",
+          "string": "InuClearDeletedCache",
+          "title": "Clear deleted messages cache"
+        }
+      ]
+    },
+    {
+      "id": "chat-header",
+      "class": "ChatHeaderSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "center-title-chats",
+          "string": "InuCenterTitleChats",
+          "title": "Center in chats/channels"
+        },
+        {
+          "slot": "hide-chat-avatar",
+          "string": "InuHideChatAvatar",
+          "title": "Hide avatar"
+        },
+        {
+          "slot": "ios-chat-header",
+          "string": "InuIosChatHeader",
+          "title": "Compact pill"
+        },
+        {
+          "slot": "ios-chat-header-avatar-slot",
+          "string": "InuIosChatHeaderAvatarSlot",
+          "title": "Move avatar to the menu button"
+        },
+        {
+          "slot": "ios-chat-header-avatar-static",
+          "string": "InuIosChatHeaderAvatarStatic",
+          "title": "Do not center the avatar"
+        },
+        {
+          "slot": "center-title-right-avatar",
+          "string": "InuCenterTitleRightAvatar",
+          "title": "Show avatar on the right"
+        },
+        {
+          "slot": "chat-header-no-pill",
+          "string": "InuChatHeaderNoPill",
+          "title": "Hide pill background"
+        },
+        {
+          "slot": "chat-title-marquee",
+          "string": "InuChatTitleMarquee",
+          "title": "Text marquee for long titles"
+        },
+        {
+          "slot": "center-title-main",
+          "string": "InuCenterTitleMain",
+          "title": "Center screen titles"
+        }
+      ]
+    },
+    {
+      "id": "currency-picker",
+      "class": "CurrencyPickerActivity",
+      "sections": [],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "datacenter-status",
+      "class": "DatacenterStatusActivity",
+      "sections": [
+        {
+          "slot": "datacenter-status",
+          "string": "InuDatacenterStatus",
+          "title": "Datacenter status"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "deleted-message-search",
+      "class": "DeletedMessageSearchActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "deleted-message-search",
+          "string": "InuDeletedMessageSearch",
+          "title": "Search archive"
+        }
+      ]
+    },
+    {
+      "id": "dialogs",
+      "class": "DialogsSettingsActivity",
+      "sections": [
+        {
+          "slot": "folders",
+          "string": "InuFolders",
+          "title": "Folders"
+        },
+        {
+          "slot": "chat-list",
+          "string": "InuChatList",
+          "title": "Chat list"
+        },
+        {
+          "slot": "bottom-tabs",
+          "string": "InuBottomTabs",
+          "title": "Bottom tabs"
+        },
+        {
+          "slot": "dialogs-fab",
+          "string": "InuDialogsFab",
+          "title": "FAB"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "show-on-tabs",
+          "string": "InuShowOnTabs",
+          "title": "Show on Tabs"
+        },
+        {
+          "slot": "folders-unread-counter",
+          "string": "InuFoldersUnreadCounter",
+          "title": "Unread counter"
+        },
+        {
+          "slot": "title-text",
+          "string": "InuTitleText",
+          "title": "Title text"
+        }
+      ],
+      "items": [
+        {
+          "slot": "pill-stack",
+          "string": "InuPillStack",
+          "title": "Pill Stack"
+        },
+        {
+          "slot": "recent-chats",
+          "string": "InuRecentChats",
+          "title": "Recent chats"
+        },
+        {
+          "slot": "feed",
+          "string": "InuFeed",
+          "title": "Feed"
+        },
+        {
+          "slot": "feed-manage-channels",
+          "string": "InuFeedManageChannels",
+          "title": "Manage channels"
+        },
+        {
+          "slot": "show-on-tabs",
+          "string": "InuShowOnTabs",
+          "title": "Show on Tabs"
+        },
+        {
+          "slot": "tab-indicator-stroke",
+          "string": "InuTabIndicatorStroke",
+          "title": "Tab Indicator Stroke"
+        },
+        {
+          "slot": "folders-unread-counter",
+          "string": "InuFoldersUnreadCounter",
+          "title": "Unread counter"
+        },
+        {
+          "slot": "hide-all-chats-tab",
+          "string": "InuHideAllChatsTab",
+          "title": "Hide \\\"All Chats\\\" Tab"
+        },
+        {
+          "slot": "remember-selected-folder",
+          "string": "InuRememberSelectedFolder",
+          "title": "Remember Selected Folder"
+        },
+        {
+          "slot": "folders-at-bottom",
+          "string": "InuFoldersAtBottom",
+          "title": "Move Folders to Bottom"
+        },
+        {
+          "slot": "hide-archive",
+          "string": "InuHideArchive",
+          "title": "Remove \\\"Archived Chats\\\" from Chat List"
+        },
+        {
+          "slot": "title-text",
+          "string": "InuTitleText",
+          "title": "Title text"
+        },
+        {
+          "slot": "title-text-override-archive",
+          "string": "InuTitleTextOverrideArchive",
+          "title": "Also apply to archive"
+        },
+        {
+          "slot": "old-mention-indicator",
+          "string": "InuOldMentionIndicator",
+          "title": "Legacy mention indicator"
+        },
+        {
+          "slot": "pull-down-action",
+          "string": "InuPullDownAction",
+          "title": "Pull-down action"
+        },
+        {
+          "slot": "disable-swipe-to-unarchive",
+          "string": "InuDisableSwipeToUnarchive",
+          "title": "Disable swipe to unarchive"
+        },
+        {
+          "slot": "disable-swipe-to-hide-general-topic",
+          "string": "InuDisableSwipeToHideGeneralTopic",
+          "title": "Disable swipe to hide General topic"
+        },
+        {
+          "slot": "hide-bot-web-view",
+          "string": "InuHideBotWebView",
+          "title": "Hide bot Web App"
+        },
+        {
+          "slot": "disable-chat-preview-expand",
+          "string": "InuDisableChatPreviewExpand",
+          "title": "Interactive chat preview"
+        },
+        {
+          "slot": "community-display-mode",
+          "string": "InuCommunityDisplayMode",
+          "title": "Communities"
+        },
+        {
+          "slot": "dialog-avatar-opens-profile",
+          "string": "InuDialogAvatarOpensProfile",
+          "title": "Tap avatar to open profile"
+        },
+        {
+          "slot": "always-show-downloads",
+          "string": "InuAlwaysShowDownloads",
+          "title": "Downloads button"
+        },
+        {
+          "slot": "bottom-tabs-hide",
+          "string": "InuBottomTabsHide",
+          "title": "Hide bottom tabs"
+        },
+        {
+          "slot": "compact-mode",
+          "string": "InuCompactMode",
+          "title": "Compact mode"
+        },
+        {
+          "slot": "show-tab-titles",
+          "string": "InuShowTabTitles",
+          "title": "Show tab titles"
+        },
+        {
+          "slot": "bottom-tabs-separate-search",
+          "string": "InuBottomTabsSeparateSearch",
+          "title": "Separate Search button"
+        },
+        {
+          "slot": "bottom-tabs-hide-top-search",
+          "string": "InuBottomTabsHideTopSearch",
+          "title": "Hide top search"
+        },
+        {
+          "slot": "main-tabs-customize-reset",
+          "string": "InuMainTabsCustomizeReset",
+          "title": "Reset to default"
+        },
+        {
+          "slot": "dialogs-fab-main-action",
+          "string": "InuDialogsFabMainAction",
+          "title": "Primary action"
+        },
+        {
+          "slot": "dialogs-fab-secondary-action",
+          "string": "InuDialogsFabSecondaryAction",
+          "title": "Secondary action"
+        },
+        {
+          "slot": "dialogs-fab-hide-on-scroll",
+          "string": "InuDialogsFabHideOnScroll",
+          "title": "Hide when scrolling"
+        },
+        {
+          "slot": "dialogs-fab-offset-for-bottom-bar",
+          "string": "InuDialogsFabOffsetForBottomBar",
+          "title": "Offset for bottom bar"
+        },
+        {
+          "slot": "dialogs-fab-left-side",
+          "string": "InuDialogsFabLeftSide",
+          "title": "Move to the left"
+        }
+      ]
+    },
+    {
+      "id": "drawer",
+      "class": "DrawerSettingsActivity",
+      "sections": [
+        {
+          "slot": "side-menu",
+          "string": "InuSideMenu",
+          "title": "Side menu"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "navigation-drawer",
+          "string": "InuNavigationDrawer",
+          "title": "Navigation drawer"
+        },
+        {
+          "slot": "drawer-back-gesture",
+          "string": "InuDrawerBackGesture",
+          "title": "Open drawer with back gesture"
+        },
+        {
+          "slot": "drawer-m3-sections",
+          "string": "InuDrawerM3Sections",
+          "title": "Modular sections in navigation drawer"
+        },
+        {
+          "slot": "show-drawer-accounts",
+          "string": "InuShowDrawerAccounts",
+          "title": "Show accounts in drawer"
+        },
+        {
+          "slot": "bottom-tabs-hide",
+          "string": "InuBottomTabsHide",
+          "title": "Hide bottom tabs"
+        },
+        {
+          "slot": "drawer-menu-order",
+          "string": "InuDrawerMenuOrder",
+          "title": "Menu items"
+        }
+      ]
+    },
+    {
+      "id": "drawer-menu-order",
+      "class": "DrawerMenuOrderActivity",
+      "sections": [
+        {
+          "slot": "drawer-menu-items",
+          "string": "InuDrawerMenuItems",
+          "title": "Items"
+        },
+        {
+          "slot": "drawer-menu-hidden",
+          "string": "InuDrawerMenuHidden",
+          "title": "Hidden items"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "drawer-menu-add-divider",
+          "string": "InuDrawerMenuAddDivider",
+          "title": "Add divider"
+        },
+        {
+          "slot": "drawer-menu-reset",
+          "string": "InuDrawerMenuReset",
+          "title": "Reset menu"
+        }
+      ]
+    },
+    {
+      "id": "feed-excluded-channels",
+      "class": "FeedExcludedChannelsSettingsActivity",
+      "sections": [
+        {
+          "slot": "feed-shown-channels",
+          "string": "InuFeedShownChannels",
+          "title": "Shown in Feed"
+        },
+        {
+          "slot": "feed-hidden-channels",
+          "string": "InuFeedHiddenChannels",
+          "title": "Hidden from Feed"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "feed-include-archived",
+          "string": "InuFeedIncludeArchived",
+          "title": "Include archived channels"
+        },
+        {
+          "slot": "feed-newest-on-top",
+          "string": "InuFeedNewestOnTop",
+          "title": "Newest posts on top"
+        },
+        {
+          "slot": "feed-mark-read-on-scroll",
+          "string": "InuFeedMarkReadOnScroll",
+          "title": "Mark as read while scrolling"
+        }
+      ]
+    },
+    {
+      "id": "font-stack",
+      "class": "FontStackActivity",
+      "sections": [
+        {
+          "slot": "app-font-stack",
+          "string": "InuAppFontStack",
+          "title": "Font stack"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "mono-font",
+          "string": "InuMonoFont",
+          "title": "Monospace font"
+        }
+      ]
+    },
+    {
+      "id": "fonts",
+      "class": "FontsSettingsActivity",
+      "sections": [
+        {
+          "slot": "available-fonts",
+          "string": "InuAvailableFonts",
+          "title": "Available fonts"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "app-font",
+          "string": "InuAppFont",
+          "title": "App font"
+        },
+        {
+          "slot": "font-include-system",
+          "string": "InuFontIncludeSystem",
+          "title": "Include system fonts"
+        },
+        {
+          "slot": "font-add",
+          "string": "InuFontAdd",
+          "title": "Add font"
+        },
+        {
+          "slot": "font-reset-order",
+          "string": "InuFontResetOrder",
+          "title": "Reset order"
+        }
+      ]
+    },
+    {
+      "id": "formatting-popup",
+      "class": "FormattingPopupActivity",
+      "sections": [
+        {
+          "slot": "formatting-popup-items",
+          "string": "InuFormattingPopupItems",
+          "title": "Popup buttons"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "formatting-popup-reset",
+          "string": "InuFormattingPopupReset",
+          "title": "Reset to defaults"
+        }
+      ]
+    },
+    {
+      "id": "ghost-chat-overrides",
+      "class": "GhostChatOverridesSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ghost-overrides-add",
+          "string": "InuGhostOverridesAdd",
+          "title": "Add chat"
+        }
+      ]
+    },
+    {
+      "id": "ghost-mode",
+      "class": "GhostModeSettingsActivity",
+      "sections": [],
+      "choices": [
+        {
+          "slot": "ghost-presence-mode",
+          "string": "InuGhostPresenceMode",
+          "title": "Online status"
+        }
+      ],
+      "items": [
+        {
+          "slot": "ghost-mode-master",
+          "string": "InuGhostModeMaster",
+          "title": "Ghost Mode"
+        },
+        {
+          "slot": "ghost-presence-mode",
+          "string": "InuGhostPresenceMode",
+          "title": "Online status"
+        },
+        {
+          "slot": "ghost-auto-offline",
+          "string": "InuGhostAutoOffline",
+          "title": "Automatically go offline"
+        },
+        {
+          "slot": "ghost-hide-app-bar-icon",
+          "string": "InuGhostHideAppBarIcon",
+          "title": "Hide indicator in header"
+        },
+        {
+          "slot": "ghost-mode-launcher-shortcut",
+          "string": "InuGhostModeLauncherShortcut",
+          "title": "Toggle shortcut on app icon"
+        },
+        {
+          "slot": "ghost-overrides",
+          "string": "InuGhostOverrides",
+          "title": "Per-chat overrides"
+        },
+        {
+          "slot": "ghost-read-on-send",
+          "string": "InuGhostReadOnSend",
+          "title": "Read on send"
+        },
+        {
+          "slot": "ghost-mark-read-locally",
+          "string": "InuGhostMarkReadLocally",
+          "title": "Mark as read locally"
+        }
+      ]
+    },
+    {
+      "id": "icon-packs",
+      "class": "IconPacksSettingsActivity",
+      "sections": [
+        {
+          "slot": "icon-replacement",
+          "string": "InuIconReplacement",
+          "title": "Icon pack"
+        },
+        {
+          "slot": "notification-icon",
+          "string": "InuNotificationIcon",
+          "title": "Notification icon"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "ios-style",
+      "class": "IosStyleSettingsActivity",
+      "sections": [
+        {
+          "slot": "ios-style",
+          "string": "InuIosStyle",
+          "title": "iOS style"
+        },
+        {
+          "slot": "message-input",
+          "string": "InuMessageInput",
+          "title": "Message input"
+        },
+        {
+          "slot": "liquid-glass",
+          "string": "InuLiquidGlass",
+          "title": "Liquid Glass"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "chat-header-settings",
+          "string": "InuChatHeaderSettings",
+          "title": "Chat header"
+        },
+        {
+          "slot": "ios-bottom-bar",
+          "string": "InuIosBottomBar",
+          "title": "iOS-style bottom bar"
+        },
+        {
+          "slot": "ios-chats-tab-first-folder",
+          "string": "InuIosChatsTabFirstFolder",
+          "title": "Chats tab returns to first folder"
+        },
+        {
+          "slot": "action-button-style",
+          "string": "InuActionButtonStyle",
+          "title": "Action button style"
+        },
+        {
+          "slot": "ios-button-placement",
+          "string": "InuIosButtonPlacement",
+          "title": "Button placement (iOS)"
+        },
+        {
+          "slot": "ios-input-appearance",
+          "string": "InuIosInputAppearance",
+          "title": "Appearance (iOS)"
+        },
+        {
+          "slot": "compact-input-size",
+          "string": "InuCompactInputSize",
+          "title": "Compact mode"
+        },
+        {
+          "slot": "disable-glass-glare",
+          "string": "InuDisableGlassGlare",
+          "title": "Disable glass glare"
+        }
+      ]
+    },
+    {
+      "id": "local-names",
+      "class": "LocalNamesSettingsActivity",
+      "sections": [
+        {
+          "slot": "local-names-list",
+          "string": "InuLocalNamesList",
+          "title": "Renamed"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "local-names",
+          "string": "InuLocalNames",
+          "title": "Local names"
+        },
+        {
+          "slot": "local-names-add",
+          "string": "InuLocalNamesAdd",
+          "title": "Add chat"
+        },
+        {
+          "slot": "local-names-export",
+          "string": "InuLocalNamesExport",
+          "title": "Export"
+        },
+        {
+          "slot": "local-names-import",
+          "string": "InuLocalNamesImport",
+          "title": "Import from clipboard"
+        },
+        {
+          "slot": "local-names-clear",
+          "string": "InuLocalNamesClear",
+          "title": "Reset all local names"
+        }
+      ]
+    },
+    {
+      "id": "marketplace",
+      "class": "MarketplaceActivity",
+      "sections": [
+        {
+          "slot": "marketplace",
+          "string": "InuMarketplace",
+          "title": "Marketplace"
+        },
+        {
+          "slot": "marketplace-versions",
+          "string": "InuMarketplaceVersions",
+          "title": "Versions"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "menu-order",
+      "class": "MenuOrderActivity",
+      "sections": [
+        {
+          "slot": "plugin-actions",
+          "string": "InuPluginActions",
+          "title": "Plugin actions"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "menus",
+      "class": "MenusSettingsActivity",
+      "sections": [
+        {
+          "slot": "menus",
+          "string": "InuMenus",
+          "title": "Menus"
+        },
+        {
+          "slot": "user-profile",
+          "string": "InuUserProfile",
+          "title": "User profile"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "message-design",
+      "class": "MessageDesignSettingsActivity",
+      "sections": [
+        {
+          "slot": "stickers",
+          "string": "InuStickers",
+          "title": "Stickers"
+        },
+        {
+          "slot": "bubbles",
+          "string": "InuBubbles",
+          "title": "Bubbles"
+        },
+        {
+          "slot": "reactions",
+          "string": "InuReactions",
+          "title": "Reactions"
+        },
+        {
+          "slot": "wide-channel-posts",
+          "string": "InuWideChannelPosts",
+          "title": "Wide posts"
+        },
+        {
+          "slot": "chat-input-text-size",
+          "string": "InuChatInputTextSize",
+          "title": "Chat input text size"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "sticker-time-mode",
+          "string": "InuStickerTimeMode",
+          "title": "Sticker time overlay"
+        },
+        {
+          "slot": "forward-header-mode",
+          "string": "InuForwardHeaderMode",
+          "title": "Forward header"
+        }
+      ],
+      "items": [
+        {
+          "slot": "sticker-time-mode",
+          "string": "InuStickerTimeMode",
+          "title": "Sticker time overlay"
+        },
+        {
+          "slot": "no-sticker-extra-padding",
+          "string": "InuNoStickerExtraPadding",
+          "title": "Remove extra bottom padding"
+        },
+        {
+          "slot": "bubble-tails",
+          "string": "InuBubbleTails",
+          "title": "Bubble tails"
+        },
+        {
+          "slot": "disable-chat-bubbles",
+          "string": "InuDisableChatBubbles",
+          "title": "Disable Android notification bubbles"
+        },
+        {
+          "slot": "compact-edited",
+          "string": "InuCompactEdited",
+          "title": "Compact edit indicator"
+        },
+        {
+          "slot": "show-forward-time",
+          "string": "InuShowForwardTime",
+          "title": "Show forward time"
+        },
+        {
+          "slot": "forward-header-mode",
+          "string": "InuForwardHeaderMode",
+          "title": "Forward header"
+        },
+        {
+          "slot": "show-forwards-count",
+          "string": "InuShowForwardsCount",
+          "title": "Show forward count"
+        },
+        {
+          "slot": "show-media-size",
+          "string": "InuShowMediaSize",
+          "title": "Show media size"
+        },
+        {
+          "slot": "small-gifs",
+          "string": "InuSmallGifs",
+          "title": "Show small GIFs"
+        },
+        {
+          "slot": "reaction-bar-below",
+          "string": "InuReactionBarBelow",
+          "title": "Reachable reactions bar"
+        },
+        {
+          "slot": "chat-views-bottom",
+          "string": "InuChatViewsBottom",
+          "title": "Reachable views list"
+        }
+      ]
+    },
+    {
+      "id": "messages",
+      "class": "MessagesSettingsActivity",
+      "sections": [
+        {
+          "slot": "reactions",
+          "string": "InuReactions",
+          "title": "Reactions"
+        },
+        {
+          "slot": "confirmations-section",
+          "string": "InuConfirmationsSection",
+          "title": "Confirmations"
+        },
+        {
+          "slot": "spoilers",
+          "string": "InuSpoilers",
+          "title": "Spoilers"
+        },
+        {
+          "slot": "blocked-messages-section",
+          "string": "InuBlockedMessagesSection",
+          "title": "Blocked users"
+        },
+        {
+          "slot": "clown-avatars-section",
+          "string": "InuClownAvatarsSection",
+          "title": "Blocked avatars"
+        },
+        {
+          "slot": "category-behavior",
+          "string": "InuCategoryBehavior",
+          "title": "Behavior &amp; Tools"
+        },
+        {
+          "slot": "double-tap-actions",
+          "string": "InuDoubleTapActions",
+          "title": "Double tap actions"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "clown-avatar-emoji",
+          "string": "InuClownAvatarEmoji",
+          "title": "Emoji"
+        },
+        {
+          "slot": "media-spoiler-mode",
+          "string": "InuMediaSpoilerMode",
+          "title": "Media spoiler style"
+        },
+        {
+          "slot": "text-spoiler-mode",
+          "string": "InuTextSpoilerMode",
+          "title": "Text spoiler style"
+        },
+        {
+          "slot": "blocked-messages-mode",
+          "string": "InuBlockedMessagesMode",
+          "title": "Messages from blocked users"
+        }
+      ],
+      "items": [
+        {
+          "slot": "pinned-reactions",
+          "string": "InuPinnedReactions",
+          "title": "Pinned reactions"
+        },
+        {
+          "slot": "instant-mark-reactions-read",
+          "string": "InuInstantMarkReactionsRead",
+          "title": "Instantly mark reactions as read"
+        },
+        {
+          "slot": "confirm-reaction-non-member",
+          "string": "InuConfirmReactionNonMember",
+          "title": "Confirm reactions in non-joined chats"
+        },
+        {
+          "slot": "show-spoilers-directly",
+          "string": "InuShowSpoilersDirectly",
+          "title": "Show spoilers directly"
+        },
+        {
+          "slot": "text-spoiler-mode",
+          "string": "InuTextSpoilerMode",
+          "title": "Text spoiler style"
+        },
+        {
+          "slot": "spoiler-extend-to-line-end",
+          "string": "InuSpoilerExtendToLineEnd",
+          "title": "Extend spoilers to line end"
+        },
+        {
+          "slot": "media-spoiler-mode",
+          "string": "InuMediaSpoilerMode",
+          "title": "Media spoiler style"
+        },
+        {
+          "slot": "link-preview-spoiler",
+          "string": "InuLinkPreviewSpoiler",
+          "title": "Spoiler link previews"
+        },
+        {
+          "slot": "blocked-messages-mode",
+          "string": "InuBlockedMessagesMode",
+          "title": "Messages from blocked users"
+        },
+        {
+          "slot": "blocked-messages-extra",
+          "string": "InuBlockedMessagesExtra",
+          "title": "Also hide messages from"
+        },
+        {
+          "slot": "clown-avatar-blocked",
+          "string": "InuClownAvatarBlocked",
+          "title": "Clown avatar for blocked users"
+        },
+        {
+          "slot": "clown-avatar-blocked-me",
+          "string": "InuClownAvatarBlockedMe",
+          "title": "Clown avatar for users who blocked me"
+        },
+        {
+          "slot": "clown-avatar-emoji",
+          "string": "InuClownAvatarEmoji",
+          "title": "Emoji"
+        },
+        {
+          "slot": "chat-remember-all-replies",
+          "string": "InuChatRememberAllReplies",
+          "title": "Remember all clicked replies"
+        },
+        {
+          "slot": "forward-pro",
+          "string": "InuForwardPro",
+          "title": "Forward Pro"
+        },
+        {
+          "slot": "incoming-messages",
+          "string": "InuIncomingMessages",
+          "title": "Incoming messages"
+        },
+        {
+          "slot": "outgoing-messages",
+          "string": "InuOutgoingMessages",
+          "title": "Outgoing messages"
+        },
+        {
+          "slot": "channel-messages",
+          "string": "InuChannelMessages",
+          "title": "Channels you can post in"
+        }
+      ]
+    },
+    {
+      "id": "niche",
+      "class": "NicheSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "paranoia",
+      "class": "ParanoiaActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "paranoia-whitelist",
+          "string": "InuParanoiaWhitelist",
+          "title": "Whitelist mode"
+        },
+        {
+          "slot": "paranoia-launcher-shortcut",
+          "string": "InuParanoiaLauncherShortcut",
+          "title": "Launcher shortcut"
+        },
+        {
+          "slot": "paranoia-hide-other-accounts",
+          "string": "InuParanoiaHideOtherAccounts",
+          "title": "Hide other accounts"
+        },
+        {
+          "slot": "paranoia-hide-folders",
+          "string": "InuParanoiaHideFolders",
+          "title": "Hide folders"
+        },
+        {
+          "slot": "paranoia-hide-my-stories",
+          "string": "InuParanoiaHideMyStories",
+          "title": "Hide my stories"
+        },
+        {
+          "slot": "paranoia-disable-notifications",
+          "string": "InuParanoiaDisableNotifications",
+          "title": "Disable notifications"
+        },
+        {
+          "slot": "hide-inugram-settings",
+          "string": "InuHideInugramSettings",
+          "title": "Hide entinyGram settings"
+        },
+        {
+          "slot": "paranoia-disguise",
+          "string": "InuParanoiaDisguise",
+          "title": "Disguise as Telegram"
+        }
+      ]
+    },
+    {
+      "id": "passcode",
+      "class": "PasscodeSettingsActivity",
+      "sections": [
+        {
+          "slot": "passcode-panic",
+          "string": "InuPasscodePanic",
+          "title": "Panic code"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "passcode-open-stock-settings",
+          "string": "InuPasscodeOpenStockSettings",
+          "title": "Stock passcode settings"
+        },
+        {
+          "slot": "passcode-show-in-settings",
+          "string": "InuPasscodeShowInSettings",
+          "title": "Show in entinyGram settings"
+        },
+        {
+          "slot": "passcode-panic-remove",
+          "string": "InuPasscodePanicRemove",
+          "title": "Remove panic code"
+        }
+      ]
+    },
+    {
+      "id": "passcode-account",
+      "class": "PasscodeAccountSettingsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "passcode-remove",
+          "string": "InuPasscodeRemove",
+          "title": "Remove passcode"
+        },
+        {
+          "slot": "passcode-hide-account",
+          "string": "InuPasscodeHideAccount",
+          "title": "Hide account"
+        },
+        {
+          "slot": "passcode-allow-panic",
+          "string": "InuPasscodeAllowPanic",
+          "title": "Log out with panic code"
+        }
+      ]
+    },
+    {
+      "id": "pill-stack",
+      "class": "PillStackSettingsActivity",
+      "sections": [
+        {
+          "slot": "pill-stack-visible-count",
+          "string": "InuPillStackVisibleCount",
+          "title": "Visible at once"
+        },
+        {
+          "slot": "pill-stack-active-pills",
+          "string": "InuPillStackActivePills",
+          "title": "Active Pills"
+        },
+        {
+          "slot": "pill-stack-hidden-pills",
+          "string": "InuPillStackHiddenPills",
+          "title": "Hidden Pills"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "pill-stack",
+          "string": "InuPillStack",
+          "title": "Pill Stack"
+        },
+        {
+          "slot": "pill-stack-infinite-scrolling",
+          "string": "InuPillStackInfiniteScrolling",
+          "title": "Infinite scrolling"
+        },
+        {
+          "slot": "pill-stack-proxy-country",
+          "string": "InuPillStackProxyCountry",
+          "title": "Show proxy country"
+        },
+        {
+          "slot": "pill-stack-in-header",
+          "string": "InuPillStackInHeader",
+          "title": "Pills in the top bar"
+        },
+        {
+          "slot": "pill-stack-add-rate",
+          "string": "InuPillStackAddRate",
+          "title": "Add a pair"
+        },
+        {
+          "slot": "pill-stack-weather",
+          "string": "InuPillStackWeather",
+          "title": "Weather"
+        },
+        {
+          "slot": "pill-stack-reset",
+          "string": "InuPillStackReset",
+          "title": "Reset pills to default"
+        },
+        {
+          "slot": "pill-stack-list-empty",
+          "string": "InuPillStackListEmpty",
+          "title": "Empty"
+        }
+      ]
+    },
+    {
+      "id": "pinned-reactions",
+      "class": "PinnedReactionsActivity",
+      "sections": [
+        {
+          "slot": "pinned-reactions-header",
+          "string": "InuPinnedReactionsHeader",
+          "title": "Pinned reactions"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "pinned-reactions-copy-server",
+          "string": "InuPinnedReactionsCopyServer",
+          "title": "Copy from server"
+        },
+        {
+          "slot": "pinned-reactions-remove-all",
+          "string": "InuPinnedReactionsRemoveAll",
+          "title": "Remove all"
+        }
+      ]
+    },
+    {
+      "id": "plugin-info",
+      "class": "PluginInfoActivity",
+      "sections": [
+        {
+          "slot": "plugins-permissions",
+          "string": "InuPluginsPermissions",
+          "title": "Permissions"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "plugins-view-source",
+          "string": "InuPluginsViewSource",
+          "title": "View source code"
+        },
+        {
+          "slot": "plugins-reload",
+          "string": "InuPluginsReload",
+          "title": "Reload"
+        },
+        {
+          "slot": "plugins-remove",
+          "string": "InuPluginsRemove",
+          "title": "Remove"
+        }
+      ]
+    },
+    {
+      "id": "plugins",
+      "class": "PluginsActivity",
+      "sections": [
+        {
+          "slot": "plugins-installed",
+          "string": "InuPluginsInstalled",
+          "title": "Installed"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "plugins-enable-engine",
+          "string": "InuPluginsEnableEngine",
+          "title": "Enable plugins"
+        },
+        {
+          "slot": "marketplace",
+          "string": "InuMarketplace",
+          "title": "Marketplace"
+        },
+        {
+          "slot": "plugins-load-from-disk",
+          "string": "InuPluginsLoadFromDisk",
+          "title": "Load from file"
+        },
+        {
+          "slot": "plugins-dev-mode",
+          "string": "InuPluginsDevMode",
+          "title": "Developer mode"
+        }
+      ]
+    },
+    {
+      "id": "presence-watch-list",
+      "class": "PresenceWatchListSettingsActivity",
+      "sections": [
+        {
+          "slot": "presence-watch-list",
+          "string": "InuPresenceWatchList",
+          "title": "Watch list"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "presence-clear-all-logs",
+          "string": "InuPresenceClearAllLogs",
+          "title": "Clear logs…"
+        },
+        {
+          "slot": "presence-watch-add",
+          "string": "InuPresenceWatchAdd",
+          "title": "Add contact to watch list"
+        }
+      ]
+    },
+    {
+      "id": "privacy-security",
+      "class": "PrivacySecurityActivity",
+      "sections": [
+        {
+          "slot": "strip-tracking-params",
+          "string": "InuStripTrackingParams",
+          "title": "Strip tracking parameters"
+        },
+        {
+          "slot": "biometric-confirm",
+          "string": "InuBiometricConfirm",
+          "title": "Biometric confirmation"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "per-account-passcode",
+          "string": "InuPerAccountPasscode",
+          "title": "Per-account passcode"
+        },
+        {
+          "slot": "paranoia-mode",
+          "string": "InuParanoiaMode",
+          "title": "Paranoia mode"
+        },
+        {
+          "slot": "anti-censorship",
+          "string": "InuAntiCensorship",
+          "title": "Censorship bypass"
+        },
+        {
+          "slot": "hide-my-phone-number",
+          "string": "InuHideMyPhoneNumber",
+          "title": "Hide my phone number"
+        },
+        {
+          "slot": "disable-draft-upload",
+          "string": "InuDisableDraftUpload",
+          "title": "Disable uploading drafts"
+        },
+        {
+          "slot": "disable-sensitive",
+          "string": "InuDisableSensitive",
+          "title": "Disable sensitive filter"
+        },
+        {
+          "slot": "strip-tracking-params-on-open",
+          "string": "InuStripTrackingParamsOnOpen",
+          "title": "When opening links"
+        },
+        {
+          "slot": "strip-tracking-params-on-paste",
+          "string": "InuStripTrackingParamsOnPaste",
+          "title": "When pasting"
+        },
+        {
+          "slot": "biometric-confirm-delete-chat",
+          "string": "InuBiometricConfirmDeleteChat",
+          "title": "Confirm deleting chats"
+        },
+        {
+          "slot": "biometric-confirm-logout",
+          "string": "InuBiometricConfirmLogout",
+          "title": "Confirm logging out"
+        },
+        {
+          "slot": "biometric-allow-device-credential",
+          "string": "InuBiometricAllowDeviceCredential",
+          "title": "Allow device PIN/pattern"
+        },
+        {
+          "slot": "biometric-lock-archive",
+          "string": "InuBiometricLockArchive",
+          "title": "Lock archived chats"
+        },
+        {
+          "slot": "biometric-lock-archive-every-time",
+          "string": "InuBiometricLockArchiveEveryTime",
+          "title": "Ask every time"
+        }
+      ]
+    },
+    {
+      "id": "rate-pair-edit",
+      "class": "RatePairEditActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "pill-stack-rate-target",
+          "string": "InuPillStackRateTarget",
+          "title": "Target"
+        },
+        {
+          "slot": "pill-stack-rate-preview",
+          "string": "InuPillStackRatePreview",
+          "title": "1 %1$s ≈ %2$s"
+        }
+      ]
+    },
+    {
+      "id": "recent-chats",
+      "class": "RecentChatsSettingsActivity",
+      "sections": [],
+      "choices": [
+        {
+          "slot": "recent-chats-style",
+          "string": "InuRecentChatsStyle",
+          "title": "Style"
+        },
+        {
+          "slot": "recent-chats-limit",
+          "string": "InuRecentChatsLimit",
+          "title": "History limit"
+        }
+      ],
+      "items": [
+        {
+          "slot": "recent-chats-style",
+          "string": "InuRecentChatsStyle",
+          "title": "Style"
+        },
+        {
+          "slot": "recent-chats-limit",
+          "string": "InuRecentChatsLimit",
+          "title": "History limit"
+        },
+        {
+          "slot": "hide-recent-chats-shortcuts",
+          "string": "InuHideRecentChatsShortcuts",
+          "title": "Hide recent chats from app icon"
+        },
+        {
+          "slot": "clear-recent-chats",
+          "string": "InuClearRecentChats",
+          "title": "Clear recent chats"
+        }
+      ]
+    },
+    {
+      "id": "regex-chat-filter",
+      "class": "RegexChatFilterSettingsActivity",
+      "sections": [
+        {
+          "slot": "regex-chat-filters-own",
+          "string": "InuRegexChatFiltersOwn",
+          "title": "This chat's filters"
+        },
+        {
+          "slot": "regex-chat-filters-exclude",
+          "string": "InuRegexChatFiltersExclude",
+          "title": "Exclude shared filters"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "regex-pattern-empty",
+          "string": "InuRegexPatternEmpty",
+          "title": "(empty pattern)"
+        },
+        {
+          "slot": "regex-filter-add",
+          "string": "InuRegexFilterAdd",
+          "title": "Add filter"
+        }
+      ]
+    },
+    {
+      "id": "regex-filter",
+      "class": "RegexFilterSettingsActivity",
+      "sections": [
+        {
+          "slot": "regex-filter",
+          "string": "InuRegexFilter",
+          "title": "AdBlock &amp; Regex Filter"
+        },
+        {
+          "slot": "regex-filters-list",
+          "string": "InuRegexFiltersList",
+          "title": "Filters"
+        }
+      ],
+      "choices": [
+        {
+          "slot": "regex-filter-mode",
+          "string": "InuRegexFilterMode",
+          "title": "Filter mode"
+        }
+      ],
+      "items": [
+        {
+          "slot": "hide-sponsored-messages",
+          "string": "InuHideSponsoredMessages",
+          "title": "Hide sponsored messages (AdBlock)"
+        },
+        {
+          "slot": "hide-proxy-sponsor-chat",
+          "string": "InuHideProxySponsorChat",
+          "title": "Hide proxy sponsor chat"
+        },
+        {
+          "slot": "regex-filter-enabled",
+          "string": "InuRegexFilterEnabled",
+          "title": "Enable content filter"
+        },
+        {
+          "slot": "regex-filter-mode",
+          "string": "InuRegexFilterMode",
+          "title": "Filter mode"
+        },
+        {
+          "slot": "regex-filter-hide-replies",
+          "string": "InuRegexFilterHideReplies",
+          "title": "Hide replies to filtered messages"
+        },
+        {
+          "slot": "regex-pattern-empty",
+          "string": "InuRegexPatternEmpty",
+          "title": "(empty pattern)"
+        },
+        {
+          "slot": "regex-filter-add",
+          "string": "InuRegexFilterAdd",
+          "title": "Add filter"
+        },
+        {
+          "slot": "regex-filter-export",
+          "string": "InuRegexFilterExport",
+          "title": "Export filters"
+        },
+        {
+          "slot": "regex-filter-import",
+          "string": "InuRegexFilterImport",
+          "title": "Import filters"
+        }
+      ]
+    },
+    {
+      "id": "regex-filter-edit",
+      "class": "RegexFilterEditActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "regex-pattern",
+          "string": "InuRegexPattern",
+          "title": "Pattern"
+        },
+        {
+          "slot": "regex-filter-enabled",
+          "string": "InuRegexFilterEnabled",
+          "title": "Enable content filter"
+        },
+        {
+          "slot": "regex-case-insensitive",
+          "string": "InuRegexCaseInsensitive",
+          "title": "Case-insensitive"
+        },
+        {
+          "slot": "regex-reversed",
+          "string": "InuRegexReversed",
+          "title": "Allow-list (invert match)"
+        }
+      ]
+    },
+    {
+      "id": "root",
+      "class": "InuSettingsActivity",
+      "sections": [
+        {
+          "slot": "root-interface",
+          "string": "InuRootInterface",
+          "title": "Interface"
+        },
+        {
+          "slot": "root-privacy",
+          "string": "InuRootPrivacy",
+          "title": "Features and privacy"
+        },
+        {
+          "slot": "root-system",
+          "string": "InuRootSystem",
+          "title": "System"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "category-appearance",
+          "string": "InuCategoryAppearance",
+          "title": "Design"
+        },
+        {
+          "slot": "category-chats",
+          "string": "InuCategoryChats",
+          "title": "Chats"
+        },
+        {
+          "slot": "messages",
+          "string": "InuMessages",
+          "title": "Messages"
+        },
+        {
+          "slot": "annoyances",
+          "string": "InuAnnoyances",
+          "title": "Hide clutter"
+        },
+        {
+          "slot": "ai-compose",
+          "string": "InuAiCompose",
+          "title": "Artificial intelligence (AI)"
+        },
+        {
+          "slot": "translator",
+          "string": "InuTranslator",
+          "title": "Translator"
+        },
+        {
+          "slot": "category-behavior",
+          "string": "InuCategoryBehavior",
+          "title": "Behavior &amp; Tools"
+        },
+        {
+          "slot": "category-privacy",
+          "string": "InuCategoryPrivacy",
+          "title": "Privacy &amp; Security"
+        },
+        {
+          "slot": "tos",
+          "string": "InuTOS",
+          "title": "Restricted features"
+        },
+        {
+          "slot": "plugins",
+          "string": "InuPlugins",
+          "title": "Plugins"
+        },
+        {
+          "slot": "category-backup",
+          "string": "InuCategoryBackup",
+          "title": "Additional"
+        },
+        {
+          "slot": "niche-settings",
+          "string": "InuNicheSettings",
+          "title": "Niche settings"
+        },
+        {
+          "slot": "about-channel",
+          "string": "InuAboutChannel",
+          "title": "Updates channel"
+        },
+        {
+          "slot": "about-git-hub",
+          "string": "InuAboutGitHub",
+          "title": "GitHub"
+        }
+      ]
+    },
+    {
+      "id": "stalker-pack",
+      "class": "StalkerPackSettingsActivity",
+      "sections": [
+        {
+          "slot": "stalker-pack",
+          "string": "InuStalkerPack",
+          "title": "Stalker Pack"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "presence-logger-notify",
+          "string": "InuPresenceLoggerNotify",
+          "title": "Presence Notifications"
+        },
+        {
+          "slot": "force-relay-calls",
+          "string": "InuForceRelayCalls",
+          "title": "Force Relay Calls"
+        },
+        {
+          "slot": "presence-watch-list",
+          "string": "InuPresenceWatchList",
+          "title": "Watch list"
+        },
+        {
+          "slot": "typing-spoof",
+          "string": "InuTypingSpoof",
+          "title": "Spoof typing status"
+        }
+      ]
+    },
+    {
+      "id": "tos",
+      "class": "TosSettingsActivity",
+      "sections": [
+        {
+          "slot": "premium-unlock",
+          "string": "InuPremiumUnlock",
+          "title": "Premium Unlock"
+        },
+        {
+          "slot": "content-protection-bypass",
+          "string": "InuContentProtectionBypass",
+          "title": "Content Protection"
+        },
+        {
+          "slot": "unlimited-limits",
+          "string": "InuUnlimitedLimits",
+          "title": "Unlimited Limits"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "ghost-mode",
+          "string": "InuGhostMode",
+          "title": "Ghost Mode"
+        },
+        {
+          "slot": "anti-deletion",
+          "string": "InuAntiDeletion",
+          "title": "Anti-deletion"
+        },
+        {
+          "slot": "stalker-pack",
+          "string": "InuStalkerPack",
+          "title": "Stalker Pack"
+        },
+        {
+          "slot": "regex-filter",
+          "string": "InuRegexFilter",
+          "title": "AdBlock &amp; Regex Filter"
+        },
+        {
+          "slot": "device-spoof",
+          "string": "InuDeviceSpoof",
+          "title": "Device spoof"
+        },
+        {
+          "slot": "local-premium",
+          "string": "InuLocalPremium",
+          "title": "Local Telegram Premium"
+        },
+        {
+          "slot": "local-custom-emoji",
+          "string": "InuLocalCustomEmoji",
+          "title": "Local Custom Emoji"
+        },
+        {
+          "slot": "local-names",
+          "string": "InuLocalNames",
+          "title": "Local names"
+        },
+        {
+          "slot": "save-any-story",
+          "string": "InuSaveAnyStory",
+          "title": "Save any story"
+        },
+        {
+          "slot": "auto-save-stories",
+          "string": "InuAutoSaveStories",
+          "title": "Auto-save viewed stories"
+        },
+        {
+          "slot": "allow-forward-restricted",
+          "string": "InuAllowForwardRestricted",
+          "title": "Allow forwarding from protected chats"
+        },
+        {
+          "slot": "disable-flag-secure",
+          "string": "InuDisableFlagSecure",
+          "title": "Disable FLAG_SECURE"
+        },
+        {
+          "slot": "suppress-screenshot-notification",
+          "string": "InuSuppressScreenshotNotification",
+          "title": "Hide Screenshot Notifications"
+        },
+        {
+          "slot": "unlimited-pinned-chats",
+          "string": "InuUnlimitedPinnedChats",
+          "title": "Unlimited Pinned Chats"
+        },
+        {
+          "slot": "unlimited-favorite-stickers",
+          "string": "InuUnlimitedFavoriteStickers",
+          "title": "Unlimited Favorite Stickers &amp; GIFs"
+        },
+        {
+          "slot": "unlimited-folder-chats",
+          "string": "InuUnlimitedFolderChats",
+          "title": "Unlimited chats per folder"
+        },
+        {
+          "slot": "local-folders",
+          "string": "InuLocalFolders",
+          "title": "Local folders"
+        }
+      ]
+    },
+    {
+      "id": "translate-provider",
+      "class": "TranslateProviderSettingsActivity",
+      "sections": [
+        {
+          "slot": "translate-provider-section",
+          "string": "InuTranslateProviderSection",
+          "title": "Translation providers"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "translation-target",
+      "class": "TranslationTargetActivity",
+      "sections": [],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "translator",
+      "class": "TranslatorSettingsActivity",
+      "sections": [
+        {
+          "slot": "translation",
+          "string": "InuTranslation",
+          "title": "Translation"
+        },
+        {
+          "slot": "languages",
+          "string": "InuLanguages",
+          "title": "Languages"
+        },
+        {
+          "slot": "translate-provider-section",
+          "string": "InuTranslateProviderSection",
+          "title": "Translation providers"
+        },
+        {
+          "slot": "advanced",
+          "string": "InuAdvanced",
+          "title": "Advanced"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "auto-translate-all",
+          "string": "InuAutoTranslateAll",
+          "title": "Auto-translate every chat"
+        },
+        {
+          "slot": "translation-target",
+          "string": "InuTranslationTarget",
+          "title": "Target language"
+        },
+        {
+          "slot": "translate-provider",
+          "string": "InuTranslateProvider",
+          "title": "Translation provider"
+        },
+        {
+          "slot": "translate-auto-detect-lang",
+          "string": "InuTranslateAutoDetectLang",
+          "title": "Detect language for the message menu"
+        },
+        {
+          "slot": "translate-outgoing",
+          "string": "InuTranslateOutgoing",
+          "title": "Translate my messages"
+        },
+        {
+          "slot": "input-translate",
+          "string": "InuInputTranslate",
+          "title": "Translate before sending"
+        },
+        {
+          "slot": "translate-in-send-preview",
+          "string": "InuTranslateInSendPreview",
+          "title": "Translate in send preview"
+        },
+        {
+          "slot": "force-translate",
+          "string": "InuForceTranslate",
+          "title": "Force translation"
+        },
+        {
+          "slot": "instant-translate-banner",
+          "string": "InuInstantTranslateBanner",
+          "title": "Instant translate banner"
+        },
+        {
+          "slot": "ignore-translations-disabled",
+          "string": "InuIgnoreTranslationsDisabled",
+          "title": "Ignore \\\"Translations disabled\\\""
+        }
+      ]
+    },
+    {
+      "id": "typing-spoof-quick-list",
+      "class": "TypingSpoofQuickListSettingsActivity",
+      "sections": [
+        {
+          "slot": "typing-spoof-active",
+          "string": "InuTypingSpoofActive",
+          "title": "Active now"
+        }
+      ],
+      "choices": [],
+      "items": [
+        {
+          "slot": "typing-spoof-pick-chat",
+          "string": "InuTypingSpoofPickChat",
+          "title": "Pick a chat"
+        }
+      ]
+    },
+    {
+      "id": "weather-location",
+      "class": "WeatherLocationActivity",
+      "sections": [
+        {
+          "slot": "weather-location",
+          "string": "InuWeatherLocation",
+          "title": "Weather Location"
+        }
+      ],
+      "choices": [],
+      "items": []
+    },
+    {
+      "id": "web-preview-replacements",
+      "class": "WebPreviewReplacementsActivity",
+      "sections": [],
+      "choices": [],
+      "items": [
+        {
+          "slot": "web-preview-add",
+          "string": "InuWebPreviewAdd",
+          "title": "Add replacement"
+        },
+        {
+          "slot": "web-preview-reset",
+          "string": "InuWebPreviewReset",
+          "title": "Reset to defaults"
+        }
+      ]
+    }
+  ]
+}

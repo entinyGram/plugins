@@ -1,0 +1,33 @@
+{
+  "name": "@entinygram/plugins",
+  "version": "1.0.0",
+  "description": "Official plugins, SDK tooling, and community catalog for entinyGram",
+  "type": "module",
+  "private": true,
+  "packageManager": "bun@1.3.13",
+  "scripts": {
+    "build": "bun run build:plugins",
+    "build:plugins": "bun scripts/build-plugin-index.ts",
+    "build:sdk": "bun run --cwd sdk/cli build",
+    "generate-slots": "bun scripts/generate-slots.ts",
+    "plugins-index": "bun scripts/build-plugin-index.ts",
+    "inu": "bun --conditions=development sdk/cli/src/cli.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@inugram/plugin-types": "workspace:*",
+    "@entiny/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^8.1.0",
+    "@types/node": "^24.6.1",
+    "eslint": "^10.2.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "workspaces": [
+    "sdk/*",
+    "plugins/*"
+  ]
+}

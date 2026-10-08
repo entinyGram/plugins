@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.tmp
+desktop.ini
+TODO.md
+CLAUDE.local.md
+
+# Plugin local dev build artifacts (published bundles stay in plugins/dist/)
+plugins/*/dist/
+
+# CLI build output
+sdk/cli/dist/
