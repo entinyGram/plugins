@@ -63,7 +63,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 | Plugin | Package ID | Version | Requires | Description |
 | :--- | :--- | :---: | :---: | :--- |
-| [**entinyGram SDK**](plugins/entiny-sdk/) | `entinygram.sdk` | `0.1.1-beta` | *None* | In-app Marketplace UI and shared settings embedding engine. |
+| [**entinyGram SDK**](plugins/entiny-sdk/) | `entinygram.sdk` | `0.1.2-beta` | *None* | In-app Marketplace UI and shared settings embedding engine. |
 | [**Text Animation**](plugins/text-animation/) | `entinygram.text-animation` | `1.0.0` | `SDK` | Fluid typing feedback animations and particle burst effects on backspace/deletion. |
 | [**2GIS**](plugins/2gis/) | `entinygram.2gis` | `1.0.0` | `SDK` | High-resolution 2GIS raster map tiles and location preview images (requires API key). |
 | [**Calendar Systems**](plugins/calendar-systems/) | `entinygram.calendar-systems` | `1.0.0` | `SDK` | Alternative calendar formatting (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) for dates. |
@@ -167,7 +167,7 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 
 ### Named bundles and the manual workflow
 
-`bun run pack` builds the same way and also writes every bundle as `<Name>-<version>.inu.js` into `release/` (for example `entinyGram-SDK-0.1.1-beta.inu.js`). The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does this on demand: pick one plugin or all of them, and optionally commit the refreshed catalog or publish the bundles as a GitHub release.
+`bun run pack` builds the same way and also writes every bundle as `<Name>-<version>.inu.js` into `release/` (for example `entinyGram-SDK-0.1.2-beta.inu.js`). The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does this on demand: pick one plugin or all of them, and optionally commit the refreshed catalog or publish the bundles as a GitHub release.
 
 ---
 

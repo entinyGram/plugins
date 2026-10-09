@@ -1,3 +1,7 @@
+## 0.1.2-beta
+
+- Installing in inugram downloads the file from the plugin release instead of opening a page
+
 ## 0.1.1-beta
 
 - Works in plain inugram: without the entinyGram bridge the SDK runs standalone and no longer crashes

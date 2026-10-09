@@ -194,11 +194,21 @@ async function loadIcons() {
   page.invalidate()
 }
 
-async function install(version: CatalogVersion, source: UIPageLike) {
+// Release assets are served as downloads under the same <Name>-<version>.inu.js name the build workflow gives them,
+// so in inugram the newest version is fetched from the latest release instead of a raw file the browser would just display.
+function releaseUrl(plugin: CatalogPlugin, version: CatalogVersion): string {
+  if (newest(plugin)?.version !== version.version) return version.file
+  const base = /^entinygram/i.test(plugin.name) ? plugin.name : `entinyGram ${plugin.name}`
+  const file = `${base.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '')}-${version.version}.inu.js`
+  return `https://github.com/entinyGram/plugins/releases/latest/download/${file}`
+}
+
+async function install(plugin: CatalogPlugin, version: CatalogVersion, source: UIPageLike) {
   const native = bridge()
   if (!native) {
     // inugram only imports plugins from a file the user opens, so hand over the link and the expected checksum
-    inu.clipboard.write(version.file)
+    const link = releaseUrl(plugin, version)
+    inu.clipboard.write(link)
     const answer = await inu.ui.dialog({
       title: 'Install from file',
       message: [
@@ -208,7 +218,7 @@ async function install(version: CatalogVersion, source: UIPageLike) {
       positive: 'Open link',
       negative: 'Close',
     })
-    if (answer === 'positive') inu.openUrl(version.file)
+    if (answer === 'positive') inu.openUrl(link)
     return
   }
   native.callStatic('install', version.file, version.sha256 ?? '')
@@ -243,7 +253,7 @@ function openPlugin(plugin: CatalogPlugin) {
           text: label,
           subtitle: missing.length ? `Needs ${missing.join(', ')}` : local ? `Installed: v${local.version}` : undefined,
           icon: inu.icons.common(state === 'installed' ? 'refresh' : 'download'),
-          onClick: () => install(top, detail),
+          onClick: () => install(plugin, top, detail),
         }))
       }
 
@@ -295,7 +305,7 @@ function openPlugin(plugin: CatalogPlugin) {
               positive: here ? 'Reinstall' : local && compare(version.version, local.version) < 0 ? 'Downgrade' : 'Install',
               negative: 'Cancel',
             })
-            if (answer === 'positive') install(version, detail)
+            if (answer === 'positive') install(plugin, version, detail)
           },
         }))
       }
