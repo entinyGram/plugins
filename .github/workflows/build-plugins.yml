@@ -3,8 +3,13 @@ name: Build plugins
 on:
   workflow_dispatch:
     inputs:
+      rebuild:
+        description: 'Rebuild from source and refresh the catalog first (otherwise the published bundles are packed as they are)'
+        required: false
+        default: false
+        type: boolean
       plugin:
-        description: 'Plugin folder to build (e.g. 2gis, entiny-sdk). Empty builds every plugin.'
+        description: 'With rebuild: plugin folder to build (e.g. 2gis, entiny-sdk). Empty builds every plugin.'
         required: false
         default: ''
         type: string
@@ -46,7 +51,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build plugins
+      - name: Pack published bundles
+        if: ${{ !(inputs.rebuild == true || inputs.rebuild == 'true') }}
+        run: |
+          bun scripts/pack-release.ts release
+          ls -l release
+
+      - name: Rebuild plugins
+        if: ${{ inputs.rebuild == true || inputs.rebuild == 'true' }}
         env:
           PLUGIN: ${{ inputs.plugin }}
           FORCE: ${{ inputs.force }}
@@ -64,7 +76,7 @@ jobs:
           if-no-files-found: error
 
       - name: Commit refreshed catalog
-        if: ${{ inputs.commit == true || inputs.commit == 'true' }}
+        if: ${{ (inputs.rebuild == true || inputs.rebuild == 'true') && (inputs.commit == true || inputs.commit == 'true') }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

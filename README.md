@@ -167,7 +167,7 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 
 ### Named bundles and the manual workflow
 
-`bun run pack` builds the same way and also writes every bundle as `<Name>-<version>.inu.js` into `release/` (for example `entinyGram-SDK-0.1.2-beta.inu.js`). The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does this on demand: pick one plugin or all of them, and optionally commit the refreshed catalog or publish the bundles as a GitHub release.
+`bun run pack` copies every published bundle as `<Name>-<version>.inu.js` into `release/`, checking each against the catalog hash (`bun run pack:rebuild` builds from source first) (for example `entinyGram-SDK-0.1.2-beta.inu.js`). The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does this on demand: pick one plugin or all of them, and optionally commit the refreshed catalog or publish the bundles as a GitHub release.
 
 ---
 

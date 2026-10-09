@@ -5,6 +5,7 @@
 import { createHash } from 'node:crypto'
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { packedName } from './pack-name.ts'
 
 const root = join(import.meta.dir, '..')
 const pluginsDir = join(root, 'plugins')
@@ -34,12 +35,6 @@ function header(source: string): Record<string, string[]> {
     if (m) (out[m[1].toLowerCase()] ??= []).push(m[2].trim())
   }
   return out
-}
-
-function packedName(pluginName: string, version: string): string {
-  const base = /^entinygram/i.test(pluginName) ? pluginName : `entinyGram ${pluginName}`
-  const safe = base.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '')
-  return `${safe}-${version}.inu.js`
 }
 
 function notesFor(dir: string, version: string): string {
