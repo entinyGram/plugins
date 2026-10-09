@@ -8,7 +8,9 @@ type Extra = NonNullable<Manifest['extra']>
 
 /** the plugin that carries the SDK: the app honours the directives below only from plugins that require it */
 export const SDK_ID = 'entinygram.sdk'
-export const SDK_VERSION = '0.1.0-alpha'
+export const SDK_VERSION = '0.1.1-beta'
+/** the oldest SDK the feature plugins work with; kept apart from SDK_VERSION so an SDK release does not republish them */
+export const SDK_MIN_VERSION = '0.1.0-alpha'
 
 /**
  * Adds `extra` to a manifest together with `@requires entinygram.sdk`, so the plugin cannot be installed or run
@@ -17,7 +19,7 @@ export const SDK_VERSION = '0.1.0-alpha'
 function withSdk(manifest: Manifest, extra: Extra): Manifest {
   const existing = manifest.extra?.requires
   const requires = Array.isArray(existing) ? existing : existing ? [existing] : []
-  const need = `${SDK_ID} >=${SDK_VERSION}`
+  const need = `${SDK_ID} >=${SDK_MIN_VERSION}`
   return {
     ...manifest,
     extra: { ...manifest.extra, ...extra, requires: requires.includes(need) ? requires : [...requires, need] },

@@ -1,7 +1,7 @@
 {
   "name": "@entiny/sdk",
   "type": "module",
-  "version": "0.1.0-alpha",
+  "version": "0.1.1-beta",
   "description": "entinyGram helpers for Inugram-engine plugins",
   "license": "MIT",
   "exports": {

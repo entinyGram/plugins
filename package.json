@@ -11,6 +11,7 @@
     "build:sdk": "bun run --cwd sdk/cli build",
     "generate-slots": "bun scripts/generate-slots.ts",
     "plugins-index": "bun scripts/build-plugin-index.ts",
+    "pack": "bun scripts/build-plugin-index.ts --pack=release",
     "inu": "bun --conditions=development sdk/cli/src/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc -b"

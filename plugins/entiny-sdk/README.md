@@ -2,7 +2,7 @@
 
 The core foundation plugin providing the **in-app Marketplace**, **dynamic Settings Embedding Engine**, and **dependency anchor** for all entinyGram plugins.
 
-`entinygram.sdk` · version `0.1.0-alpha` · required by all entinyGram feature plugins
+`entinygram.sdk` · version `0.1.1-beta` · required by all entinyGram feature plugins
 
 ---
 

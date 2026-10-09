@@ -11,5 +11,8 @@ CLAUDE.local.md
 # Plugin local dev build artifacts (published bundles stay in plugins/dist/)
 plugins/*/dist/
 
+# Named bundles from `bun run pack`
+release/
+
 # CLI build output
 sdk/cli/dist/

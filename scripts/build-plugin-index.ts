@@ -11,6 +11,9 @@ const pluginsDir = join(root, 'plugins')
 const indexFile = join(pluginsDir, 'index.json')
 const cli = join(root, 'sdk/cli/src/cli.ts')
 const force = process.argv.includes('--force')
+// `--pack=<dir>` also writes every built bundle as <Name>-<version>.inu.js (e.g. entinyGram-SDK-0.1.0-alpha.inu.js)
+const packArg = process.argv.find(arg => arg.startsWith('--pack='))
+const packDir = packArg ? join(root, packArg.slice('--pack='.length) || 'release') : null
 const selectedPlugins = new Set(process.argv.slice(2).filter(arg => !arg.startsWith('--')))
 
 interface Version { version: string, date: string, notes: string, file: string, sha256: string, requires: string[], pluginApi?: number }
@@ -31,6 +34,12 @@ function header(source: string): Record<string, string[]> {
     if (m) (out[m[1].toLowerCase()] ??= []).push(m[2].trim())
   }
   return out
+}
+
+function packedName(pluginName: string, version: string): string {
+  const base = /^entinygram/i.test(pluginName) ? pluginName : `entinyGram ${pluginName}`
+  const safe = base.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '')
+  return `${safe}-${version}.inu.js`
 }
 
 function notesFor(dir: string, version: string): string {
@@ -84,6 +93,10 @@ for (const name of readdirSync(pluginsDir, { withFileTypes: true })) {
     else Object.assign(existing, record)
     mkdirSync(join(pluginsDir, 'dist', id), { recursive: true })
     copyFileSync(join(buildDir, file), target)
+    if (packDir) {
+      mkdirSync(packDir, { recursive: true })
+      copyFileSync(join(buildDir, file), join(packDir, packedName(h.name?.[0] ?? id, version)))
+    }
   }
 }
 rmSync(join(pluginsDir, '.release-build'), { recursive: true, force: true })

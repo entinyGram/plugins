@@ -13,7 +13,7 @@ export default defineConfig({
         author: 'entinyGram',
         version: SDK_VERSION,
         description: 'Needed by plugins that use the entinyGram SDK',
-        grants: ['fetch(raw.githubusercontent.com)', 'unsafe.jvm', 'unsafe.xposed'],
+        grants: ['fetch(raw.githubusercontent.com)', 'openUrl', 'clipboard.write', 'unsafe.fs', 'unsafe.jvm', 'unsafe.xposed'],
       },
     },
   },

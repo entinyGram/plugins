@@ -46,6 +46,15 @@
       "name": "entinyGram SDK",
       "versions": [
         {
+          "version": "0.1.1-beta",
+          "date": "2026-10-09",
+          "notes": "- Works in plain inugram: without the entinyGram bridge the SDK runs standalone and no longer crashes\n- Marketplace reads the installed plugins from the app directory in standalone mode\n- Installing from the marketplace in inugram hands over the download link and checksum",
+          "file": "plugins/dist/entinygram.sdk/0.1.1-beta.inu.js",
+          "sha256": "b87bb7bc76ccc90a15b53bb75a437079d8ef6076a3ecab6f3919c9c14b11ad7e",
+          "requires": [],
+          "pluginApi": 1
+        },
+        {
           "version": "0.1.0-alpha",
           "date": "2026-10-06",
           "notes": "",

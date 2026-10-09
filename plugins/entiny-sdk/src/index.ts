@@ -27,11 +27,12 @@ interface Installed {
 
 type Filter = 'all' | 'installed' | 'updates'
 
-const FILTERS: { key: Filter, label: string }[] = [
+const ALL_FILTERS: { key: Filter, label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'installed', label: 'Installed' },
   { key: 'updates', label: 'Updates' },
 ]
+const filters = () => ALL_FILTERS
 
 let embedState = 'off'
 try {
@@ -41,7 +42,24 @@ try {
   embedState = `off (${(e as Error).message})`
 }
 
-const bridge = () => inu.jvm.cls('desu.inugram.helpers.entiny.EntinyMarketBridge')
+// The market bridge exists only in entinyGram. In plain inugram its class is missing, so the SDK runs standalone:
+// it still browses the catalog and embeds settings, but cannot list or install plugins itself.
+const BRIDGE_CLASS = 'desu.inugram.helpers.entiny.EntinyMarketBridge'
+const DEFAULT_INDEX_URL = 'https://raw.githubusercontent.com/entinyGram/plugins/main/index.json'
+
+type Bridge = ReturnType<typeof inu.jvm.cls>
+let bridgeRef: Bridge | null | undefined
+function bridge(): Bridge | null {
+  if (bridgeRef === undefined) {
+    try {
+      bridgeRef = inu.jvm.cls(BRIDGE_CLASS)
+    } catch {
+      bridgeRef = null
+    }
+  }
+  return bridgeRef
+}
+const standalone = () => bridge() === null
 
 let catalog: CatalogPlugin[] | null = null
 let loading = false
@@ -71,9 +89,40 @@ function newest(plugin: CatalogPlugin): CatalogVersion | undefined {
   return [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0]
 }
 
-function installedList(): Installed[] {
+// Without the bridge the installed set is read from the app's plugin directory: every .inu.js there carries its
+// id and version in the ==InuPlugin== header. The engine does not expose which of them are switched off.
+function scanInstalled(): Installed[] {
+  const found = new Map<string, Installed>()
+  const decoder = new TextDecoder()
+  const visit = (dir: string, depth: number) => {
+    for (const name of inu.fs.readdir(dir)) {
+      const full = `${dir}/${name}`
+      const info = inu.fs.stat(full)
+      if (info.isDirectory) {
+        if (depth < 3) visit(full, depth + 1)
+        continue
+      }
+      if (!/\.js$/.test(name) || info.size > 4_000_000) continue
+      const head = decoder.decode(inu.fs.read(full).subarray(0, 4096))
+      const block = head.split('==InuPlugin==')[1]?.split('==/InuPlugin==')[0]
+      const id = block?.match(/@id\s+(\S+)/)?.[1]
+      const version = block?.match(/@version\s+(\S+)/)?.[1]
+      if (id && version) found.set(id, { id, version, enabled: true })
+    }
+  }
   try {
-    return JSON.parse(bridge().callStatic('installed') as string) as Installed[]
+    visit(inu.android.getPluginsDir(), 0)
+  } catch (e) {
+    console.log('scanning installed plugins failed', e)
+  }
+  return [...found.values()]
+}
+
+function installedList(): Installed[] {
+  const native = bridge()
+  if (!native) return scanInstalled()
+  try {
+    return JSON.parse(native.callStatic('installed') as string) as Installed[]
   } catch (e) {
     console.log('installed list failed', e)
     return []
@@ -106,7 +155,7 @@ async function load() {
   loading = true
   failure = null
   page.invalidate()
-  const base = bridge().callStatic('indexUrl') as string
+  const base = (bridge()?.callStatic('indexUrl') as string | undefined) ?? DEFAULT_INDEX_URL
   let problem = 'not found'
   for (const url of candidates(base)) {
     try {
@@ -145,8 +194,24 @@ async function loadIcons() {
   page.invalidate()
 }
 
-function install(version: CatalogVersion, source: UIPageLike) {
-  bridge().callStatic('install', version.file, version.sha256 ?? '')
+async function install(version: CatalogVersion, source: UIPageLike) {
+  const native = bridge()
+  if (!native) {
+    // inugram only imports plugins from a file the user opens, so hand over the link and the expected checksum
+    inu.clipboard.write(version.file)
+    const answer = await inu.ui.dialog({
+      title: 'Install from file',
+      message: [
+        'The download link is copied. Save the file, then open Settings → Plugins → Load from file and pick it.',
+        version.sha256 ? `SHA-256: ${version.sha256}` : '',
+      ].filter(Boolean).join('\n\n'),
+      positive: 'Open link',
+      negative: 'Close',
+    })
+    if (answer === 'positive') inu.openUrl(version.file)
+    return
+  }
+  native.callStatic('install', version.file, version.sha256 ?? '')
   // the install sheet is the app's own; pick up its result once the user is done with it
   for (const delay of [3000, 8000, 20000]) setTimeout(() => { page.invalidate(); source.invalidate() }, delay)
 }
@@ -197,7 +262,9 @@ function openPlugin(plugin: CatalogPlugin) {
             })
             if (answer !== 'positive') return
             try {
-              bridge().callStatic('remove', plugin.id)
+              const native = bridge()
+              if (!native) throw new Error('standalone')
+              native.callStatic('remove', plugin.id)
               setTimeout(() => { page.invalidate(); detail.invalidate() }, 1000)
             } catch (error) {
               console.warn('plugin removal is unavailable in the app bridge', error)
@@ -282,9 +349,9 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
       id: 'filter',
       text: 'Show',
       icon: inu.icons.common('more'),
-      items: FILTERS.map(f => f.label),
-      selected: FILTERS.findIndex(f => f.key === filter),
-      onChange: (index) => { filter = FILTERS[index].key },
+      items: filters().map(f => f.label),
+      selected: Math.max(0, filters().findIndex(f => f.key === filter)),
+      onChange: (index) => { filter = filters()[index].key },
     }))
 
     if (!catalog) {
@@ -318,7 +385,7 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
     rows.push(inu.ui.button({
       id: 'refresh', text: 'Refresh catalog', icon: inu.icons.common('refresh'), onClick: () => { void load() },
     }))
-    rows.push(inu.ui.separator(`entinyGram SDK ${SDK_VERSION}, settings embedding ${embedState}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation`))
+    rows.push(inu.ui.separator(`entinyGram SDK ${SDK_VERSION}, settings embedding ${embedState}${standalone() ? ', standalone mode (installing goes through a file)' : ''}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation`))
     return rows
   },
 })
