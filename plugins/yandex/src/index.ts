@@ -1,4 +1,5 @@
 import { embed, embedChanged } from '@entiny/sdk/embed'
+import { t, tf } from './i18n.js'
 
 const KEY = 'apiKey'
 const MAPS = 'maps'
@@ -22,17 +23,17 @@ inu.registerTranslationProvider({
   name: 'Yandex Translate',
   async translate({ texts, to, signal }) {
     const key = apiKey()
-    if (key === '') throw new Error('Set the Yandex API key in the translation provider settings')
+    if (key === '') throw new Error(t('err_no_key'))
     const response = await fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Api-Key ${key}` },
       body: JSON.stringify({ targetLanguageCode: normalize(to), texts }),
       signal,
     })
-    if (!response.ok) throw new Error(`Yandex Translate answered ${response.status}`)
+    if (!response.ok) throw new Error(tf('err_status', response.status))
     const data = await response.json() as { translations?: Array<{ text?: string }> }
     const translations = data.translations ?? []
-    if (translations.length !== texts.length) throw new Error('Yandex Translate returned an empty result')
+    if (translations.length !== texts.length) throw new Error(t('err_empty'))
     return translations.map(item => item.text ?? '')
   },
 })
@@ -92,10 +93,10 @@ const page = inu.ui.settingsPage({
   items: () => [
     inu.ui.button({
       id: 'key',
-      text: 'Yandex API key',
-      value: apiKey() === '' ? 'Not set' : '••••••••',
+      text: t('key_title'),
+      value: apiKey() === '' ? t('not_set') : '••••••••',
       onClick: async () => {
-        const value = await inu.ui.prompt({ title: 'Yandex API key', value: apiKey(), selectAll: true })
+        const value = await inu.ui.prompt({ title: t('key_title'), value: apiKey(), selectAll: true })
         if (value === null) return
         localStorage.setItem(KEY, value.trim())
         page.invalidate()
@@ -103,8 +104,8 @@ const page = inu.ui.settingsPage({
     }),
     inu.ui.check({
       id: 'maps',
-      text: 'Yandex',
-      subtitle: hooked ? 'Used whenever the app builds a preview from a map service' : 'This device does not allow the hooks the plugin needs',
+      text: t('maps_title'),
+      subtitle: hooked ? t('maps_subtitle') : t('hook_failed'),
       checked: useMaps.call('get'),
       onChange: (checked) => {
         useMaps.call('set', checked)
@@ -127,19 +128,19 @@ embed({
   name: 'Yandex',
   placements: { inline: [{ slot: 'translate-provider.end', rows: ['key'] }], choice: ['behavior.map-preview-provider'] },
   rows: slot => slot === 'translate-provider.end' && yandexChosen()
-    ? [{ id: 'key', type: 'button', text: 'Yandex API key', value: apiKey() === '' ? 'Not set' : '••••••••' }]
+    ? [{ id: 'key', type: 'button', text: t('key_title'), value: apiKey() === '' ? t('not_set') : '••••••••' }]
     : [],
   onEvent: (row) => {
     if (row !== 'key') return
     // a dialog needs the plugin thread, which the screen's hook is not on
     setTimeout(async () => {
-      const value = await inu.ui.prompt({ title: 'Yandex API key', value: apiKey(), selectAll: true })
+      const value = await inu.ui.prompt({ title: t('key_title'), value: apiKey(), selectAll: true })
       if (value === null) return
       localStorage.setItem(KEY, value.trim())
       embedChanged()
     }, 0)
   },
-  choices: () => [{ id: 'maps', title: 'Yandex', subtitle: 'Location previews from Yandex static maps', checked: useMaps.call('get') }],
+  choices: () => [{ id: 'maps', title: t('maps_title'), subtitle: t('maps_choice_subtitle'), checked: useMaps.call('get') }],
   onChoice: (_id, picked) => {
     useMaps.call('set', picked)
     localStorage.setItem(MAPS, picked ? '1' : '0')

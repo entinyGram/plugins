@@ -10,7 +10,7 @@
           "date": "2026-10-07",
           "notes": "",
           "file": "plugins/dist/entinygram.2gis/1.0.0.inu.js",
-          "sha256": "0a441c9d048cc9f0272f01933321016044adb0f0a5130844d412117bd7264a45",
+          "sha256": "cbe1828ee3cd07287b4464a83aa0fde28c38dddffee4fe0c427f574059c620c1",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -30,7 +30,7 @@
           "date": "2026-10-06",
           "notes": "",
           "file": "plugins/dist/entinygram.calendar-systems/1.0.0.inu.js",
-          "sha256": "3b96b463dd99f97990ae541c2b6d886e84a99555554eaf24a4c7e61c69aadc3e",
+          "sha256": "811e54ce55c50947d5b6704c491767dc6224a7b7108a923563ad8df873c5d967",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -42,6 +42,26 @@
       "icon": "plugins/calendar-systems/icon.svg"
     },
     {
+      "id": "entinygram.doc-viewer",
+      "name": "Doc Viewer",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-10",
+          "notes": "- Initial release of Doc Viewer for Inugram / entinyGram.\n- Ported from the Python plugin by Daxo-Developer & @Daxo_OS.\n- In-app viewing for PDF, images, text, code, JSON, CSV, Jupyter Notebooks, Markdown, HTML, SVG, office documents (DOCX, XLSX, PPTX, ODF, RTF, EML), books (EPUB, FB2) and archives (ZIP, TAR).",
+          "file": "plugins/dist/entinygram.doc-viewer/1.0.0.inu.js",
+          "sha256": "b730dbce4a50154daaf20015ad9c1632bf79d7f1138c9356243949fcba2f6a6a",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "Daxo-Developer && @Daxo_OS (original), entinyGram (Inugram port)",
+      "description": "In-app viewer for PDF, DOCX, XLSX, text, code, images, archives and more",
+      "icon": "plugins/doc-viewer/icon.svg"
+    },
+    {
       "id": "entinygram.sdk",
       "name": "entinyGram SDK",
       "versions": [
@@ -50,7 +70,7 @@
           "date": "2026-10-09",
           "notes": "- Installing in inugram downloads the file from the plugin release instead of opening a page",
           "file": "plugins/dist/entinygram.sdk/0.1.2-beta.inu.js",
-          "sha256": "4027652b268eaa688f99d588f3302460e25d536b38ecf9a45310aef8e535021e",
+          "sha256": "8fbdbb42fb2380ebcd990be95e1fe1146de9dd366e7ac7e6301c3d6c3d46fb9f",
           "requires": [],
           "pluginApi": 1
         },
@@ -86,7 +106,7 @@
           "date": "2026-10-08",
           "notes": "",
           "file": "plugins/dist/entinygram.text-animation/1.0.0.inu.js",
-          "sha256": "f5a57b555355a5cc78b6db908cfc90526747a91e042e0408f606e42a9a884db8",
+          "sha256": "e9574f343eeddc597bd472fea018866a0839bdb121885ee52f582f870be37130",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -106,7 +126,7 @@
           "date": "2026-10-06",
           "notes": "",
           "file": "plugins/dist/entinygram.yandex/1.0.0.inu.js",
-          "sha256": "eea4aea6b1b57660147b93ae92af59ef8849d41e0bebe40b98712d30910384dc",
+          "sha256": "786ee82d57035d8872089e932d65670e8d1973fe0fdf87f7fe6cf8e923cbdb14",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],

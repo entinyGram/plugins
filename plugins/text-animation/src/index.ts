@@ -1,4 +1,5 @@
 import { embed, embedChanged } from '@entiny/sdk/embed'
+import { particleStyleNames, t } from './i18n.js'
 
 // ─── JVM class references ────────────────────────────────────────────────────
 
@@ -1085,17 +1086,15 @@ inu.onUnload(() => {
 
 // ─── Settings page ──────────────────────────────────────────────────────────
 
-const STYLE_NAMES = ['Dust', 'Sparks', 'Snow', 'Sakura', 'Letters', 'Fall']
-
 const page = inu.ui.settingsPage({
   title: 'Text animation',
   items: () => {
     const enabled = cfgBool('enable')
     const items: any[] = [
-      inu.ui.header('General'),
+      inu.ui.header(t('general')),
       inu.ui.check({
         id: 'enable',
-        text: 'Enable text animation',
+        text: t('enable'),
         checked: enabled,
         onChange: (checked: boolean) => {
           cfgSet('enable', String(checked))
@@ -1107,75 +1106,75 @@ const page = inu.ui.settingsPage({
       items.push(
         inu.ui.slider({
           id: 'duration',
-          text: 'Duration',
+          text: t('duration'),
           min: 80, max: 900, step: 10,
           value: cfgInt('duration'),
-          format: (v: number) => `${v} ms`,
+          label: (v: number) => `${v} ms`,
           onChange: (v: number) => cfgSet('duration', String(v)),
         }),
         inu.ui.slider({
           id: 'wave',
-          text: 'Wave delay',
+          text: t('wave_delay'),
           min: 0, max: 120, step: 5,
           value: cfgInt('wave_step'),
-          format: (v: number) => `${v} ms`,
+          label: (v: number) => `${v} ms`,
           onChange: (v: number) => cfgSet('wave_step', String(v)),
         }),
         inu.ui.separator(),
-        inu.ui.header('Effects'),
+        inu.ui.header(t('effects')),
         inu.ui.check({
           id: 'blur',
-          text: 'Blur',
+          text: t('blur'),
           checked: cfgBool('blur_enabled'),
           onChange: (c: boolean) => cfgSet('blur_enabled', String(c)),
         }),
         inu.ui.check({
           id: 'slide',
-          text: 'Slide',
+          text: t('slide'),
           checked: cfgBool('slide_enabled'),
           onChange: (c: boolean) => cfgSet('slide_enabled', String(c)),
         }),
         inu.ui.check({
           id: 'scale',
-          text: 'Scale',
+          text: t('scale'),
           checked: cfgBool('scale_enabled'),
           onChange: (c: boolean) => cfgSet('scale_enabled', String(c)),
         }),
         inu.ui.check({
           id: 'rotate',
-          text: 'Rotate',
+          text: t('rotate'),
           checked: cfgBool('rotate_enabled'),
           onChange: (c: boolean) => cfgSet('rotate_enabled', String(c)),
         }),
         inu.ui.separator(),
-        inu.ui.header('Deletion'),
+        inu.ui.header(t('deletion')),
         inu.ui.check({
           id: 'ghost',
-          text: 'Ghost on delete',
+          text: t('ghost'),
           checked: cfgBool('delete_ghost'),
           onChange: (c: boolean) => cfgSet('delete_ghost', String(c)),
         }),
         inu.ui.select({
           id: 'particle-style',
-          text: 'Particle style',
-          items: STYLE_NAMES,
+          text: t('particle_style'),
+          items: particleStyleNames(),
           selected: cfgParticleStyle(),
           onChange: (idx: number) => cfgSet('particle_style', String(idx)),
         }),
         inu.ui.slider({
           id: 'particle-count',
-          text: 'Particles per char',
+          text: t('particles_per_char'),
           min: 0, max: 12, step: 1,
           value: cfgInt('particle_count'),
-          format: (v: number) => `${v}`,
+          label: (v: number) => `${v}`,
           onChange: (v: number) => cfgSet('particle_count', String(v)),
         }),
       )
     }
 
     items.push(inu.ui.separator(hooked
-      ? 'The animation plays in the message input as you type'
-      : 'This device does not support the hooks needed for this plugin'))
+      ? t('note_info')
+      : t('note_unsupported')))
 
     return items
   },
@@ -1195,8 +1194,8 @@ embed({
   rows: () => [{
     id: 'enable',
     type: 'check' as const,
-    text: 'Text animation',
-    subtitle: cfgBool('enable') ? 'Enabled' : undefined,
+    text: t('title'),
+    subtitle: cfgBool('enable') ? t('enabled') : undefined,
     checked: cfgBool('enable'),
   }],
   onEvent: (_row, value) => {

@@ -63,10 +63,11 @@ jobs:
           PLUGIN: ${{ inputs.plugin }}
           FORCE: ${{ inputs.force }}
         run: |
-          args=(--pack=release)
+          args=()
           if [ "$FORCE" = 'true' ]; then args+=(--force); fi
           if [ -n "$PLUGIN" ]; then args+=("$PLUGIN"); fi
           bun scripts/build-plugin-index.ts "${args[@]}"
+          bun scripts/pack-release.ts release
           ls -l release
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

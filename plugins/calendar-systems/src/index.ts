@@ -1,23 +1,24 @@
 import { embed, embedChanged } from '@entiny/sdk/embed'
+import { calendarTitle, t } from './i18n.js'
 
 // Dates in the app go through FastDateFormat. For a date pattern (one that holds a month or a year) the
 // result is replaced by the same pattern rendered with an ICU calendar picked by the "calendar" locale keyword.
 // The hooks are routines: they run in Java on the calling thread and never wait for the JS engine, which
 // matters because chat lists format a date per row.
 
-const CALENDARS: Array<[id: string, title: string]> = [
-  ['', 'Gregorian'],
-  ['islamic', 'Hijri Qamari (lunar)'],
-  ['islamic-civil', 'Hijri civil'],
-  ['islamic-umalqura', 'Umm al-Qura'],
-  ['persian', 'Hijri Shamsi (Jalali)'],
-  ['indian', 'Indian national (Saka)'],
-  ['hebrew', 'Hebrew'],
-  ['buddhist', 'Buddhist'],
-  ['japanese', 'Japanese'],
-  ['roc', 'Minguo'],
-  ['coptic', 'Coptic'],
-  ['ethiopic', 'Ethiopic'],
+const CALENDAR_IDS: string[] = [
+  '',
+  'islamic',
+  'islamic-civil',
+  'islamic-umalqura',
+  'persian',
+  'indian',
+  'hebrew',
+  'buddhist',
+  'japanese',
+  'roc',
+  'coptic',
+  'ethiopic',
 ]
 
 const STORAGE_KEY = 'calendar'
@@ -132,13 +133,13 @@ embed({
   rows: () => [{
     id: 'calendar',
     type: 'select',
-    text: 'Calendar system',
+    text: t('calendar_system'),
     subtitle: current() === '' ? undefined : preview(current()),
-    options: CALENDARS.map(([, title]) => title),
-    selected: Math.max(0, CALENDARS.findIndex(([id]) => id === current())),
+    options: CALENDAR_IDS.map(calendarTitle),
+    selected: Math.max(0, CALENDAR_IDS.indexOf(current())),
   }],
   onEvent: (_row, value) => {
-    const id = CALENDARS[Number(value)][0]
+    const id = CALENDAR_IDS[Number(value)] ?? ''
     selected.call('set', id)
     localStorage.setItem(STORAGE_KEY, id)
     embedChanged()
@@ -148,22 +149,22 @@ embed({
 inu.registerSettings(inu.ui.settingsPage({
   title: 'Calendar systems',
   items: () => [
-    inu.ui.header('Dates'),
+    inu.ui.header(t('header_dates')),
     inu.ui.select({
       id: 'calendar',
-      text: 'Calendar system',
-      items: CALENDARS.map(([, title]) => title),
-      selected: Math.max(0, CALENDARS.findIndex(([id]) => id === current())),
+      text: t('calendar_system'),
+      items: CALENDAR_IDS.map(calendarTitle),
+      selected: Math.max(0, CALENDAR_IDS.indexOf(current())),
       onChange: (index) => {
-        const id = CALENDARS[index][0]
+        const id = CALENDAR_IDS[index] ?? ''
         selected.call('set', id)
         localStorage.setItem(STORAGE_KEY, id)
       },
     }),
-    ...(current() === '' ? [] : [inu.ui.button({ id: 'today', text: 'Today', value: preview(current()), onClick: () => {} })]),
+    ...(current() === '' ? [] : [inu.ui.button({ id: 'today', text: t('today'), value: preview(current()), onClick: () => {} })]),
     inu.ui.separator(hooked
-      ? 'Already shown dates update when the screen is reopened'
-      : 'This device does not allow the hooks the plugin needs'),
+      ? t('note_update')
+      : t('note_unsupported')),
   ],
 }))
 

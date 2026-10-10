@@ -1,5 +1,6 @@
 import { SDK_VERSION } from '@entiny/sdk'
 import { startEmbedEngine } from './embed/engine.js'
+import { t, tf } from './i18n.js'
 
 interface CatalogVersion {
   version: string
@@ -27,12 +28,11 @@ interface Installed {
 
 type Filter = 'all' | 'installed' | 'updates'
 
-const ALL_FILTERS: { key: Filter, label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'installed', label: 'Installed' },
-  { key: 'updates', label: 'Updates' },
+const filters = (): { key: Filter, label: string }[] => [
+  { key: 'all', label: t('filter_all') },
+  { key: 'installed', label: t('filter_installed') },
+  { key: 'updates', label: t('filter_updates') },
 ]
-const filters = () => ALL_FILTERS
 
 let embedState = 'off'
 try {
@@ -210,13 +210,13 @@ async function install(plugin: CatalogPlugin, version: CatalogVersion, source: U
     const link = releaseUrl(plugin, version)
     inu.clipboard.write(link)
     const answer = await inu.ui.dialog({
-      title: 'Install from file',
+      title: t('install_file_title'),
       message: [
-        'The download link is copied. Save the file, then open Settings → Plugins → Load from file and pick it.',
+        t('install_file_msg'),
         version.sha256 ? `SHA-256: ${version.sha256}` : '',
       ].filter(Boolean).join('\n\n'),
-      positive: 'Open link',
-      negative: 'Close',
+      positive: t('open_link'),
+      negative: t('close'),
     })
     if (answer === 'positive') inu.openUrl(link)
     return
@@ -240,18 +240,18 @@ function openPlugin(plugin: CatalogPlugin) {
       const top = newest(plugin)
       const rows: inu.UIElement[] = []
 
-      rows.push(inu.ui.header('About'))
-      rows.push(inu.ui.separator(plugin.description || 'No description provided.'))
-      if (plugin.author) rows.push(inu.ui.separator(`Created by ${plugin.author}`))
+      rows.push(inu.ui.header(t('about')))
+      rows.push(inu.ui.separator(plugin.description || t('no_desc')))
+      if (plugin.author) rows.push(inu.ui.separator(tf('created_by', plugin.author)))
 
-      rows.push(inu.ui.header('Installation'))
+      rows.push(inu.ui.header(t('installation')))
       if (top) {
         const missing = unmet(top, installed)
-        const label = state === 'new' ? `Install v${top.version}` : state === 'update' ? `Update to v${top.version}` : 'Reinstall'
+        const label = state === 'new' ? tf('btn_install', top.version) : state === 'update' ? tf('btn_update', top.version) : t('btn_reinstall')
         rows.push(inu.ui.button({
           id: 'main',
           text: label,
-          subtitle: missing.length ? `Needs ${missing.join(', ')}` : local ? `Installed: v${local.version}` : undefined,
+          subtitle: missing.length ? tf('needs_deps', missing.join(', ')) : local ? tf('installed_ver', local.version) : undefined,
           icon: inu.icons.common(state === 'installed' ? 'refresh' : 'download'),
           onClick: () => install(plugin, top, detail),
         }))
@@ -260,15 +260,15 @@ function openPlugin(plugin: CatalogPlugin) {
       if (local) {
         rows.push(inu.ui.button({
           id: 'remove',
-          text: 'Remove plugin',
-          subtitle: `Installed version: v${local.version}`,
+          text: t('btn_remove'),
+          subtitle: tf('installed_ver_sub', local.version),
           icon: inu.icons.common('delete'),
           onClick: async () => {
             const answer = await inu.ui.dialog({
-              title: `Remove ${plugin.name}?`,
-              message: 'The plugin and its stored data will be removed from this device.',
-              positive: 'Remove',
-              negative: 'Cancel',
+              title: tf('remove_title', plugin.name),
+              message: t('remove_msg'),
+              positive: t('remove_confirm'),
+              negative: t('cancel'),
             })
             if (answer !== 'positive') return
             try {
@@ -279,16 +279,16 @@ function openPlugin(plugin: CatalogPlugin) {
             } catch (error) {
               console.warn('plugin removal is unavailable in the app bridge', error)
               await inu.ui.dialog({
-                title: 'Removal unavailable',
-                message: 'This app build does not expose plugin removal to the marketplace yet. Remove it from Settings → Plugins.',
-                positive: 'OK',
+                title: t('remove_unavail_title'),
+                message: t('remove_unavail_msg'),
+                positive: t('ok'),
               })
             }
           },
         }))
       }
 
-      rows.push(inu.ui.header('Version history'))
+      rows.push(inu.ui.header(t('history')))
       for (const version of [...plugin.versions].sort((x, y) => compare(y.version, x.version))) {
         const here = local && compare(version.version, local.version) === 0
         const note = (version.notes ?? '').split('\n').find(l => l.trim())
@@ -296,20 +296,20 @@ function openPlugin(plugin: CatalogPlugin) {
           id: `v:${version.version}`,
           text: `v${version.version}`,
           subtitle: [version.date, note].filter(Boolean).join('\n') || undefined,
-          value: here ? 'Installed' : version === top ? 'Latest' : undefined,
+          value: here ? t('status_installed') : version === top ? t('status_latest') : undefined,
           onClick: async () => {
             const missing = unmet(version, installed)
             const answer = await inu.ui.dialog({
               title: `${plugin.name} v${version.version}`,
-              message: [version.notes?.trim(), missing.length ? `Needs ${missing.join(', ')}` : ''].filter(Boolean).join('\n\n') || 'Install this version?',
-              positive: here ? 'Reinstall' : local && compare(version.version, local.version) < 0 ? 'Downgrade' : 'Install',
-              negative: 'Cancel',
+              message: [version.notes?.trim(), missing.length ? tf('needs_deps', missing.join(', ')) : ''].filter(Boolean).join('\n\n') || t('confirm_install_ver'),
+              positive: here ? t('btn_reinstall') : local && compare(version.version, local.version) < 0 ? t('btn_downgrade') : tf('btn_install', version.version),
+              negative: t('cancel'),
             })
             if (answer === 'positive') install(plugin, version, detail)
           },
         }))
       }
-      rows.push(inu.ui.separator(`${plugin.versions.length} published version${plugin.versions.length === 1 ? '' : 's'}`))
+      rows.push(inu.ui.separator(tf('published_versions', plugin.versions.length)))
       return rows
     },
   })
@@ -321,7 +321,7 @@ function openPlugin(plugin: CatalogPlugin) {
 function row(plugin: CatalogPlugin, installed: Installed[]): inu.UIElement {
   const { state, local } = stateOf(plugin, installed)
   const top = newest(plugin)
-  const value = state === 'update' ? `v${top?.version}` : state === 'installed' ? 'Installed' : top ? `v${top.version}` : undefined
+  const value = state === 'update' ? `v${top?.version}` : state === 'installed' ? t('status_installed') : top ? `v${top.version}` : undefined
   const icon = state === 'update' ? 'refresh' : state === 'installed' ? 'check' : 'download'
   const subtitle = state === 'update' && local
     ? `v${local.version} → v${top?.version}`
@@ -344,11 +344,11 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
 
     rows.push(inu.ui.button({
       id: 'search',
-      text: 'Search',
-      subtitle: query || 'Name, author or description',
+      text: t('search_title'),
+      subtitle: query || t('search_hint'),
       icon: inu.icons.common('search'),
       onClick: async () => {
-        const value = await inu.ui.prompt({ title: 'Search plugins', hint: 'Name, author or description', value: query, selectAll: true })
+        const value = await inu.ui.prompt({ title: t('search_prompt_title'), hint: t('search_hint'), value: query, selectAll: true })
         if (value !== null) {
           query = value.trim()
           page.invalidate()
@@ -357,7 +357,7 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
     }))
     rows.push(inu.ui.select({
       id: 'filter',
-      text: 'Show',
+      text: t('filter_title'),
       icon: inu.icons.common('more'),
       items: filters().map(f => f.label),
       selected: Math.max(0, filters().findIndex(f => f.key === filter)),
@@ -365,9 +365,9 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
     }))
 
     if (!catalog) {
-      rows.push(inu.ui.separator(loading ? 'Loading plugins…' : `Could not load the catalog: ${failure ?? 'unknown error'}`))
+      rows.push(inu.ui.separator(loading ? t('loading_catalog') : tf('catalog_fail', failure ?? t('unknown_error'))))
       rows.push(inu.ui.button({
-        id: 'retry', text: 'Try again', icon: inu.icons.common('refresh'), onClick: () => { void load() },
+        id: 'retry', text: t('try_again'), icon: inu.icons.common('refresh'), onClick: () => { void load() },
       }))
       return rows
     }
@@ -381,21 +381,21 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
       .sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
 
     const sections: [string, typeof shown][] = [
-      ['Updates available', shown.filter(x => x.state === 'update')],
-      ['Installed', shown.filter(x => x.state === 'installed')],
-      ['Available', shown.filter(x => x.state === 'new')],
+      [t('sec_updates'), shown.filter(x => x.state === 'update')],
+      [t('sec_installed'), shown.filter(x => x.state === 'installed')],
+      [t('sec_available'), shown.filter(x => x.state === 'new')],
     ]
     for (const [title, group] of sections) {
       if (!group.length) continue
       rows.push(inu.ui.header(title))
       for (const x of group) rows.push(row(x.plugin, installed))
     }
-    if (!shown.length) rows.push(inu.ui.separator(query ? 'Nothing matches the search' : 'Nothing here yet'))
+    if (!shown.length) rows.push(inu.ui.separator(query ? t('empty_search') : t('empty_list')))
 
     rows.push(inu.ui.button({
-      id: 'refresh', text: 'Refresh catalog', icon: inu.icons.common('refresh'), onClick: () => { void load() },
+      id: 'refresh', text: t('refresh_catalog'), icon: inu.icons.common('refresh'), onClick: () => { void load() },
     }))
-    rows.push(inu.ui.separator(`entinyGram SDK ${SDK_VERSION}, settings embedding ${embedState}${standalone() ? ', standalone mode (installing goes through a file)' : ''}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation`))
+    rows.push(inu.ui.separator(tf('footer_info', SDK_VERSION, embedState, standalone() ? t('standalone_mode') : '')))
     return rows
   },
 })

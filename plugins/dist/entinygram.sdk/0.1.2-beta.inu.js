@@ -858,13 +858,281 @@ function startEmbedEngine() {
   return { hooked: true };
 }
 
+// src/i18n.ts
+function appLang() {
+  try {
+    const LocaleController2 = inu.jvm.cls("org.telegram.messenger.LocaleController");
+    const short = String(LocaleController2.callStatic("getInstance").call("getCurrentLocaleInfo").getField("shortName")).toLowerCase();
+    if (short.startsWith("uk")) return "uk";
+    if (short.startsWith("ru")) return "ru";
+  } catch {
+  }
+  try {
+    const JLocale = inu.jvm.cls("java.util.Locale");
+    const lang = String(JLocale.callStatic("getDefault").call("getLanguage")).toLowerCase();
+    if (lang.startsWith("uk")) return "uk";
+    if (lang.startsWith("ru")) return "ru";
+  } catch {
+  }
+  return "en";
+}
+var STRINGS = {
+  filter_all: {
+    uk: "Усі",
+    ru: "Все",
+    en: "All"
+  },
+  filter_installed: {
+    uk: "Встановлені",
+    ru: "Установленные",
+    en: "Installed"
+  },
+  filter_updates: {
+    uk: "Оновлення",
+    ru: "Обновления",
+    en: "Updates"
+  },
+  search_title: {
+    uk: "Пошук",
+    ru: "Поиск",
+    en: "Search"
+  },
+  search_hint: {
+    uk: "Назва, автор або опис",
+    ru: "Название, автор или описание",
+    en: "Name, author or description"
+  },
+  search_prompt_title: {
+    uk: "Пошук плагінів",
+    ru: "Поиск плагинов",
+    en: "Search plugins"
+  },
+  filter_title: {
+    uk: "Показувати",
+    ru: "Показывать",
+    en: "Show"
+  },
+  loading_catalog: {
+    uk: "Завантаження плагінів…",
+    ru: "Загрузка плагинов…",
+    en: "Loading plugins…"
+  },
+  catalog_fail: {
+    uk: "Не вдалося завантажити каталог: {0}",
+    ru: "Не удалось загрузить каталог: {0}",
+    en: "Could not load the catalog: {0}"
+  },
+  unknown_error: {
+    uk: "невідома помилка",
+    ru: "неизвестная ошибка",
+    en: "unknown error"
+  },
+  try_again: {
+    uk: "Спробувати знову",
+    ru: "Попробовать снова",
+    en: "Try again"
+  },
+  refresh_catalog: {
+    uk: "Оновити каталог",
+    ru: "Обновить каталог",
+    en: "Refresh catalog"
+  },
+  sec_updates: {
+    uk: "Доступні оновлення",
+    ru: "Доступны обновления",
+    en: "Updates available"
+  },
+  sec_installed: {
+    uk: "Встановлені",
+    ru: "Установленные",
+    en: "Installed"
+  },
+  sec_available: {
+    uk: "Доступні",
+    ru: "Доступные",
+    en: "Available"
+  },
+  empty_search: {
+    uk: "Нічого не знайдено за запитом",
+    ru: "Ничего не найдено по запросу",
+    en: "Nothing matches the search"
+  },
+  empty_list: {
+    uk: "Тут поки нічого немає",
+    ru: "Здесь пока ничего нет",
+    en: "Nothing here yet"
+  },
+  status_installed: {
+    uk: "Встановлено",
+    ru: "Установлено",
+    en: "Installed"
+  },
+  status_latest: {
+    uk: "Остання",
+    ru: "Последняя",
+    en: "Latest"
+  },
+  about: {
+    uk: "Про плагін",
+    ru: "О плагине",
+    en: "About"
+  },
+  no_desc: {
+    uk: "Опис відсутній.",
+    ru: "Описание отсутствует.",
+    en: "No description provided."
+  },
+  created_by: {
+    uk: "Автор: {0}",
+    ru: "Автор: {0}",
+    en: "Created by {0}"
+  },
+  installation: {
+    uk: "Встановлення",
+    ru: "Установка",
+    en: "Installation"
+  },
+  btn_install: {
+    uk: "Встановити v{0}",
+    ru: "Установить v{0}",
+    en: "Install v{0}"
+  },
+  btn_update: {
+    uk: "Оновити до v{0}",
+    ru: "Обновить до v{0}",
+    en: "Update to v{0}"
+  },
+  btn_reinstall: {
+    uk: "Перевстановити",
+    ru: "Переустановить",
+    en: "Reinstall"
+  },
+  btn_downgrade: {
+    uk: "Понизити версію",
+    ru: "Понизить версию",
+    en: "Downgrade"
+  },
+  needs_deps: {
+    uk: "Потрібно: {0}",
+    ru: "Требуется: {0}",
+    en: "Needs {0}"
+  },
+  installed_ver: {
+    uk: "Встановлено: v{0}",
+    ru: "Установлено: v{0}",
+    en: "Installed: v{0}"
+  },
+  btn_remove: {
+    uk: "Видалити плагін",
+    ru: "Удалить плагин",
+    en: "Remove plugin"
+  },
+  installed_ver_sub: {
+    uk: "Встановлена версія: v{0}",
+    ru: "Установленная версия: v{0}",
+    en: "Installed version: v{0}"
+  },
+  remove_title: {
+    uk: "Видалити {0}?",
+    ru: "Удалить {0}?",
+    en: "Remove {0}?"
+  },
+  remove_msg: {
+    uk: "Плагін та збережені ним дані буде видалено з цього пристрою.",
+    ru: "Плагин и его сохранённые данные будут удалены с этого устройства.",
+    en: "The plugin and its stored data will be removed from this device."
+  },
+  remove_confirm: {
+    uk: "Видалити",
+    ru: "Удалить",
+    en: "Remove"
+  },
+  cancel: {
+    uk: "Скасувати",
+    ru: "Отмена",
+    en: "Cancel"
+  },
+  remove_unavail_title: {
+    uk: "Видалення недоступне",
+    ru: "Удаление недоступно",
+    en: "Removal unavailable"
+  },
+  remove_unavail_msg: {
+    uk: "Ця збірка додатку ще не підтримує видалення через маркетплейс. Видаліть плагін через Налаштування → Плагіни.",
+    ru: "Эта сборка приложения ещё не поддерживает удаление через маркетплейс. Удалите плагин через Настройки → Плагины.",
+    en: "This app build does not expose plugin removal to the marketplace yet. Remove it from Settings → Plugins."
+  },
+  ok: {
+    uk: "OK",
+    ru: "OK",
+    en: "OK"
+  },
+  history: {
+    uk: "Історія версій",
+    ru: "История версий",
+    en: "Version history"
+  },
+  confirm_install_ver: {
+    uk: "Встановити цю версію?",
+    ru: "Установить эту версию?",
+    en: "Install this version?"
+  },
+  published_versions: {
+    uk: "{0} опублікованих версій",
+    ru: "{0} опубликованных версий",
+    en: "{0} published versions"
+  },
+  install_file_title: {
+    uk: "Встановлення з файлу",
+    ru: "Установка из файла",
+    en: "Install from file"
+  },
+  install_file_msg: {
+    uk: "Посилання на завантаження скопійовано. Збережіть файл, потім відкрийте Налаштування → Плагіни → Завантажити з файлу та оберіть його.",
+    ru: "Ссылка на скачивание скопирована. Сохраните файл, затем откройте Настройки → Плагины → Загрузить из файла и выберите его.",
+    en: "The download link is copied. Save the file, then open Settings → Plugins → Load from file and pick it."
+  },
+  open_link: {
+    uk: "Відкрити посилання",
+    ru: "Открыть ссылку",
+    en: "Open link"
+  },
+  close: {
+    uk: "Закрити",
+    ru: "Закрыть",
+    en: "Close"
+  },
+  footer_info: {
+    uk: "entinyGram SDK {0}, вбудовування налаштувань {1}{2}. Плагіни надходять з репозиторію GitHub entinyGram; кожне встановлення запитує підтвердження",
+    ru: "entinyGram SDK {0}, встраивание настроек {1}{2}. Плагины поступают из репозитория GitHub entinyGram; каждая установка запрашивает подтверждение",
+    en: "entinyGram SDK {0}, settings embedding {1}{2}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation"
+  },
+  standalone_mode: {
+    uk: ", автономний режим (встановлення через файл)",
+    ru: ", автономный режим (установка через файл)",
+    en: ", standalone mode (installing goes through a file)"
+  }
+};
+function t(key) {
+  const l = appLang();
+  const entry = STRINGS[key];
+  if (!entry) return key;
+  return entry[l] ?? entry.en;
+}
+function tf(key, ...args) {
+  let str = t(key);
+  for (let i = 0; i < args.length; i++) {
+    str = str.replace(new RegExp(`\\{${i}\\}`, "g"), String(args[i]));
+  }
+  return str;
+}
+
 // src/index.ts
-var ALL_FILTERS = [
-  { key: "all", label: "All" },
-  { key: "installed", label: "Installed" },
-  { key: "updates", label: "Updates" }
+var filters = () => [
+  { key: "all", label: t("filter_all") },
+  { key: "installed", label: t("filter_installed") },
+  { key: "updates", label: t("filter_updates") }
 ];
-var filters = () => ALL_FILTERS;
 var embedState = "off";
 try {
   const engine = startEmbedEngine();
@@ -1013,13 +1281,13 @@ async function install(plugin, version, source) {
     const link = releaseUrl(plugin, version);
     inu.clipboard.write(link);
     const answer = await inu.ui.dialog({
-      title: "Install from file",
+      title: t("install_file_title"),
       message: [
-        "The download link is copied. Save the file, then open Settings → Plugins → Load from file and pick it.",
+        t("install_file_msg"),
         version.sha256 ? `SHA-256: ${version.sha256}` : ""
       ].filter(Boolean).join("\n\n"),
-      positive: "Open link",
-      negative: "Close"
+      positive: t("open_link"),
+      negative: t("close")
     });
     if (answer === "positive") inu.openUrl(link);
     return;
@@ -1039,17 +1307,17 @@ function openPlugin(plugin) {
       const { state, local } = stateOf(plugin, installed);
       const top = newest(plugin);
       const rows = [];
-      rows.push(inu.ui.header("About"));
-      rows.push(inu.ui.separator(plugin.description || "No description provided."));
-      if (plugin.author) rows.push(inu.ui.separator(`Created by ${plugin.author}`));
-      rows.push(inu.ui.header("Installation"));
+      rows.push(inu.ui.header(t("about")));
+      rows.push(inu.ui.separator(plugin.description || t("no_desc")));
+      if (plugin.author) rows.push(inu.ui.separator(tf("created_by", plugin.author)));
+      rows.push(inu.ui.header(t("installation")));
       if (top) {
         const missing = unmet(top, installed);
-        const label = state === "new" ? `Install v${top.version}` : state === "update" ? `Update to v${top.version}` : "Reinstall";
+        const label = state === "new" ? tf("btn_install", top.version) : state === "update" ? tf("btn_update", top.version) : t("btn_reinstall");
         rows.push(inu.ui.button({
           id: "main",
           text: label,
-          subtitle: missing.length ? `Needs ${missing.join(", ")}` : local ? `Installed: v${local.version}` : void 0,
+          subtitle: missing.length ? tf("needs_deps", missing.join(", ")) : local ? tf("installed_ver", local.version) : void 0,
           icon: inu.icons.common(state === "installed" ? "refresh" : "download"),
           onClick: () => install(plugin, top, detail)
         }));
@@ -1057,15 +1325,15 @@ function openPlugin(plugin) {
       if (local) {
         rows.push(inu.ui.button({
           id: "remove",
-          text: "Remove plugin",
-          subtitle: `Installed version: v${local.version}`,
+          text: t("btn_remove"),
+          subtitle: tf("installed_ver_sub", local.version),
           icon: inu.icons.common("delete"),
           onClick: async () => {
             const answer = await inu.ui.dialog({
-              title: `Remove ${plugin.name}?`,
-              message: "The plugin and its stored data will be removed from this device.",
-              positive: "Remove",
-              negative: "Cancel"
+              title: tf("remove_title", plugin.name),
+              message: t("remove_msg"),
+              positive: t("remove_confirm"),
+              negative: t("cancel")
             });
             if (answer !== "positive") return;
             try {
@@ -1079,15 +1347,15 @@ function openPlugin(plugin) {
             } catch (error) {
               console.warn("plugin removal is unavailable in the app bridge", error);
               await inu.ui.dialog({
-                title: "Removal unavailable",
-                message: "This app build does not expose plugin removal to the marketplace yet. Remove it from Settings → Plugins.",
-                positive: "OK"
+                title: t("remove_unavail_title"),
+                message: t("remove_unavail_msg"),
+                positive: t("ok")
               });
             }
           }
         }));
       }
-      rows.push(inu.ui.header("Version history"));
+      rows.push(inu.ui.header(t("history")));
       for (const version of [...plugin.versions].sort((x, y) => compare(y.version, x.version))) {
         const here = local && compare(version.version, local.version) === 0;
         const note = (version.notes ?? "").split("\n").find((l) => l.trim());
@@ -1095,20 +1363,20 @@ function openPlugin(plugin) {
           id: `v:${version.version}`,
           text: `v${version.version}`,
           subtitle: [version.date, note].filter(Boolean).join("\n") || void 0,
-          value: here ? "Installed" : version === top ? "Latest" : void 0,
+          value: here ? t("status_installed") : version === top ? t("status_latest") : void 0,
           onClick: async () => {
             const missing = unmet(version, installed);
             const answer = await inu.ui.dialog({
               title: `${plugin.name} v${version.version}`,
-              message: [version.notes?.trim(), missing.length ? `Needs ${missing.join(", ")}` : ""].filter(Boolean).join("\n\n") || "Install this version?",
-              positive: here ? "Reinstall" : local && compare(version.version, local.version) < 0 ? "Downgrade" : "Install",
-              negative: "Cancel"
+              message: [version.notes?.trim(), missing.length ? tf("needs_deps", missing.join(", ")) : ""].filter(Boolean).join("\n\n") || t("confirm_install_ver"),
+              positive: here ? t("btn_reinstall") : local && compare(version.version, local.version) < 0 ? t("btn_downgrade") : tf("btn_install", version.version),
+              negative: t("cancel")
             });
             if (answer === "positive") install(plugin, version, detail);
           }
         }));
       }
-      rows.push(inu.ui.separator(`${plugin.versions.length} published version${plugin.versions.length === 1 ? "" : "s"}`));
+      rows.push(inu.ui.separator(tf("published_versions", plugin.versions.length)));
       return rows;
     }
   });
@@ -1117,7 +1385,7 @@ function openPlugin(plugin) {
 function row(plugin, installed) {
   const { state, local } = stateOf(plugin, installed);
   const top = newest(plugin);
-  const value = state === "update" ? `v${top?.version}` : state === "installed" ? "Installed" : top ? `v${top.version}` : void 0;
+  const value = state === "update" ? `v${top?.version}` : state === "installed" ? t("status_installed") : top ? `v${top.version}` : void 0;
   const icon = state === "update" ? "refresh" : state === "installed" ? "check" : "download";
   const subtitle = state === "update" && local ? `v${local.version} → v${top?.version}` : [plugin.author, plugin.description].filter(Boolean).join(" · ");
   return inu.ui.button({
@@ -1136,11 +1404,11 @@ var page = inu.ui.settingsPage({
     if (!catalog && !loading && !failure) void load();
     rows.push(inu.ui.button({
       id: "search",
-      text: "Search",
-      subtitle: query || "Name, author or description",
+      text: t("search_title"),
+      subtitle: query || t("search_hint"),
       icon: inu.icons.common("search"),
       onClick: async () => {
-        const value = await inu.ui.prompt({ title: "Search plugins", hint: "Name, author or description", value: query, selectAll: true });
+        const value = await inu.ui.prompt({ title: t("search_prompt_title"), hint: t("search_hint"), value: query, selectAll: true });
         if (value !== null) {
           query = value.trim();
           page.invalidate();
@@ -1149,7 +1417,7 @@ var page = inu.ui.settingsPage({
     }));
     rows.push(inu.ui.select({
       id: "filter",
-      text: "Show",
+      text: t("filter_title"),
       icon: inu.icons.common("more"),
       items: filters().map((f) => f.label),
       selected: Math.max(0, filters().findIndex((f) => f.key === filter)),
@@ -1158,10 +1426,10 @@ var page = inu.ui.settingsPage({
       }
     }));
     if (!catalog) {
-      rows.push(inu.ui.separator(loading ? "Loading plugins…" : `Could not load the catalog: ${failure ?? "unknown error"}`));
+      rows.push(inu.ui.separator(loading ? t("loading_catalog") : tf("catalog_fail", failure ?? t("unknown_error"))));
       rows.push(inu.ui.button({
         id: "retry",
-        text: "Try again",
+        text: t("try_again"),
         icon: inu.icons.common("refresh"),
         onClick: () => {
           void load();
@@ -1173,25 +1441,25 @@ var page = inu.ui.settingsPage({
     const needle = query.toLowerCase();
     const shown = catalog.filter((p) => !needle || [p.name, p.id, p.author, p.description].some((s) => s?.toLowerCase().includes(needle))).map((p) => ({ plugin: p, ...stateOf(p, installed) })).filter((x) => filter === "all" || (filter === "installed" ? x.state !== "new" : x.state === "update")).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name));
     const sections = [
-      ["Updates available", shown.filter((x) => x.state === "update")],
-      ["Installed", shown.filter((x) => x.state === "installed")],
-      ["Available", shown.filter((x) => x.state === "new")]
+      [t("sec_updates"), shown.filter((x) => x.state === "update")],
+      [t("sec_installed"), shown.filter((x) => x.state === "installed")],
+      [t("sec_available"), shown.filter((x) => x.state === "new")]
     ];
     for (const [title, group] of sections) {
       if (!group.length) continue;
       rows.push(inu.ui.header(title));
       for (const x of group) rows.push(row(x.plugin, installed));
     }
-    if (!shown.length) rows.push(inu.ui.separator(query ? "Nothing matches the search" : "Nothing here yet"));
+    if (!shown.length) rows.push(inu.ui.separator(query ? t("empty_search") : t("empty_list")));
     rows.push(inu.ui.button({
       id: "refresh",
-      text: "Refresh catalog",
+      text: t("refresh_catalog"),
       icon: inu.icons.common("refresh"),
       onClick: () => {
         void load();
       }
     }));
-    rows.push(inu.ui.separator(`entinyGram SDK ${SDK_VERSION}, settings embedding ${embedState}${standalone() ? ", standalone mode (installing goes through a file)" : ""}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation`));
+    rows.push(inu.ui.separator(tf("footer_info", SDK_VERSION, embedState, standalone() ? t("standalone_mode") : "")));
     return rows;
   }
 });

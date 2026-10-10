@@ -1,8 +1,19 @@
-import type { Manifest } from '@inugram/cli'
 import type { ChoiceSlot, EntinySlot } from './slots.js'
 
 export type { ChoiceSlot, EntinySlot } from './slots.js'
 export { CHOICE_SLOTS, SLOTS } from './slots.js'
+
+export interface Manifest {
+  id?: string
+  name: string
+  author?: string
+  version?: string
+  description?: string | Record<string, string>
+  icon?: string
+  grants?: string[]
+  extra?: Record<string, any>
+  [key: string]: any
+}
 
 type Extra = NonNullable<Manifest['extra']>
 

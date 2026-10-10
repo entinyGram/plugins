@@ -1,5 +1,6 @@
 import { embed, embedChanged } from '@entiny/sdk/embed'
 import { clearTileSource, setTileSource } from '@entiny/sdk/maps'
+import { t, tf } from './i18n.js'
 
 const KEY = 'apiKey'
 const MAPS = 'maps'
@@ -30,6 +31,13 @@ const PLAIN = 'https://static.maps.2gis.com/2.0?s=%dx%d@%dx&c=%.6f,%.6f&z=%d&key
 // the app's own map: raster tiles with the same key, drawn by the app's OSM renderer
 let tilesOn = localStorage.getItem(TILES) === '1'
 let tilesState = 'off'
+
+function getTilesStateLabel(): string {
+  if (tilesState === 'active') return t('state_active')
+  if (tilesState === 'waiting for a key') return t('state_waiting_key')
+  if (tilesState.startsWith('failed: ')) return tf('state_failed', tilesState.slice('failed: '.length))
+  return t('state_off')
+}
 
 function applyTiles() {
   try {
@@ -89,11 +97,11 @@ const page = inu.ui.settingsPage({
     ...(hookError ? [inu.ui.separator(hookError)] : []),
     inu.ui.button({
       id: 'key',
-      text: '2GIS API key',
-      subtitle: 'A Static API key from the 2GIS Platform Manager',
-      value: apiKey() === '' ? 'Not set' : '••••••••',
+      text: t('key_title'),
+      subtitle: t('key_desc'),
+      value: apiKey() === '' ? t('not_set') : '••••••••',
       onClick: async () => {
-        const value = await inu.ui.prompt({ title: '2GIS API key', value: apiKey(), selectAll: true })
+        const value = await inu.ui.prompt({ title: t('key_title'), value: apiKey(), selectAll: true })
         if (value === null) return
         localStorage.setItem(KEY, value.trim())
         key.call('set', encodeURIComponent(value.trim()))
@@ -103,8 +111,8 @@ const page = inu.ui.settingsPage({
     }),
     inu.ui.check({
       id: 'tiles',
-      text: 'Map tiles',
-      subtitle: `Draws the map in the app with 2GIS tiles · ${tilesState}`,
+      text: t('tiles_title'),
+      subtitle: `${t('tiles_desc')} · ${getTilesStateLabel()}`,
       checked: tilesOn,
       onChange: (checked) => {
         tilesOn = checked
@@ -114,8 +122,8 @@ const page = inu.ui.settingsPage({
     }),
     inu.ui.check({
       id: 'maps',
-      text: 'Static maps',
-      subtitle: hooked ? 'Used whenever the app builds a preview from a map service' : `The preview hook failed: ${hookError}`,
+      text: t('maps_title'),
+      subtitle: hooked ? t('maps_desc') : `${t('hook_failed')}: ${hookError}`,
       checked: useMaps.call('get'),
       onChange: (checked) => {
         useMaps.call('set', checked)
@@ -135,8 +143,8 @@ embed({
   rows: () => [],
   onEvent: () => {},
   choices: slot => slot === 'behavior.map-provider'
-    ? [{ id: 'tiles', title: 'Map tiles', subtitle: 'Draws the map in the app with 2GIS tiles', checked: tilesOn }]
-    : [{ id: 'maps', title: 'Static maps', subtitle: 'Location previews from the 2GIS Static API', checked: useMaps.call('get') }],
+    ? [{ id: 'tiles', title: t('tiles_title'), subtitle: t('tiles_desc'), checked: tilesOn }]
+    : [{ id: 'maps', title: t('maps_title'), subtitle: t('maps_choice_desc'), checked: useMaps.call('get') }],
   onChoice: (id, picked) => {
     if (id === 'tiles') {
       tilesOn = picked

@@ -32,6 +32,14 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
+    "plugins/doc-viewer": {
+      "name": "@entiny-plugins/doc-viewer",
+      "devDependencies": {
+        "@entiny/sdk": "workspace:*",
+        "@inugram/cli": "workspace:*",
+        "@inugram/plugin-types": "workspace:*",
+      },
+    },
     "plugins/entiny-sdk": {
       "name": "@entiny-plugins/entiny-sdk",
       "devDependencies": {
@@ -92,7 +100,7 @@
     },
     "sdk/entiny": {
       "name": "@entiny/sdk",
-      "version": "0.1.0-alpha",
+      "version": "0.1.2-beta",
       "peerDependencies": {
         "@inugram/cli": "*",
       },
@@ -126,6 +134,8 @@
     "@entiny-plugins/2gis": ["@entiny-plugins/2gis@workspace:plugins/2gis"],
 
     "@entiny-plugins/calendar-systems": ["@entiny-plugins/calendar-systems@workspace:plugins/calendar-systems"],
+
+    "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/doc-viewer"],
 
     "@entiny-plugins/entiny-sdk": ["@entiny-plugins/entiny-sdk@workspace:plugins/entiny-sdk"],
 
