@@ -72,12 +72,34 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 ---
 
+## User Repository
+
+Besides the official catalog the marketplace shows a separate **User plugins** section backed by [`user-plugins/index.json`](user-plugins/index.json). It is the place for community plugins that are distributed as ready-made `.inu.js` bundles instead of being built from source in this repo.
+
+To add or update a user plugin:
+
+1. Drop the ready-made bundle into `user-plugins/bundles/` with proper `@id`, `@version` and `@description` in its `==InuPlugin==` header.
+2. Add `@id` matching `user-plugins/icons/<id>.svg` for the marketplace icon.
+3. Run `bun run build:user` — it hashes the bundle, publishes an immutable copy to `user-plugins/dist/<id>/<version>.inu.js` and refreshes the index.
+4. Commit. The marketplace picks the plugin up from `<repo>/main/user-plugins/index.json`.
+
+Current user plugins:
+
+| Plugin | ID | Version | Author | Description |
+| :--- | :--- | :---: | :---: | :--- |
+| [**Display Resize**](user-plugins/bundles/display-resize.inu.js) | `user.display-resize` | `1.0.0` | Pixuz | Control the full size of Telegram's UI (scale density) with presets and a custom factor. |
+| [**Hide Folder Tags**](user-plugins/bundles/hide-folder-tags.inu.js) | `user.hide-folder-tags` | `1.1.0` | Pixuz | Hide the colored folder badges (SH, BOT, GR, CH…) under chat names. |
+| [**Local Message Edit**](user-plugins/bundles/local-message-edit.inu.js) | `user.local-message-edit` | `1.7.0` | Pixuz | Local edit/reset of message text in chats, groups, channels and bots. |
+
+---
+
 ## Installing Plugins
 
 ### 1. In-App Marketplace (Recommended)
 Open **`Settings → Plugins → Marketplace`**.
-- Browse available plugins with live descriptions, version history, and icons.
+- Browse available plugins with live descriptions, version history, and icons, split into the **entinyGram** (official) and **User plugins** (community repository) sections.
 - Tap **Install** or **Update**. The app downloads the script, validates its SHA-256 against the catalog, and prompts you to review the requested grants.
+- On a plugin page, an **About** card shows the description, author, source repository, plugin ID (tap to copy), requirements and the latest version.
 
 ### 2. Loading from a File
 Transfer any `.inu.js` file to your Android device and open it via **`Settings → Plugins → Load from file`** or by tapping the file in a chat.
@@ -184,13 +206,19 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 │   ├── entiny-sdk/        # Marketplace UI and SDK runtime plugin
 │   ├── text-animation/    # Message input typing & deletion animation plugin
 │   └── yandex/            # Yandex Translate & static maps plugin
+├── user-plugins/          # Community "User plugins" marketplace section
+│   ├── index.json         # User catalog read by the marketplace
+│   ├── bundles/           # Ready-made .inu.js bundles (source of truth)
+│   ├── icons/             # Marketplace icons, one per plugin id
+│   └── dist/              # Published immutable copies of user bundles
 ├── sdk/
 │   ├── entiny/            # @entiny/sdk: settings placement, slots, map utilities
 │   ├── cli/               # @inugram/cli tooling
 │   ├── types/             # @inugram/plugin-types typings
 │   └── docs/              # Guides for engine APIs (grants, UI, JVM, Xposed)
 └── scripts/
-    ├── build-plugin-index.ts # Compiles plugins and regenerates index.json
+    ├── build-plugin-index.ts # Compiles official plugins and regenerates index.json
+    ├── build-user-index.ts   # Publishes user bundles and regenerates user-plugins/index.json
     └── generate-slots.ts     # Extracts available settings slots from app strings
 ```
 

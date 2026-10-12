@@ -77,6 +77,36 @@ const STRINGS = {
     ru: 'Обновить каталог',
     en: 'Refresh catalog',
   },
+  refreshing: {
+    uk: 'Оновлення…',
+    ru: 'Обновление…',
+    en: 'Refreshing…',
+  },
+  refreshing_sub: {
+    uk: 'Завантажуємо обидва каталоги',
+    ru: 'Загружаем оба каталога',
+    en: 'Fetching both catalogs',
+  },
+  catalog_updated: {
+    uk: 'Каталог оновлено',
+    ru: 'Каталог обновлён',
+    en: 'Catalog updated',
+  },
+  refresh_fail_title: {
+    uk: 'Не вдалося оновити каталог',
+    ru: 'Не удалось обновить каталог',
+    en: 'Could not refresh the catalog',
+  },
+  updated_at: {
+    uk: 'Оновлено: {0}',
+    ru: 'Обновлено: {0}',
+    en: 'Updated: {0}',
+  },
+  never_updated: {
+    uk: 'ще не оновлювався',
+    ru: 'ещё не обновлялся',
+    en: 'not updated yet',
+  },
   sec_updates: {
     uk: 'Доступні оновлення',
     ru: 'Доступны обновления',
@@ -126,6 +156,76 @@ const STRINGS = {
     uk: 'Автор: {0}',
     ru: 'Автор: {0}',
     en: 'Created by {0}',
+  },
+  source_official: {
+    uk: 'entinyGram',
+    ru: 'entinyGram',
+    en: 'entinyGram',
+  },
+  source_user: {
+    uk: 'Користувацький репозиторій',
+    ru: 'Пользовательский репозиторий',
+    en: 'User repository',
+  },
+  source_official_desc: {
+    uk: 'Офіційні плагіни entinyGram',
+    ru: 'Официальные плагины entinyGram',
+    en: 'Official entinyGram plugins',
+  },
+  source_user_desc: {
+    uk: 'Плагіни з користувацького репозиторію',
+    ru: 'Плагины из пользовательского репозитория',
+    en: 'Plugins from the user repository',
+  },
+  source_official_msg: {
+    uk: 'Плагін опубліковано в офіційному каталозі entinyGram.',
+    ru: 'Плагин опубликован в официальном каталоге entinyGram.',
+    en: 'This plugin is published in the official entinyGram catalog.',
+  },
+  source_user_msg: {
+    uk: 'Плагін опубліковано в користувацькому репозиторії спільноти.',
+    ru: 'Плагин опубликован в пользовательском репозитории сообщества.',
+    en: 'This plugin is published in the community user repository.',
+  },
+  about_desc: {
+    uk: 'Опис',
+    ru: 'Описание',
+    en: 'Description',
+  },
+  about_author: {
+    uk: 'Автор',
+    ru: 'Автор',
+    en: 'Author',
+  },
+  about_source: {
+    uk: 'Джерело',
+    ru: 'Источник',
+    en: 'Source',
+  },
+  about_id: {
+    uk: 'ID плагіна',
+    ru: 'ID плагина',
+    en: 'Plugin ID',
+  },
+  about_requires: {
+    uk: 'Залежності',
+    ru: 'Зависимости',
+    en: 'Requires',
+  },
+  unknown_author: {
+    uk: 'Невідомий автор',
+    ru: 'Неизвестный автор',
+    en: 'Unknown author',
+  },
+  published_date: {
+    uk: 'Опубліковано: {0}',
+    ru: 'Опубликовано: {0}',
+    en: 'Published {0}',
+  },
+  id_copied: {
+    uk: 'ID плагіна скопійовано',
+    ru: 'ID плагина скопирован',
+    en: 'Plugin ID copied',
   },
   installation: {
     uk: 'Встановлення',

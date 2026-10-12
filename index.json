@@ -77,6 +77,15 @@
       "name": "entinyGram SDK",
       "versions": [
         {
+          "version": "0.1.4-beta",
+          "date": "2026-10-12",
+          "notes": "- The marketplace shows two sections: the official entinyGram catalog and the separate user repository (`user-plugins/index.json`) with community plugins\n- The plugin page is redesigned into icon cards: description, author, source repository, plugin ID (tap to copy), requirements and the latest version, each as its own row with an icon\n- User plugins are exported to the plugin release too (`pack-release.ts` now packs them as `<Name>-<version>.inu.js`), so in plain inugram they are offered as release downloads just like the official ones",
+          "file": "plugins/dist/entinygram.sdk/0.1.4-beta.inu.js",
+          "sha256": "5dac4bddc73fc0cbe368c852da02ef5512c1a115005514ddfe0bea19d85353e4",
+          "requires": [],
+          "pluginApi": 1
+        },
+        {
           "version": "0.1.2-beta",
           "date": "2026-10-09",
           "notes": "- Installing in inugram downloads the file from the plugin release instead of opening a page",

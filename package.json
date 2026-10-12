@@ -8,6 +8,7 @@
   "scripts": {
     "build": "bun run build:plugins",
     "build:plugins": "bun scripts/build-plugin-index.ts",
+    "build:user": "bun scripts/build-user-index.ts",
     "build:sdk": "bun run --cwd sdk/cli build",
     "generate-slots": "bun scripts/generate-slots.ts",
     "plugins-index": "bun scripts/build-plugin-index.ts",

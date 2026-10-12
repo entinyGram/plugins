@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "id": "user.display-resize",
+      "name": "Display Resize",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-10-12",
+          "notes": "",
+          "file": "dist/user.display-resize/1.0.0.inu.js",
+          "sha256": "b11c7c8fc94fe44cfac73124eb5ffe55d1ff4974aaf078cdac81ca6234a5f9ea",
+          "requires": [],
+          "pluginApi": 1
+        }
+      ],
+      "author": "Pixuz",
+      "description": "Control the full size of Telegram's UI (scale density). Multi-functional scale presets + custom factor. Includes app restart button.",
+      "icon": "icons/user.display-resize.svg"
+    },
+    {
+      "id": "user.hide-folder-tags",
+      "name": "Hide Folder Tags",
+      "versions": [
+        {
+          "version": "1.1.0",
+          "date": "2026-10-12",
+          "notes": "",
+          "file": "dist/user.hide-folder-tags/1.1.0.inu.js",
+          "sha256": "4dabb64077efd354eafc9d17ed0e7191aade0d7a374d4aa6c655eff6676e1c19",
+          "requires": [],
+          "pluginApi": 1
+        }
+      ],
+      "author": "Pixuz",
+      "description": "Hide the colored folder badges (SH, BOT, GR, CH, etc.) under chat names. Lightweight, no per-frame hooks.",
+      "icon": "icons/user.hide-folder-tags.svg"
+    },
+    {
+      "id": "user.local-message-edit",
+      "name": "Local Message Edit",
+      "versions": [
+        {
+          "version": "1.7.0",
+          "date": "2026-10-12",
+          "notes": "",
+          "file": "dist/user.local-message-edit/1.7.0.inu.js",
+          "sha256": "6521b0082beaef1da1117a29dbcf7a2532a9841fa12f9ace12c56a5ee3947ddb",
+          "requires": [],
+          "pluginApi": 1
+        }
+      ],
+      "author": "Pixuz",
+      "description": "Local edit/reset of message text. Works in private chats, groups, channels, and bots.",
+      "icon": "icons/user.local-message-edit.svg"
+    }
+  ]
+}

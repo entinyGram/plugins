@@ -1,0 +1,1702 @@
+// ==InuPlugin==
+// @name         entinyGram SDK
+// @id           entinygram.sdk
+// @author       entinyGram
+// @version      0.1.4-beta
+// @description  Needed by plugins that use the entinyGram SDK
+// @grant        fetch(raw.githubusercontent.com)
+// @grant        openUrl
+// @grant        clipboard.write
+// @grant        unsafe.fs
+// @grant        unsafe.jvm
+// @grant        unsafe.xposed
+// @plugin-api   1
+// @platform     android
+// ==/InuPlugin==
+
+
+// ../../sdk/entiny/src/index.ts
+var SDK_VERSION = "0.1.4-beta";
+
+// ../../sdk/entiny/src/embed.ts
+var REGISTRY_KEY = "entiny.embed";
+var CHANGED_KEY = "__changed";
+function embedRegistry() {
+  const props = inu.jvm.cls("java.lang.System").callStatic("getProperties");
+  let registry = props.call("get", REGISTRY_KEY);
+  if (registry === null) {
+    props.call("putIfAbsent", REGISTRY_KEY, new (inu.jvm.cls("java.util.concurrent.ConcurrentHashMap"))());
+    registry = props.call("get", REGISTRY_KEY);
+  }
+  return registry;
+}
+var embedKeys = { changed: CHANGED_KEY };
+
+// src/embed/strings.ts
+var END = "";
+var FIELD_SEP = "";
+var ROW_SEP = "";
+var StringBuilder = inu.jvm.cls("java.lang.StringBuilder");
+var ApplicationLoader = inu.jvm.cls("org.telegram.messenger.ApplicationLoader");
+var LocaleController = inu.jvm.cls("org.telegram.messenger.LocaleController");
+var CHUNK = 500;
+var Indexer = inu.jvm.defineClass({
+  methods: {
+    build: {
+      params: ["android.content.res.Resources", "int", "int", "int"],
+      returns: "java.lang.String",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (res: any, base: any, from: any, to: any) {
+                const sb = new StringBuilder()
+                let misses = 0
+                for (let i = from; i < to; i++) {
+                  const id = base + i
+                  let name = null
+                  try {
+                    name = res.getResourceEntryName(id)
+                    misses = 0
+                  } catch (e) {
+                    // ids can have gaps; a long run of them means the type is over
+                    misses++
+                    if (misses >= 64) {
+                      sb.append(END)
+                      break
+                    }
+                    continue
+                  }
+                  if (name.startsWith('Inu') && !name.endsWith('Info')) {
+                    try {
+                      sb.append(name).append(FIELD_SEP).append(res.getString(id)).append(ROW_SEP)
+                    } catch (e) {
+                      // not a plain string
+                    }
+                  }
+                }
+                return sb.toString()
+              }`,
+        captures: ["StringBuilder", "END", "FIELD_SEP", "ROW_SEP"],
+        slots: 4,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["capture", 2],
+          ["capture", 3],
+          ["new", 0, []],
+          ["setSlot", 0, [0]],
+          ["arg", [2]],
+          ["setSlot", 1, 6],
+          ["getSlot", 1],
+          ["arg", [3]],
+          ["lt", 8, 9],
+          ["jumpIfFalsy", 10, 53],
+          ["arg", [1]],
+          ["getSlot", 1],
+          ["add", 12, 13],
+          ["setSlot", 2, [null]],
+          ["arg", [0]],
+          ["call", 16, ["getResourceEntryName"], [14]],
+          ["setSlot", 2, 17],
+          ["setSlot", 0, [0]],
+          ["jump", 31],
+          ["catch"],
+          ["getSlot", 0],
+          ["add", 22, [1]],
+          ["setSlot", 0, 23],
+          ["getSlot", 0],
+          ["ge", 25, [64]],
+          ["jumpIfFalsy", 26, 30],
+          ["call", 4, ["append"], [1]],
+          ["jump", 53],
+          ["jump", 49],
+          ["getSlot", 2],
+          ["call", 31, ["startsWith"], [["Inu"]]],
+          ["setSlot", 3, 32],
+          ["jumpIfFalsy", 32, 39],
+          ["getSlot", 2],
+          ["call", 35, ["endsWith"], [["Info"]]],
+          ["not", 36],
+          ["setSlot", 3, 37],
+          ["getSlot", 3],
+          ["jumpIfFalsy", 39, 49],
+          ["getSlot", 2],
+          ["call", 4, ["append"], [41]],
+          ["call", 42, ["append"], [2]],
+          ["call", 16, ["getString"], [14]],
+          ["call", 43, ["append"], [44]],
+          ["call", 45, ["append"], [3]],
+          ["jump", 49],
+          ["catch"],
+          ["getSlot", 1],
+          ["add", 49, [1]],
+          ["setSlot", 1, 50],
+          ["loop", 8],
+          ["call", 4, ["toString"], []],
+          ["return", 53]
+        ],
+        tries: [[16, 20, 21], [41, 47, 48]]
+      }, [StringBuilder, END, FIELD_SEP, ROW_SEP])
+    }
+  }
+});
+var kebabCache = /* @__PURE__ */ new Map();
+function kebab(name) {
+  const cachedVal = kebabCache.get(name);
+  if (cachedVal !== void 0) return cachedVal;
+  let out = "";
+  for (let i = 0; i < name.length; i++) {
+    const code = name.charCodeAt(i);
+    const upper = code >= 65 && code <= 90;
+    const prevCode = i > 0 ? name.charCodeAt(i - 1) : 0;
+    const prevUpper = prevCode >= 65 && prevCode <= 90;
+    if (upper && i > 0 && !prevUpper) out += "-";
+    out += name[i].toLowerCase();
+  }
+  kebabCache.set(name, out);
+  return out;
+}
+var cached = null;
+function localeKey() {
+  return String(LocaleController.callStatic("getInstance").call("getCurrentLocaleInfo").getField("shortName"));
+}
+function build() {
+  const context = ApplicationLoader.getStaticField("applicationContext");
+  const resources = context.call("getResources");
+  const probe = resources.call("getIdentifier", "InuSettings", "string", context.call("getPackageName"));
+  const base = probe - (probe & 65535);
+  const indexer = new Indexer();
+  const byText = /* @__PURE__ */ new Map();
+  for (let from = 0; from < 65536; from += CHUNK) {
+    const part = String(indexer.call("build", resources, base, from, from + CHUNK));
+    const ended = part.includes(END);
+    for (const row2 of part.replace(END, "").split(ROW_SEP)) {
+      if (!row2) continue;
+      const [name, text] = row2.split(FIELD_SEP);
+      const slots = byText.get(text) ?? [];
+      slots.push(kebab(name.replace(/^Inu/, "")));
+      byText.set(text, slots);
+    }
+    if (ended) break;
+  }
+  return byText;
+}
+function slotsFor(text) {
+  const locale = localeKey();
+  if (cached === null || cached.locale !== locale) cached = { locale, byText: build() };
+  return cached.byText.get(text) ?? [];
+}
+function warmUp() {
+  slotsFor("");
+}
+
+// src/embed/engine.ts
+var FIELD_SEP2 = "";
+var ROW_SEP2 = "";
+var MAX_ROWS = 4;
+var VIEW_TYPE_HEADER = 0;
+var VIEW_TYPE_SHADOW = 7;
+var VIEW_TYPE_CUSTOM_SHADOW = -4;
+var UItem = inu.jvm.cls("org.telegram.ui.Components.UItem");
+var UniversalFragment = inu.jvm.cls("org.telegram.ui.Components.UniversalFragment");
+var ArrayCls = inu.jvm.cls("java.lang.reflect.Array");
+var StringBuilder2 = inu.jvm.cls("java.lang.StringBuilder");
+var ButtonCell = inu.jvm.cls("desu.inugram.ui.settings.ButtonCellFactory").getStaticField("Companion");
+var CheckCell = inu.jvm.cls("desu.inugram.ui.settings.CheckCellFactory").getStaticField("Companion");
+var ICON_CUSTOMIZE = inu.jvm.cls("org.telegram.messenger.R$drawable").getStaticField("msg_customize");
+var Dumper = inu.jvm.defineClass({
+  methods: {
+    dump: {
+      params: ["java.lang.Object", "java.util.ArrayList"],
+      returns: "java.lang.String",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (fragment: any, items: any) {
+                const sb = new StringBuilder()
+                // Object.toString is \`package.Class@hash\`; a Class value inside a routine is a class reference, not an object
+                sb.append(fragment.toString()).append(ROW_SEP)
+                for (const it of items) {
+                  // a number is ambiguous for StringBuilder.append inside a routine; a string is not
+                  sb.append('' + it.viewType).append(FIELD_SEP).append('' + it.id).append(FIELD_SEP)
+                  const text = it.text
+                  if (text !== null) sb.append(text.toString())
+                  sb.append(ROW_SEP)
+                }
+                return sb.toString()
+              }`,
+        captures: ["StringBuilder", "ROW_SEP", "FIELD_SEP"],
+        slots: 0,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["capture", 2],
+          ["new", 0, []],
+          ["arg", [0]],
+          ["call", 4, ["toString"], []],
+          ["call", 3, ["append"], [5]],
+          ["call", 6, ["append"], [1]],
+          ["arg", [1]],
+          ["iterate", 8],
+          ["advance", 9, 26],
+          ["get", 10, ["viewType"]],
+          ["add", [""], 11],
+          ["call", 3, ["append"], [12]],
+          ["call", 13, ["append"], [2]],
+          ["get", 10, ["id"]],
+          ["add", [""], 15],
+          ["call", 14, ["append"], [16]],
+          ["call", 17, ["append"], [2]],
+          ["get", 10, ["text"]],
+          ["ne", 19, [null]],
+          ["jumpIfFalsy", 20, 24],
+          ["call", 19, ["toString"], []],
+          ["call", 3, ["append"], [22]],
+          ["call", 3, ["append"], [1]],
+          ["loop", 10],
+          ["call", 3, ["toString"], []],
+          ["return", 26]
+        ],
+        tries: []
+      }, [StringBuilder2, ROW_SEP2, FIELD_SEP2])
+    }
+  }
+});
+var dumper = new Dumper();
+var owned = /* @__PURE__ */ new Map();
+var ownedIds = new (inu.jvm.cls("java.util.concurrent.ConcurrentHashMap"))();
+function idOf(pluginId, rowId) {
+  const text = `${pluginId}:${rowId}`;
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = (h << 5) + h + text.charCodeAt(i) | 0;
+  return 1073741824 | h & 1073741823;
+}
+function pageIdOf(simpleName) {
+  const name = simpleName.replace(/Activity$/, "").replace(/Settings$/, "");
+  return name === "Inu" ? "root" : kebab(name);
+}
+function registrations() {
+  const registry = embedRegistry();
+  const keys = registry.call("keySet").call("toArray");
+  const count = ArrayCls.callStatic("getLength", keys);
+  const out = [];
+  for (let i = 0; i < count; i++) {
+    const id = String(ArrayCls.callStatic("get", keys, i));
+    if (id.startsWith("__")) continue;
+    const handler = registry.call("get", id);
+    if (handler === null) continue;
+    try {
+      const meta = JSON.parse(String(handler.call("apply", "meta", "")));
+      out.push({ id, name: meta.name, placements: meta.placements ?? {}, handler });
+    } catch (e) {
+      registry.call("remove", id);
+    }
+  }
+  return out;
+}
+function choicesAt(slot) {
+  const out = [];
+  for (const reg of registrations()) {
+    if (!(reg.placements.choice ?? []).includes(slot)) continue;
+    try {
+      const list = JSON.parse(String(reg.handler.call("apply", "choices", slot)));
+      for (const choice of list.slice(0, 2)) out.push({ reg, choice });
+    } catch (e) {
+      console.warn(`embed: ${reg.id} gave no choices for ${slot}`, e);
+    }
+  }
+  return out;
+}
+var choiceCache = /* @__PURE__ */ new Map();
+function refreshChoices(page2, regs) {
+  const slots = /* @__PURE__ */ new Set();
+  for (const reg of regs) for (const slot of reg.placements.choice ?? []) if (slot.startsWith(`${page2}.`)) slots.add(slot);
+  for (const slot of slots) choiceCache.set(slot, choicesAt(slot));
+}
+function wantedSlots(regs, page2) {
+  const wants = /* @__PURE__ */ new Map();
+  const add = (slot, insert) => {
+    if (!slot.startsWith(`${page2}.`)) return;
+    const list = wants.get(slot) ?? [];
+    list.push(insert);
+    wants.set(slot, list);
+  };
+  for (const reg of regs) {
+    for (const slot of reg.placements.screen ?? []) add(slot, { reg, slot, kind: "screen" });
+    for (const place of reg.placements.inline ?? []) {
+      const slot = typeof place === "string" ? place : place.slot;
+      add(slot, { reg, slot, kind: "inline", only: typeof place === "string" ? void 0 : place.rows });
+    }
+  }
+  return wants;
+}
+function build2(insert) {
+  const { reg } = insert;
+  if (insert.kind === "screen") {
+    const id = idOf(reg.id, `screen:${insert.slot}`);
+    owned.set(id, { reg, rowId: "", kind: "screen" });
+    ownedIds.call("put", "" + id, "1");
+    return [UItem.callStatic("asButton", id, ICON_CUSTOMIZE, reg.name)];
+  }
+  let rows = [];
+  try {
+    rows = JSON.parse(String(reg.handler.call("apply", "rows", insert.slot)));
+  } catch (e) {
+    console.warn(`embed: ${reg.id} gave no rows for ${insert.slot}`, e);
+  }
+  if (insert.only) rows = rows.filter((row2) => insert.only.includes(row2.id));
+  return rows.slice(0, MAX_ROWS).map((row2) => {
+    const id = idOf(reg.id, row2.id);
+    owned.set(id, { reg, rowId: row2.id, row: row2, kind: "inline" });
+    ownedIds.call("put", "" + id, "1");
+    const subtitle = row2.subtitle ?? null;
+    if (row2.type === "check") return CheckCell.call("of", id, row2.text, subtitle, null, !!row2.checked, null);
+    const value = row2.type === "select" ? row2.options?.[row2.selected ?? 0] : row2.value;
+    return ButtonCell.call("of", id, row2.text, value ?? null, subtitle, null, !!row2.danger, null);
+  });
+}
+function plan(page2, entries, wants) {
+  const ops = [];
+  const get = (slot) => wants.get(slot) ?? [];
+  const rowsOf = (inserts) => {
+    const seen = /* @__PURE__ */ new Set();
+    return inserts.filter((i) => {
+      const key = `${i.reg.id}|${i.kind}|${i.slot}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).flatMap(build2);
+  };
+  const slotsAt = (text) => text ? slotsFor(text).map((s) => `${page2}.${s}`) : [];
+  let section = [];
+  entries.forEach((entry, i) => {
+    const slots = slotsAt(entry.text);
+    const isHeader = entry.type === VIEW_TYPE_HEADER;
+    const isShadow = entry.type === VIEW_TYPE_SHADOW || entry.type === VIEW_TYPE_CUSTOM_SHADOW;
+    const before = rowsOf(slots.flatMap((s) => get(`${s}.before`)));
+    if (before.length) ops.push({ index: i, remove: 0, add: before });
+    const replace = rowsOf(slots.flatMap((s) => get(`${s}.replace`)));
+    if (replace.length) {
+      ops.push({ index: i, remove: 1, add: replace });
+      return;
+    }
+    if (isHeader) {
+      section = slots;
+      const start = rowsOf(section.flatMap((s) => get(`${s}.start`)));
+      if (start.length) ops.push({ index: i + 1, remove: 0, add: start });
+    } else if (isShadow && section.length) {
+      const end = rowsOf(section.flatMap((s) => [...get(s), ...get(`${s}.end`)]));
+      if (end.length) ops.push({ index: i, remove: 0, add: end });
+      section = [];
+    }
+    if (!isHeader && !isShadow) {
+      const after = rowsOf(slots.flatMap((s) => [...get(`${s}.after`), ...get(s)]));
+      if (after.length) ops.push({ index: i + 1, remove: 0, add: after });
+    }
+  });
+  if (section.length) {
+    const end = rowsOf(section.flatMap((s) => [...get(s), ...get(`${s}.end`)]));
+    if (end.length) ops.push({ index: entries.length, remove: 0, add: end });
+  }
+  const tail = rowsOf(get(`${page2}.end`));
+  if (tail.length) {
+    ops.push({
+      index: entries.length,
+      remove: 0,
+      add: [UItem.callStatic("asShadow(Ljava/lang/CharSequence;)Lorg/telegram/ui/Components/UItem;", null), ...tail, UItem.callStatic("asShadow(Ljava/lang/CharSequence;)Lorg/telegram/ui/Components/UItem;", null)]
+    });
+  }
+  return ops;
+}
+function fill(fragment, items) {
+  const regs = registrations();
+  if (regs.length === 0) return;
+  const lines = String(dumper.call("dump", fragment, items)).split(ROW_SEP2);
+  const page2 = pageIdOf(lines[0].split("@")[0].split(".").pop() ?? "");
+  refreshChoices(page2, regs);
+  const wants = wantedSlots(regs, page2);
+  if (wants.size === 0 && !regs.some((reg) => (reg.placements.choice ?? []).some((slot) => slot.startsWith(`${page2}.`)))) return;
+  const entries = lines.slice(1).filter((line) => line !== "").map((line) => {
+    const [type, id, text] = line.split(FIELD_SEP2);
+    return { type: Number(type), id: Number(id), text: text ?? "" };
+  });
+  if (entries.some((entry) => owned.has(entry.id))) return;
+  entries.forEach((entry, i) => {
+    for (const slot of entry.text ? slotsFor(entry.text).map((s) => `${page2}.${s}`) : []) {
+      const active = (choiceCache.get(slot) ?? []).find((c) => c.choice.checked);
+      if (active) items.call("get(I)Ljava/lang/Object;", i).setField("textValue", active.choice.title);
+    }
+  });
+  const ops = plan(page2, entries, wants).sort((a, b) => b.index - a.index);
+  for (const op of ops) {
+    if (op.remove) items.call("remove(I)Ljava/lang/Object;", op.index);
+    op.add.forEach((row2, n) => items.call("add(ILjava/lang/Object;)V", op.index + n, row2));
+  }
+}
+var Launch = inu.jvm.cls("org.telegram.ui.LaunchActivity");
+var mainHandler = new (inu.jvm.cls("android.os.Handler"))(inu.jvm.cls("android.os.Looper").callStatic("getMainLooper"));
+var redraw = inu.jvm.routine({
+  v: 1,
+  source: `
+  () => {
+    const fragment = Launch.getSafeLastFragment()
+    if (fragment !== null && fragment instanceof UniversalFragment) fragment.listView.adapter.update(true)
+  }`,
+  captures: ["Launch", "UniversalFragment"],
+  slots: 1,
+  code: [
+    ["capture", 0],
+    ["capture", 1],
+    ["call", 0, ["getSafeLastFragment"], []],
+    ["ne", 2, [null]],
+    ["setSlot", 0, 3],
+    ["jumpIfFalsy", 3, 8],
+    ["instanceOf", 2, 1],
+    ["setSlot", 0, 6],
+    ["getSlot", 0],
+    ["jumpIfFalsy", 8, 13],
+    ["get", 2, ["listView"]],
+    ["get", 10, ["adapter"]],
+    ["call", 11, ["update"], [[true]]]
+  ],
+  tries: []
+}, [Launch, UniversalFragment]);
+function refresh() {
+  mainHandler.call("post", redraw);
+}
+function fire(own, value) {
+  own.reg.handler.call("apply", "event", JSON.stringify({ row: own.rowId, value }));
+}
+function tap(own) {
+  if (own.kind === "screen") {
+    own.reg.handler.call("apply", "open", "");
+    return;
+  }
+  const row2 = own.row;
+  if (row2.type === "check") {
+    fire(own, String(!row2.checked));
+    refresh();
+  } else if (row2.type === "button") {
+    fire(own, "");
+    refresh();
+  } else {
+    setTimeout(async () => {
+      const chosen = await inu.ui.chooser({ items: row2.options ?? [], selected: row2.selected ?? 0 });
+      if (chosen === null) return;
+      fire(own, String(chosen));
+      refresh();
+    }, 0);
+  }
+}
+var Function1 = inu.jvm.cls("kotlin.jvm.functions.Function1");
+var KotlinUnit = inu.jvm.cls("kotlin.Unit").getStaticField("INSTANCE");
+var JArrayList = inu.jvm.cls("java.util.ArrayList");
+var RadioItemOptions = inu.jvm.cls("desu.inugram.ui.settings.RadioItemOptions");
+function announce(own, picked) {
+  own.reg.handler.call("apply", "choice", JSON.stringify({ id: own.choice.id, picked }));
+}
+var pickState = new JArrayList();
+for (let n = 0; n < 4; n++) pickState.call("add", null);
+pickState.call("set", 3, KotlinUnit);
+var pickQueue = new (inu.jvm.cls("java.util.concurrent.ConcurrentLinkedQueue"))();
+var drainPicks = inu.jvm.runnable(() => {
+  for (let line = pickQueue.call("poll"); line !== null; line = pickQueue.call("poll")) {
+    try {
+      const [slot, at, size] = String(line).split("|");
+      const mine = choiceCache.get(slot) ?? [];
+      const index = Number(at);
+      const count = Number(size);
+      if (index < count) {
+        for (const own of mine) if (own.choice.checked) announce(own, false);
+      } else {
+        mine.forEach((own, i) => {
+          if (i === index - count) announce(own, true);
+          else if (own.choice.checked) announce(own, false);
+        });
+      }
+    } catch (e) {
+      console.warn("embed: a picker choice failed", e);
+    }
+  }
+});
+var Pick = inu.jvm.defineClass({
+  interfaces: [Function1],
+  methods: {
+    invoke: {
+      params: ["java.lang.Object"],
+      returns: "java.lang.Object",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (index: any) {
+                const size = pickState.get(1)
+                if (index < size) pickState.get(0).invoke(index)
+                pickQueue.add(\`\${pickState.get(2)}|\${index}|\${size}\`)
+                mainHandler.post(drainPicks)
+                return pickState.get(3)
+              }`,
+        captures: ["pickState", "pickQueue", "mainHandler", "drainPicks"],
+        slots: 0,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["capture", 2],
+          ["capture", 3],
+          ["call", 0, ["get"], [[1]]],
+          ["arg", [0]],
+          ["lt", 5, 4],
+          ["jumpIfFalsy", 6, 10],
+          ["call", 0, ["get"], [[0]]],
+          ["call", 8, ["invoke"], [5]],
+          ["call", 0, ["get"], [[2]]],
+          ["add", [""], 10],
+          ["add", 11, ["|"]],
+          ["add", 12, 5],
+          ["add", 13, ["|"]],
+          ["add", 14, 4],
+          ["call", 1, ["add"], [15]],
+          ["call", 2, ["post"], [3]],
+          ["call", 0, ["get"], [[3]]],
+          ["return", 18]
+        ],
+        tries: []
+      }, [pickState, pickQueue, mainHandler, drainPicks])
+    }
+  }
+});
+var RecyclerView = inu.jvm.cls("androidx.recyclerview.widget.RecyclerView");
+var getChildAdapterPosition = RecyclerView.getDeclaredMethod("getChildAdapterPosition(Landroid/view/View;)I");
+function pickerSlots(fragment, anchor) {
+  const listView = fragment.getField("listView");
+  const position = getChildAdapterPosition.invoke(listView, anchor);
+  if (position < 0) return [];
+  const item = listView.getField("adapter").call("getItem", position);
+  const text = item === null ? null : item.getField("text");
+  if (text === null) return [];
+  const className = String(dumper.call("dump", fragment, emptyItems)).split(ROW_SEP2)[0];
+  const page2 = pageIdOf(className.split("@")[0].split(".").pop() ?? "");
+  return slotsFor(String(text)).map((s) => `${page2}.${s}`);
+}
+var JSystem = inu.jvm.cls("java.lang.System");
+var sharedItems = new JArrayList();
+var sharedPick = new Pick();
+var emptyItems = new JArrayList();
+function hookPickers() {
+  const hook = (descriptor, slotIndex) => {
+    let show;
+    try {
+      show = RadioItemOptions.getDeclaredMethod(descriptor);
+    } catch (e) {
+      return;
+    }
+    inu.xposed.hookMethod(show, {
+      before: (ctx) => {
+        try {
+          if (choiceCache.size === 0) return;
+          const fragment = ctx.args[0];
+          if (!UniversalFragment.isInstance(fragment)) return;
+          const className = String(dumper.call("dump", fragment, emptyItems)).split(ROW_SEP2)[0];
+          const page2 = pageIdOf(className.split("@")[0].split(".").pop() ?? "");
+          if (page2 === "plugin-settings") return;
+          let hasChoices = false;
+          for (const k of choiceCache.keys()) {
+            if (k.startsWith(`${page2}.`)) {
+              hasChoices = true;
+              break;
+            }
+          }
+          if (!hasChoices) return;
+          const anchor = ctx.args[1];
+          const original = ctx.args[2];
+          const onSelect = ctx.args[slotIndex + 1];
+          if (JSystem.callStatic("identityHashCode", original) === JSystem.callStatic("identityHashCode", sharedItems)) return;
+          const slots = pickerSlots(fragment, anchor);
+          for (const slot of slots) {
+            const mine = choiceCache.get(slot) ?? [];
+            if (mine.length === 0) continue;
+            const size = original.call("size");
+            sharedItems.call("clear");
+            sharedItems.call("addAll", original);
+            for (const own of mine) sharedItems.call("add", `${own.choice.title}  (${own.reg.name})`);
+            const checked = mine.findIndex((own) => own.choice.checked);
+            pickState.call("set", 0, onSelect);
+            pickState.call("set", 1, size);
+            pickState.call("set", 2, slot);
+            ctx.args[2] = sharedItems;
+            if (checked >= 0) ctx.args[3] = size + checked;
+            ctx.args[slotIndex + 1] = sharedPick;
+            return;
+          }
+        } catch (e) {
+          console.warn("embed: a picker could not be extended", e);
+        }
+      }
+    });
+  };
+  hook("show(Lorg/telegram/ui/ActionBar/BaseFragment;Landroid/view/View;Ljava/util/List;ILkotlin/jvm/functions/Function1;)V", 3);
+  hook("show(Lorg/telegram/ui/ActionBar/BaseFragment;Landroid/view/View;Ljava/util/List;ILjava/lang/String;Lkotlin/jvm/functions/Function1;)V", 4);
+}
+var Callback2 = inu.jvm.cls("org.telegram.messenger.Utilities$Callback2");
+var ClickListener = inu.jvm.cls("org.telegram.ui.Components.RecyclerListView$OnItemClickListenerExtended");
+var FillWrapper = inu.jvm.defineClass({
+  interfaces: [Callback2],
+  fields: { orig: "java.lang.Object", fragment: "java.lang.Object" },
+  methods: {
+    run: {
+      params: ["java.lang.Object", "java.lang.Object"],
+      returns: "void",
+      body: (self, items, adapter) => {
+        self.getField("orig").call("run", items, adapter);
+        try {
+          fill(self.getField("fragment"), items);
+        } catch (e) {
+          console.warn("embed: filling a screen failed", e);
+        }
+      }
+    }
+  }
+});
+var tapState = new (inu.jvm.cls("java.util.concurrent.ConcurrentHashMap"))();
+var tapQueue = new (inu.jvm.cls("java.util.concurrent.ConcurrentLinkedQueue"))();
+var drainTaps = inu.jvm.runnable(() => {
+  for (let id = tapQueue.call("poll"); id !== null; id = tapQueue.call("poll")) {
+    try {
+      const own = owned.get(Number(id));
+      if (own !== void 0) tap(own);
+    } catch (e) {
+      console.warn("embed: a tap failed", e);
+    }
+  }
+});
+var TapWrapper = inu.jvm.defineClass({
+  interfaces: [ClickListener],
+  methods: {
+    hasDoubleTap: {
+      params: ["android.view.View", "int"],
+      returns: "boolean",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (view: any, position: any) {
+                return tapState.get('' + JSystem.identityHashCode(this)).get(0).hasDoubleTap(view, position)
+              }`,
+        captures: ["tapState", "JSystem"],
+        slots: 0,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["this"],
+          ["call", 1, ["identityHashCode"], [2]],
+          ["add", [""], 3],
+          ["call", 0, ["get"], [4]],
+          ["call", 5, ["get"], [[0]]],
+          ["arg", [0]],
+          ["arg", [1]],
+          ["call", 6, ["hasDoubleTap"], [7, 8]],
+          ["return", 9]
+        ],
+        tries: []
+      }, [tapState, JSystem])
+    },
+    onDoubleTap: {
+      params: ["android.view.View", "int", "float", "float"],
+      returns: "void",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (view: any, position: any, x: any, y: any) {
+                tapState.get('' + JSystem.identityHashCode(this)).get(0).onDoubleTap(view, position, x, y)
+              }`,
+        captures: ["tapState", "JSystem"],
+        slots: 0,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["this"],
+          ["call", 1, ["identityHashCode"], [2]],
+          ["add", [""], 3],
+          ["call", 0, ["get"], [4]],
+          ["call", 5, ["get"], [[0]]],
+          ["arg", [0]],
+          ["arg", [1]],
+          ["arg", [2]],
+          ["arg", [3]],
+          ["call", 6, ["onDoubleTap"], [7, 8, 9, 10]]
+        ],
+        tries: []
+      }, [tapState, JSystem])
+    },
+    onItemClick: {
+      params: ["android.view.View", "int", "float", "float"],
+      returns: "void",
+      body: inu.jvm.routine({
+        v: 1,
+        source: `
+        function (view: any, position: any, x: any, y: any) {
+                const state = tapState.get('' + JSystem.identityHashCode(this))
+                const item = state.get(1).getItem(position)
+                if (item !== null && ownedIds.containsKey('' + item.id)) {
+                  tapQueue.add('' + item.id)
+                  mainHandler.post(drainTaps)
+                } else {
+                  state.get(0).onItemClick(view, position, x, y)
+                }
+              }`,
+        captures: ["tapState", "JSystem", "ownedIds", "tapQueue", "mainHandler", "drainTaps"],
+        slots: 1,
+        code: [
+          ["capture", 0],
+          ["capture", 1],
+          ["capture", 2],
+          ["capture", 3],
+          ["capture", 4],
+          ["capture", 5],
+          ["this"],
+          ["call", 1, ["identityHashCode"], [6]],
+          ["add", [""], 7],
+          ["call", 0, ["get"], [8]],
+          ["call", 9, ["get"], [[1]]],
+          ["arg", [1]],
+          ["call", 10, ["getItem"], [11]],
+          ["ne", 12, [null]],
+          ["setSlot", 0, 13],
+          ["jumpIfFalsy", 13, 20],
+          ["get", 12, ["id"]],
+          ["add", [""], 16],
+          ["call", 2, ["containsKey"], [17]],
+          ["setSlot", 0, 18],
+          ["getSlot", 0],
+          ["jumpIfFalsy", 20, 27],
+          ["get", 12, ["id"]],
+          ["add", [""], 22],
+          ["call", 3, ["add"], [23]],
+          ["call", 4, ["post"], [5]],
+          ["jump", 32],
+          ["call", 9, ["get"], [[0]]],
+          ["arg", [0]],
+          ["arg", [2]],
+          ["arg", [3]],
+          ["call", 27, ["onItemClick"], [28, 11, 29, 30]]
+        ],
+        tries: []
+      }, [tapState, JSystem, ownedIds, tapQueue, mainHandler, drainTaps])
+    }
+  }
+});
+function hookScreens() {
+  inu.xposed.hookAllOverloads(UniversalFragment, "createView", {
+    after: (ctx) => {
+      try {
+        const fragment = ctx.thisObject;
+        const view = fragment.getField("listView");
+        if (view === null) return;
+        const adapter = view.getField("adapter");
+        const current = adapter.getField("fillItems");
+        if (FillWrapper.isInstance(current)) return;
+        const wrapper = new FillWrapper();
+        wrapper.setField("orig", current);
+        wrapper.setField("fragment", fragment);
+        adapter.setField("fillItems", wrapper);
+        const clicks = view.getField("onItemClickListenerExtended");
+        if (clicks !== null) {
+          const tapper = new TapWrapper();
+          const state = new JArrayList();
+          state.call("add", clicks);
+          state.call("add", adapter);
+          tapState.call("put", "" + JSystem.callStatic("identityHashCode", tapper), state);
+          view.call("setOnItemClickListener(Lorg/telegram/ui/Components/RecyclerListView$OnItemClickListenerExtended;)V", tapper);
+        }
+      } catch (e) {
+        console.warn("embed: could not wrap a screen", e);
+      }
+    }
+  });
+}
+function startEmbedEngine() {
+  const errors = [];
+  for (const hook of [hookScreens, hookPickers]) {
+    try {
+      hook();
+    } catch (e) {
+      errors.push(String(e.message ?? e));
+    }
+  }
+  if (errors.length === 2) return { hooked: false, reason: errors.join("; ") };
+  const Changed = inu.jvm.defineClass({
+    methods: {
+      run: {
+        params: [],
+        returns: "void",
+        body: inu.jvm.routine({
+          v: 1,
+          source: `
+          function () {
+                    mainHandler.post(redraw)
+                  }`,
+          captures: ["mainHandler", "redraw"],
+          slots: 0,
+          code: [
+            ["capture", 0],
+            ["capture", 1],
+            ["call", 0, ["post"], [1]]
+          ],
+          tries: []
+        }, [mainHandler, redraw])
+      }
+    }
+  });
+  const changed = new Changed();
+  embedRegistry().call("put", embedKeys.changed, changed);
+  setTimeout(() => {
+    try {
+      warmUp();
+      refresh();
+    } catch (e) {
+      console.warn("embed: could not read the settings strings", e);
+    }
+  }, 0);
+  return { hooked: true };
+}
+
+// src/i18n.ts
+function appLang() {
+  try {
+    const LocaleController2 = inu.jvm.cls("org.telegram.messenger.LocaleController");
+    const short = String(LocaleController2.callStatic("getInstance").call("getCurrentLocaleInfo").getField("shortName")).toLowerCase();
+    if (short.startsWith("uk")) return "uk";
+    if (short.startsWith("ru")) return "ru";
+  } catch {
+  }
+  try {
+    const JLocale = inu.jvm.cls("java.util.Locale");
+    const lang = String(JLocale.callStatic("getDefault").call("getLanguage")).toLowerCase();
+    if (lang.startsWith("uk")) return "uk";
+    if (lang.startsWith("ru")) return "ru";
+  } catch {
+  }
+  return "en";
+}
+var STRINGS = {
+  filter_all: {
+    uk: "Усі",
+    ru: "Все",
+    en: "All"
+  },
+  filter_installed: {
+    uk: "Встановлені",
+    ru: "Установленные",
+    en: "Installed"
+  },
+  filter_updates: {
+    uk: "Оновлення",
+    ru: "Обновления",
+    en: "Updates"
+  },
+  search_title: {
+    uk: "Пошук",
+    ru: "Поиск",
+    en: "Search"
+  },
+  search_hint: {
+    uk: "Назва, автор або опис",
+    ru: "Название, автор или описание",
+    en: "Name, author or description"
+  },
+  search_prompt_title: {
+    uk: "Пошук плагінів",
+    ru: "Поиск плагинов",
+    en: "Search plugins"
+  },
+  filter_title: {
+    uk: "Показувати",
+    ru: "Показывать",
+    en: "Show"
+  },
+  loading_catalog: {
+    uk: "Завантаження плагінів…",
+    ru: "Загрузка плагинов…",
+    en: "Loading plugins…"
+  },
+  catalog_fail: {
+    uk: "Не вдалося завантажити каталог: {0}",
+    ru: "Не удалось загрузить каталог: {0}",
+    en: "Could not load the catalog: {0}"
+  },
+  unknown_error: {
+    uk: "невідома помилка",
+    ru: "неизвестная ошибка",
+    en: "unknown error"
+  },
+  try_again: {
+    uk: "Спробувати знову",
+    ru: "Попробовать снова",
+    en: "Try again"
+  },
+  refresh_catalog: {
+    uk: "Оновити каталог",
+    ru: "Обновить каталог",
+    en: "Refresh catalog"
+  },
+  refreshing: {
+    uk: "Оновлення…",
+    ru: "Обновление…",
+    en: "Refreshing…"
+  },
+  refreshing_sub: {
+    uk: "Завантажуємо обидва каталоги",
+    ru: "Загружаем оба каталога",
+    en: "Fetching both catalogs"
+  },
+  catalog_updated: {
+    uk: "Каталог оновлено",
+    ru: "Каталог обновлён",
+    en: "Catalog updated"
+  },
+  refresh_fail_title: {
+    uk: "Не вдалося оновити каталог",
+    ru: "Не удалось обновить каталог",
+    en: "Could not refresh the catalog"
+  },
+  updated_at: {
+    uk: "Оновлено: {0}",
+    ru: "Обновлено: {0}",
+    en: "Updated: {0}"
+  },
+  never_updated: {
+    uk: "ще не оновлювався",
+    ru: "ещё не обновлялся",
+    en: "not updated yet"
+  },
+  sec_updates: {
+    uk: "Доступні оновлення",
+    ru: "Доступны обновления",
+    en: "Updates available"
+  },
+  sec_installed: {
+    uk: "Встановлені",
+    ru: "Установленные",
+    en: "Installed"
+  },
+  sec_available: {
+    uk: "Доступні",
+    ru: "Доступные",
+    en: "Available"
+  },
+  empty_search: {
+    uk: "Нічого не знайдено за запитом",
+    ru: "Ничего не найдено по запросу",
+    en: "Nothing matches the search"
+  },
+  empty_list: {
+    uk: "Тут поки нічого немає",
+    ru: "Здесь пока ничего нет",
+    en: "Nothing here yet"
+  },
+  status_installed: {
+    uk: "Встановлено",
+    ru: "Установлено",
+    en: "Installed"
+  },
+  status_latest: {
+    uk: "Остання",
+    ru: "Последняя",
+    en: "Latest"
+  },
+  about: {
+    uk: "Про плагін",
+    ru: "О плагине",
+    en: "About"
+  },
+  no_desc: {
+    uk: "Опис відсутній.",
+    ru: "Описание отсутствует.",
+    en: "No description provided."
+  },
+  created_by: {
+    uk: "Автор: {0}",
+    ru: "Автор: {0}",
+    en: "Created by {0}"
+  },
+  source_official: {
+    uk: "entinyGram",
+    ru: "entinyGram",
+    en: "entinyGram"
+  },
+  source_user: {
+    uk: "Користувацький репозиторій",
+    ru: "Пользовательский репозиторий",
+    en: "User repository"
+  },
+  source_official_desc: {
+    uk: "Офіційні плагіни entinyGram",
+    ru: "Официальные плагины entinyGram",
+    en: "Official entinyGram plugins"
+  },
+  source_user_desc: {
+    uk: "Плагіни з користувацького репозиторію",
+    ru: "Плагины из пользовательского репозитория",
+    en: "Plugins from the user repository"
+  },
+  source_official_msg: {
+    uk: "Плагін опубліковано в офіційному каталозі entinyGram.",
+    ru: "Плагин опубликован в официальном каталоге entinyGram.",
+    en: "This plugin is published in the official entinyGram catalog."
+  },
+  source_user_msg: {
+    uk: "Плагін опубліковано в користувацькому репозиторії спільноти.",
+    ru: "Плагин опубликован в пользовательском репозитории сообщества.",
+    en: "This plugin is published in the community user repository."
+  },
+  about_desc: {
+    uk: "Опис",
+    ru: "Описание",
+    en: "Description"
+  },
+  about_author: {
+    uk: "Автор",
+    ru: "Автор",
+    en: "Author"
+  },
+  about_source: {
+    uk: "Джерело",
+    ru: "Источник",
+    en: "Source"
+  },
+  about_id: {
+    uk: "ID плагіна",
+    ru: "ID плагина",
+    en: "Plugin ID"
+  },
+  about_requires: {
+    uk: "Залежності",
+    ru: "Зависимости",
+    en: "Requires"
+  },
+  unknown_author: {
+    uk: "Невідомий автор",
+    ru: "Неизвестный автор",
+    en: "Unknown author"
+  },
+  published_date: {
+    uk: "Опубліковано: {0}",
+    ru: "Опубликовано: {0}",
+    en: "Published {0}"
+  },
+  id_copied: {
+    uk: "ID плагіна скопійовано",
+    ru: "ID плагина скопирован",
+    en: "Plugin ID copied"
+  },
+  installation: {
+    uk: "Встановлення",
+    ru: "Установка",
+    en: "Installation"
+  },
+  btn_install: {
+    uk: "Встановити v{0}",
+    ru: "Установить v{0}",
+    en: "Install v{0}"
+  },
+  btn_update: {
+    uk: "Оновити до v{0}",
+    ru: "Обновить до v{0}",
+    en: "Update to v{0}"
+  },
+  btn_reinstall: {
+    uk: "Перевстановити",
+    ru: "Переустановить",
+    en: "Reinstall"
+  },
+  btn_downgrade: {
+    uk: "Понизити версію",
+    ru: "Понизить версию",
+    en: "Downgrade"
+  },
+  needs_deps: {
+    uk: "Потрібно: {0}",
+    ru: "Требуется: {0}",
+    en: "Needs {0}"
+  },
+  installed_ver: {
+    uk: "Встановлено: v{0}",
+    ru: "Установлено: v{0}",
+    en: "Installed: v{0}"
+  },
+  btn_remove: {
+    uk: "Видалити плагін",
+    ru: "Удалить плагин",
+    en: "Remove plugin"
+  },
+  installed_ver_sub: {
+    uk: "Встановлена версія: v{0}",
+    ru: "Установленная версия: v{0}",
+    en: "Installed version: v{0}"
+  },
+  remove_title: {
+    uk: "Видалити {0}?",
+    ru: "Удалить {0}?",
+    en: "Remove {0}?"
+  },
+  remove_msg: {
+    uk: "Плагін та збережені ним дані буде видалено з цього пристрою.",
+    ru: "Плагин и его сохранённые данные будут удалены с этого устройства.",
+    en: "The plugin and its stored data will be removed from this device."
+  },
+  remove_confirm: {
+    uk: "Видалити",
+    ru: "Удалить",
+    en: "Remove"
+  },
+  cancel: {
+    uk: "Скасувати",
+    ru: "Отмена",
+    en: "Cancel"
+  },
+  remove_unavail_title: {
+    uk: "Видалення недоступне",
+    ru: "Удаление недоступно",
+    en: "Removal unavailable"
+  },
+  remove_unavail_msg: {
+    uk: "Ця збірка додатку ще не підтримує видалення через маркетплейс. Видаліть плагін через Налаштування → Плагіни.",
+    ru: "Эта сборка приложения ещё не поддерживает удаление через маркетплейс. Удалите плагин через Настройки → Плагины.",
+    en: "This app build does not expose plugin removal to the marketplace yet. Remove it from Settings → Plugins."
+  },
+  ok: {
+    uk: "OK",
+    ru: "OK",
+    en: "OK"
+  },
+  history: {
+    uk: "Історія версій",
+    ru: "История версий",
+    en: "Version history"
+  },
+  confirm_install_ver: {
+    uk: "Встановити цю версію?",
+    ru: "Установить эту версию?",
+    en: "Install this version?"
+  },
+  published_versions: {
+    uk: "{0} опублікованих версій",
+    ru: "{0} опубликованных версий",
+    en: "{0} published versions"
+  },
+  install_file_title: {
+    uk: "Встановлення з файлу",
+    ru: "Установка из файла",
+    en: "Install from file"
+  },
+  install_file_msg: {
+    uk: "Посилання на завантаження скопійовано. Збережіть файл, потім відкрийте Налаштування → Плагіни → Завантажити з файлу та оберіть його.",
+    ru: "Ссылка на скачивание скопирована. Сохраните файл, затем откройте Настройки → Плагины → Загрузить из файла и выберите его.",
+    en: "The download link is copied. Save the file, then open Settings → Plugins → Load from file and pick it."
+  },
+  open_link: {
+    uk: "Відкрити посилання",
+    ru: "Открыть ссылку",
+    en: "Open link"
+  },
+  close: {
+    uk: "Закрити",
+    ru: "Закрыть",
+    en: "Close"
+  },
+  footer_info: {
+    uk: "entinyGram SDK {0}, вбудовування налаштувань {1}{2}. Плагіни надходять з репозиторію GitHub entinyGram; кожне встановлення запитує підтвердження",
+    ru: "entinyGram SDK {0}, встраивание настроек {1}{2}. Плагины поступают из репозитория GitHub entinyGram; каждая установка запрашивает подтверждение",
+    en: "entinyGram SDK {0}, settings embedding {1}{2}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation"
+  },
+  standalone_mode: {
+    uk: ", автономний режим (встановлення через файл)",
+    ru: ", автономный режим (установка через файл)",
+    en: ", standalone mode (installing goes through a file)"
+  }
+};
+function t(key) {
+  const l = appLang();
+  const entry = STRINGS[key];
+  if (!entry) return key;
+  return entry[l] ?? entry.en;
+}
+function tf(key, ...args) {
+  let str = t(key);
+  for (let i = 0; i < args.length; i++) {
+    str = str.replace(new RegExp(`\\{${i}\\}`, "g"), String(args[i]));
+  }
+  return str;
+}
+
+// src/index.ts
+var SOURCE_KEYS = ["official", "user"];
+var filters = () => [
+  { key: "all", label: t("filter_all") },
+  { key: "installed", label: t("filter_installed") },
+  { key: "updates", label: t("filter_updates") }
+];
+var embedState = "off";
+try {
+  const engine = startEmbedEngine();
+  embedState = engine.hooked ? "on" : `off (${engine.reason})`;
+} catch (e) {
+  embedState = `off (${e.message})`;
+}
+var BRIDGE_CLASS = "desu.inugram.helpers.entiny.EntinyMarketBridge";
+var DEFAULT_INDEX_URL = "https://raw.githubusercontent.com/entinyGram/plugins/main/index.json";
+var bridgeRef;
+function bridge() {
+  if (bridgeRef === void 0) {
+    try {
+      bridgeRef = inu.jvm.cls(BRIDGE_CLASS);
+    } catch {
+      bridgeRef = null;
+    }
+  }
+  return bridgeRef;
+}
+var standalone = () => bridge() === null;
+function sourceUrl(key) {
+  const base = bridge()?.callStatic("indexUrl") ?? DEFAULT_INDEX_URL;
+  if (key === "user") return base.replace(/index\.json$/, "user-plugins/index.json");
+  return base;
+}
+function sourceLabel(key) {
+  return key === "official" ? t("source_official") : t("source_user");
+}
+var catalogs = /* @__PURE__ */ new Map([
+  ["official", null],
+  ["user", null]
+]);
+var loading = false;
+var refreshing = false;
+var lastUpdated = 0;
+var failures = /* @__PURE__ */ new Map();
+var query = "";
+var filter = "all";
+var icons = /* @__PURE__ */ new Map();
+function compare(a, b) {
+  const [coreA, preA] = a.split(/-(.+)/);
+  const [coreB, preB] = b.split(/-(.+)/);
+  const pa = coreA.split(".").map((n) => parseInt(n, 10) || 0);
+  const pb = coreB.split(".").map((n) => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (d !== 0) return d < 0 ? -1 : 1;
+  }
+  if (preA === preB) return 0;
+  if (preA === void 0) return 1;
+  if (preB === void 0) return -1;
+  return preA < preB ? -1 : 1;
+}
+function newest(plugin) {
+  return [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0];
+}
+function scanInstalled() {
+  const found = /* @__PURE__ */ new Map();
+  const decoder = new TextDecoder();
+  const visit = (dir, depth) => {
+    for (const name of inu.fs.readdir(dir)) {
+      const full = `${dir}/${name}`;
+      const info = inu.fs.stat(full);
+      if (info.isDirectory) {
+        if (depth < 3) visit(full, depth + 1);
+        continue;
+      }
+      if (!/\.js$/.test(name) || info.size > 4e6) continue;
+      const head = decoder.decode(inu.fs.read(full).subarray(0, 4096));
+      const block = head.split("==InuPlugin==")[1]?.split("==/InuPlugin==")[0];
+      const id = block?.match(/@id\s+(\S+)/)?.[1];
+      const version = block?.match(/@version\s+(\S+)/)?.[1];
+      if (id && version) found.set(id, { id, version, enabled: true });
+    }
+  };
+  try {
+    visit(inu.android.getPluginsDir(), 0);
+  } catch (e) {
+    console.log("scanning installed plugins failed", e);
+  }
+  return [...found.values()];
+}
+function installedList() {
+  const native = bridge();
+  if (!native) return scanInstalled();
+  try {
+    return JSON.parse(native.callStatic("installed"));
+  } catch (e) {
+    console.log("installed list failed", e);
+    return [];
+  }
+}
+function stateOf(plugin, installed) {
+  const local = installed.find((p) => p.id === plugin.id);
+  if (!local) return { state: "new" };
+  const top = newest(plugin);
+  return { state: top && compare(top.version, local.version) > 0 ? "update" : "installed", local };
+}
+function unmet(version, installed) {
+  return (version.requires ?? []).filter((req) => !installed.some((p) => req.startsWith(p.id)));
+}
+function candidates(url) {
+  const list = [url];
+  if (url.includes("/main/")) list.push(url.replace("/main/", "/dev/"));
+  return list;
+}
+async function loadCatalog(key, suffix = "") {
+  const url = sourceUrl(key) + suffix;
+  let problem = "not found";
+  for (const candidate of candidates(url)) {
+    try {
+      const res = await fetch(candidate);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const root = await res.json();
+      const dir = candidate.slice(0, candidate.lastIndexOf("/") + 1);
+      catalogs.set(key, root.plugins.map((p) => ({
+        ...p,
+        name: p.name || p.id,
+        icon: p.icon && (/^https?:/.test(p.icon) ? p.icon : dir + p.icon),
+        versions: p.versions.map((v) => ({ ...v, file: /^https?:/.test(v.file) ? v.file : dir + v.file }))
+      })));
+      failures.delete(key);
+      return;
+    } catch (e) {
+      problem = e.message;
+    }
+  }
+  failures.set(key, problem);
+}
+async function load(manual = false) {
+  if (loading) return;
+  loading = true;
+  refreshing = manual;
+  failures.clear();
+  page.invalidate();
+  const suffix = manual ? `?t=${Date.now()}` : "";
+  await Promise.all(SOURCE_KEYS.map((key) => loadCatalog(key, suffix)));
+  loading = false;
+  refreshing = false;
+  const failed = [...failures.entries()];
+  if (failed.length === 0) {
+    lastUpdated = Date.now();
+    if (manual) {
+      try {
+        inu.ui.toast(t("catalog_updated"));
+      } catch {
+      }
+    }
+  } else if (manual) {
+    try {
+      await inu.ui.dialog({
+        title: t("refresh_fail_title"),
+        message: failed.map(([key, error]) => `${sourceLabel(key)}: ${error}`).join("\n"),
+        positive: t("ok")
+      });
+    } catch {
+    }
+    return;
+  }
+  page.invalidate();
+  void loadIcons();
+}
+async function loadIcons() {
+  await Promise.all([...catalogs.values()].flatMap((group) => group ?? []).map(async (plugin) => {
+    if (!plugin.icon || icons.has(plugin.id)) return;
+    try {
+      const res = await fetch(plugin.icon);
+      if (res.ok) icons.set(plugin.id, inu.icons.svg(await res.text()));
+    } catch (e) {
+      console.log(`icon of ${plugin.id} failed`, e);
+    }
+  }));
+  page.invalidate();
+}
+function releaseUrl(plugin, version, key) {
+  if (newest(plugin)?.version !== version.version) return version.file;
+  const base = key === "official" && !/^entinygram/i.test(plugin.name) ? `entinyGram ${plugin.name}` : plugin.name;
+  const file = `${base.replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "")}-${version.version}.inu.js`;
+  return `https://github.com/entinyGram/plugins/releases/latest/download/${file}`;
+}
+async function install(plugin, version, source, key) {
+  const native = bridge();
+  if (!native) {
+    const link = releaseUrl(plugin, version, key);
+    inu.clipboard.write(link);
+    const answer = await inu.ui.dialog({
+      title: t("install_file_title"),
+      message: [
+        t("install_file_msg"),
+        version.sha256 ? `SHA-256: ${version.sha256}` : ""
+      ].filter(Boolean).join("\n\n"),
+      positive: t("open_link"),
+      negative: t("close")
+    });
+    if (answer === "positive") inu.openUrl(link);
+    return;
+  }
+  native.callStatic("install", version.file, version.sha256 ?? "");
+  for (const delay of [3e3, 8e3, 2e4]) setTimeout(() => {
+    page.invalidate();
+    source.invalidate();
+  }, delay);
+}
+function aboutRows(plugin, source) {
+  const rows = [];
+  const top = newest(plugin);
+  rows.push(inu.ui.header(t("about")));
+  rows.push(inu.ui.button({
+    id: "hero",
+    text: plugin.name,
+    subtitle: [sourceLabel(source), plugin.author].filter(Boolean).join(" · "),
+    icon: icons.get(plugin.id) ?? inu.icons.common(source === "official" ? "star" : "user"),
+    value: top ? `v${top.version}` : void 0,
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: plugin.name,
+        message: [
+          plugin.id,
+          tf("published_versions", plugin.versions.length),
+          top ? `${t("status_latest")}: v${top.version}${top.date ? ` (${top.date})` : ""}` : ""
+        ].filter(Boolean).join("\n"),
+        positive: t("close")
+      });
+    }
+  }));
+  rows.push(inu.ui.button({
+    id: "desc",
+    text: t("about_desc"),
+    subtitle: plugin.description || t("no_desc"),
+    icon: inu.icons.common("info"),
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: `${plugin.name} — ${t("about_desc")}`,
+        message: plugin.description || t("no_desc"),
+        positive: t("close")
+      });
+    }
+  }));
+  if (plugin.author) {
+    rows.push(inu.ui.button({
+      id: "author",
+      text: t("about_author"),
+      subtitle: plugin.author,
+      icon: inu.icons.common("user"),
+      onClick: async () => {
+        await inu.ui.dialog({ title: t("about_author"), message: plugin.author, positive: t("close") });
+      }
+    }));
+  }
+  rows.push(inu.ui.button({
+    id: "source",
+    text: t("about_source"),
+    subtitle: source === "official" ? t("source_official_desc") : t("source_user_desc"),
+    icon: inu.icons.common(source === "official" ? "star" : "user"),
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: t("about_source"),
+        message: source === "official" ? t("source_official_msg") : t("source_user_msg"),
+        positive: t("close")
+      });
+    }
+  }));
+  rows.push(inu.ui.button({
+    id: "id",
+    text: t("about_id"),
+    subtitle: plugin.id,
+    icon: inu.icons.common("link"),
+    onClick: () => {
+      try {
+        inu.clipboard.write(plugin.id);
+        inu.ui.toast(t("id_copied"));
+      } catch {
+      }
+    }
+  }));
+  if (top?.requires?.length) {
+    rows.push(inu.ui.button({
+      id: "deps",
+      text: t("about_requires"),
+      subtitle: top.requires.join(", "),
+      icon: inu.icons.common("lock"),
+      onClick: () => {
+      }
+    }));
+  }
+  return rows;
+}
+function openPlugin(plugin, source) {
+  const detail = inu.ui.settingsPage({
+    title: plugin.name,
+    transient: true,
+    items: () => {
+      const installed = installedList();
+      const { state, local } = stateOf(plugin, installed);
+      const top = newest(plugin);
+      const rows = [];
+      rows.push(...aboutRows(plugin, source));
+      rows.push(inu.ui.header(t("installation")));
+      if (top) {
+        const missing = unmet(top, installed);
+        const label = state === "new" ? tf("btn_install", top.version) : state === "update" ? tf("btn_update", top.version) : t("btn_reinstall");
+        rows.push(inu.ui.button({
+          id: "main",
+          text: label,
+          subtitle: missing.length ? tf("needs_deps", missing.join(", ")) : local ? tf("installed_ver", local.version) : top.date ? tf("published_date", top.date) : void 0,
+          icon: inu.icons.common(state === "installed" ? "refresh" : "download"),
+          onClick: () => install(plugin, top, detail, source)
+        }));
+      }
+      if (local) {
+        rows.push(inu.ui.button({
+          id: "remove",
+          text: t("btn_remove"),
+          subtitle: tf("installed_ver_sub", local.version),
+          icon: inu.icons.common("delete"),
+          onClick: async () => {
+            const answer = await inu.ui.dialog({
+              title: tf("remove_title", plugin.name),
+              message: t("remove_msg"),
+              positive: t("remove_confirm"),
+              negative: t("cancel")
+            });
+            if (answer !== "positive") return;
+            try {
+              const native = bridge();
+              if (!native) throw new Error("standalone");
+              native.callStatic("remove", plugin.id);
+              setTimeout(() => {
+                page.invalidate();
+                detail.invalidate();
+              }, 1e3);
+            } catch (error) {
+              console.warn("plugin removal is unavailable in the app bridge", error);
+              await inu.ui.dialog({
+                title: t("remove_unavail_title"),
+                message: t("remove_unavail_msg"),
+                positive: t("ok")
+              });
+            }
+          }
+        }));
+      }
+      rows.push(inu.ui.header(t("history")));
+      for (const version of [...plugin.versions].sort((x, y) => compare(y.version, x.version))) {
+        const here = local && compare(version.version, local.version) === 0;
+        const note = (version.notes ?? "").split("\n").find((l) => l.trim());
+        rows.push(inu.ui.button({
+          id: `v:${version.version}`,
+          text: `v${version.version}`,
+          subtitle: [version.date, note].filter(Boolean).join("\n") || void 0,
+          icon: inu.icons.common(here ? "check" : "bookmark"),
+          value: here ? t("status_installed") : version === top ? t("status_latest") : void 0,
+          onClick: async () => {
+            const missing = unmet(version, installed);
+            const answer = await inu.ui.dialog({
+              title: `${plugin.name} v${version.version}`,
+              message: [version.notes?.trim(), missing.length ? tf("needs_deps", missing.join(", ")) : ""].filter(Boolean).join("\n\n") || t("confirm_install_ver"),
+              positive: here ? t("btn_reinstall") : local && compare(version.version, local.version) < 0 ? t("btn_downgrade") : tf("btn_install", version.version),
+              negative: t("cancel")
+            });
+            if (answer === "positive") install(plugin, version, detail, source);
+          }
+        }));
+      }
+      rows.push(inu.ui.separator(tf("published_versions", plugin.versions.length)));
+      return rows;
+    }
+  });
+  inu.ui.openPage(detail);
+}
+function row(plugin, source, installed) {
+  const { state, local } = stateOf(plugin, installed);
+  const top = newest(plugin);
+  const value = state === "update" ? `v${top?.version}` : state === "installed" ? t("status_installed") : top ? `v${top.version}` : void 0;
+  const icon = state === "update" ? "refresh" : state === "installed" ? "check" : "download";
+  const subtitle = state === "update" && local ? `v${local.version} → v${top?.version}` : [plugin.author, plugin.description].filter(Boolean).join(" · ");
+  return inu.ui.button({
+    id: `p:${plugin.id}`,
+    text: plugin.name,
+    subtitle: subtitle || void 0,
+    value,
+    icon: icons.get(plugin.id) ?? inu.icons.common(icon),
+    onClick: () => openPlugin(plugin, source)
+  });
+}
+var page = inu.ui.settingsPage({
+  title: "Marketplace",
+  items: () => {
+    const rows = [];
+    if ([...catalogs.values()].every((group) => group === null) && failures.size === 0 && !loading) void load();
+    rows.push(inu.ui.button({
+      id: "search",
+      text: t("search_title"),
+      subtitle: query || t("search_hint"),
+      icon: inu.icons.common("search"),
+      onClick: async () => {
+        const value = await inu.ui.prompt({ title: t("search_prompt_title"), hint: t("search_hint"), value: query, selectAll: true });
+        if (value !== null) {
+          query = value.trim();
+          page.invalidate();
+        }
+      }
+    }));
+    rows.push(inu.ui.select({
+      id: "filter",
+      text: t("filter_title"),
+      icon: inu.icons.common("more"),
+      items: filters().map((f) => f.label),
+      selected: Math.max(0, filters().findIndex((f) => f.key === filter)),
+      onChange: (index) => {
+        filter = filters()[index].key;
+      }
+    }));
+    const loaded = SOURCE_KEYS.filter((key) => catalogs.get(key) !== null);
+    if (loaded.length === 0) {
+      const problems = [...failures.entries()].map(([key, error]) => `${sourceLabel(key)}: ${error}`);
+      rows.push(inu.ui.separator(loading ? t("loading_catalog") : problems.length ? tf("catalog_fail", problems.join(" · ")) : t("unknown_error")));
+      rows.push(inu.ui.button({
+        id: "retry",
+        text: t("try_again"),
+        icon: inu.icons.common("refresh"),
+        onClick: () => {
+          void load();
+        }
+      }));
+      return rows;
+    }
+    const installed = installedList();
+    const needle = query.toLowerCase();
+    const shown = loaded.flatMap((key) => (catalogs.get(key) ?? []).map((plugin) => ({ key, plugin, ...stateOf(plugin, installed) }))).filter((x) => !needle || [x.plugin.name, x.plugin.id, x.plugin.author, x.plugin.description, sourceLabel(x.key)].some((s) => s?.toLowerCase().includes(needle))).filter((x) => filter === "all" || (filter === "installed" ? x.state !== "new" : x.state === "update"));
+    for (const key of loaded) {
+      const group = shown.filter((x) => x.key === key).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name));
+      if (!group.length) continue;
+      rows.push(inu.ui.header(sourceLabel(key)));
+      const subsections = [
+        [t("sec_updates"), group.filter((x) => x.state === "update")],
+        [t("sec_installed"), group.filter((x) => x.state === "installed")],
+        [t("sec_available"), group.filter((x) => x.state === "new")]
+      ];
+      const visible = subsections.filter(([, list]) => list.length > 0);
+      if (visible.length === 1) {
+        for (const x of visible[0][1]) rows.push(row(x.plugin, x.key, installed));
+      } else {
+        for (const [title, list] of visible) {
+          rows.push(inu.ui.header(title));
+          for (const x of list) rows.push(row(x.plugin, x.key, installed));
+        }
+      }
+    }
+    if (!shown.length) rows.push(inu.ui.separator(query ? t("empty_search") : t("empty_list")));
+    const clock = lastUpdated ? tf("updated_at", `${new Date(lastUpdated).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`) : t("never_updated");
+    rows.push(inu.ui.button({
+      id: "refresh",
+      text: refreshing ? t("refreshing") : t("refresh_catalog"),
+      subtitle: refreshing ? t("refreshing_sub") : clock,
+      icon: refreshing ? inu.icons.animation("loading") : inu.icons.common("refresh"),
+      onClick: () => {
+        void load(true);
+      }
+    }));
+    rows.push(inu.ui.separator(tf("footer_info", SDK_VERSION, embedState, standalone() ? t("standalone_mode") : "")));
+    return rows;
+  }
+});
+inu.registerSettings(page);

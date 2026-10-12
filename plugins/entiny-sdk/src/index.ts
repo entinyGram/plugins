@@ -28,6 +28,12 @@ interface Installed {
 
 type Filter = 'all' | 'installed' | 'updates'
 
+// The marketplace shows two groups: the official entinyGram catalog and the separate user repository with
+// community plugins. Both live in the same GitHub repo; the user index is the one next to the official one.
+type SourceKey = 'official' | 'user'
+
+const SOURCE_KEYS: SourceKey[] = ['official', 'user']
+
 const filters = (): { key: Filter, label: string }[] => [
   { key: 'all', label: t('filter_all') },
   { key: 'installed', label: t('filter_installed') },
@@ -61,9 +67,25 @@ function bridge(): Bridge | null {
 }
 const standalone = () => bridge() === null
 
-let catalog: CatalogPlugin[] | null = null
+function sourceUrl(key: SourceKey): string {
+  const base = (bridge()?.callStatic('indexUrl') as string | undefined) ?? DEFAULT_INDEX_URL
+  if (key === 'user') return base.replace(/index\.json$/, 'user-plugins/index.json')
+  return base
+}
+
+function sourceLabel(key: SourceKey): string {
+  return key === 'official' ? t('source_official') : t('source_user')
+}
+
+const catalogs = new Map<SourceKey, CatalogPlugin[] | null>([
+  ['official', null],
+  ['user', null],
+])
 let loading = false
-let failure: string | null = null
+let refreshing = false
+/** epoch ms of the last catalog load that returned at least one index */
+let lastUpdated = 0
+const failures = new Map<SourceKey, string>()
 let query = ''
 let filter: Filter = 'all'
 const icons = new Map<string, inu.UIIcon>()
@@ -150,39 +172,63 @@ function candidates(url: string): string[] {
   return list
 }
 
-async function load() {
-  if (loading) return
-  loading = true
-  failure = null
-  page.invalidate()
-  const base = (bridge()?.callStatic('indexUrl') as string | undefined) ?? DEFAULT_INDEX_URL
+async function loadCatalog(key: SourceKey, suffix = ''): Promise<void> {
+  const url = sourceUrl(key) + suffix
   let problem = 'not found'
-  for (const url of candidates(base)) {
+  for (const candidate of candidates(url)) {
     try {
-      const res = await fetch(url)
+      const res = await fetch(candidate)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const root = await res.json() as { plugins: CatalogPlugin[] }
-      const dir = url.slice(0, url.lastIndexOf('/') + 1)
-      catalog = root.plugins.map(p => ({
+      const dir = candidate.slice(0, candidate.lastIndexOf('/') + 1)
+      catalogs.set(key, root.plugins.map(p => ({
         ...p,
         name: p.name || p.id,
         icon: p.icon && (/^https?:/.test(p.icon) ? p.icon : dir + p.icon),
         versions: p.versions.map(v => ({ ...v, file: /^https?:/.test(v.file) ? v.file : dir + v.file })),
-      }))
-      problem = ''
-      break
+      })))
+      failures.delete(key)
+      return
     } catch (e) {
       problem = (e as Error).message
     }
   }
-  failure = problem || null
+  failures.set(key, problem)
+}
+
+async function load(manual = false) {
+  if (loading) return
+  loading = true
+  refreshing = manual
+  failures.clear()
+  page.invalidate()
+  // a manual refresh bypasses any cache the fetch layer keeps: the query makes the URL fresh
+  const suffix = manual ? `?t=${Date.now()}` : ''
+  await Promise.all(SOURCE_KEYS.map(key => loadCatalog(key, suffix)))
   loading = false
+  refreshing = false
+  const failed = [...failures.entries()]
+  if (failed.length === 0) {
+    lastUpdated = Date.now()
+    if (manual) {
+      try { inu.ui.toast(t('catalog_updated')) } catch {}
+    }
+  } else if (manual) {
+    try {
+      await inu.ui.dialog({
+        title: t('refresh_fail_title'),
+        message: failed.map(([key, error]) => `${sourceLabel(key)}: ${error}`).join('\n'),
+        positive: t('ok'),
+      })
+    } catch {}
+    return
+  }
   page.invalidate()
   void loadIcons()
 }
 
 async function loadIcons() {
-  await Promise.all((catalog ?? []).map(async (plugin) => {
+  await Promise.all([...catalogs.values()].flatMap(group => (group ?? [])).map(async (plugin) => {
     if (!plugin.icon || icons.has(plugin.id)) return
     try {
       const res = await fetch(plugin.icon)
@@ -195,19 +241,20 @@ async function loadIcons() {
 }
 
 // Release assets are served as downloads under the same <Name>-<version>.inu.js name the build workflow gives them,
-// so in inugram the newest version is fetched from the latest release instead of a raw file the browser would just display.
-function releaseUrl(plugin: CatalogPlugin, version: CatalogVersion): string {
+// so in inugram (no entinyGram bridge) the newest version is fetched from the latest release instead of a raw file the
+// browser would just display. Official packages keep the `entinyGram ` prefix, user plugins keep their own name.
+function releaseUrl(plugin: CatalogPlugin, version: CatalogVersion, key: SourceKey): string {
   if (newest(plugin)?.version !== version.version) return version.file
-  const base = /^entinygram/i.test(plugin.name) ? plugin.name : `entinyGram ${plugin.name}`
+  const base = key === 'official' && !/^entinygram/i.test(plugin.name) ? `entinyGram ${plugin.name}` : plugin.name
   const file = `${base.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '')}-${version.version}.inu.js`
   return `https://github.com/entinyGram/plugins/releases/latest/download/${file}`
 }
 
-async function install(plugin: CatalogPlugin, version: CatalogVersion, source: UIPageLike) {
+async function install(plugin: CatalogPlugin, version: CatalogVersion, source: UIPageLike, key: SourceKey) {
   const native = bridge()
   if (!native) {
     // inugram only imports plugins from a file the user opens, so hand over the link and the expected checksum
-    const link = releaseUrl(plugin, version)
+    const link = releaseUrl(plugin, version, key)
     inu.clipboard.write(link)
     const answer = await inu.ui.dialog({
       title: t('install_file_title'),
@@ -230,7 +277,103 @@ type UIPageLike = { invalidate(): void }
 
 // --- plugin page -------------------------------------------------------------------------------------------------
 
-function openPlugin(plugin: CatalogPlugin) {
+// The "about" card: description, author, where the plugin comes from, its id and the SDK it needs, each row with an
+// icon. Tap a row to see the full text.
+function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
+  const rows: inu.UIElement[] = []
+  const top = newest(plugin)
+
+  rows.push(inu.ui.header(t('about')))
+  rows.push(inu.ui.button({
+    id: 'hero',
+    text: plugin.name,
+    subtitle: [sourceLabel(source), plugin.author].filter(Boolean).join(' · '),
+    icon: icons.get(plugin.id) ?? inu.icons.common(source === 'official' ? 'star' : 'user'),
+    value: top ? `v${top.version}` : undefined,
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: plugin.name,
+        message: [
+          plugin.id,
+          tf('published_versions', plugin.versions.length),
+          top ? `${t('status_latest')}: v${top.version}${top.date ? ` (${top.date})` : ''}` : '',
+        ].filter(Boolean).join('\n'),
+        positive: t('close'),
+      })
+    },
+  }))
+
+  rows.push(inu.ui.button({
+    id: 'desc',
+    text: t('about_desc'),
+    subtitle: plugin.description || t('no_desc'),
+    icon: inu.icons.common('info'),
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: `${plugin.name} — ${t('about_desc')}`,
+        message: plugin.description || t('no_desc'),
+        positive: t('close'),
+      })
+    },
+  }))
+
+  if (plugin.author) {
+    rows.push(inu.ui.button({
+      id: 'author',
+      text: t('about_author'),
+      subtitle: plugin.author,
+      icon: inu.icons.common('user'),
+      onClick: async () => {
+        await inu.ui.dialog({ title: t('about_author'), message: plugin.author, positive: t('close') })
+      },
+    }))
+  }
+
+  rows.push(inu.ui.button({
+    id: 'source',
+    text: t('about_source'),
+    subtitle: source === 'official' ? t('source_official_desc') : t('source_user_desc'),
+    icon: inu.icons.common(source === 'official' ? 'star' : 'user'),
+    onClick: async () => {
+      await inu.ui.dialog({
+        title: t('about_source'),
+        message: source === 'official' ? t('source_official_msg') : t('source_user_msg'),
+        positive: t('close'),
+      })
+    },
+  }))
+
+  rows.push(inu.ui.button({
+    id: 'id',
+    text: t('about_id'),
+    subtitle: plugin.id,
+    icon: inu.icons.common('link'),
+    onClick: () => {
+      try {
+        inu.clipboard.write(plugin.id)
+        inu.ui.toast(t('id_copied'))
+      } catch {
+        // clipboard.write is not granted in this build
+      }
+    },
+  }))
+
+  if (top?.requires?.length) {
+    rows.push(inu.ui.button({
+      id: 'deps',
+      text: t('about_requires'),
+      subtitle: top.requires.join(', '),
+      icon: inu.icons.common('lock'),
+      onClick: () => {
+        // informational row
+      },
+    }))
+  }
+
+  return rows
+}
+
+function openPlugin(plugin: CatalogPlugin, source: SourceKey) {
   const detail: inu.ui.UIPage = inu.ui.settingsPage({
     title: plugin.name,
     transient: true,
@@ -240,9 +383,7 @@ function openPlugin(plugin: CatalogPlugin) {
       const top = newest(plugin)
       const rows: inu.UIElement[] = []
 
-      rows.push(inu.ui.header(t('about')))
-      rows.push(inu.ui.separator(plugin.description || t('no_desc')))
-      if (plugin.author) rows.push(inu.ui.separator(tf('created_by', plugin.author)))
+      rows.push(...aboutRows(plugin, source))
 
       rows.push(inu.ui.header(t('installation')))
       if (top) {
@@ -251,9 +392,9 @@ function openPlugin(plugin: CatalogPlugin) {
         rows.push(inu.ui.button({
           id: 'main',
           text: label,
-          subtitle: missing.length ? tf('needs_deps', missing.join(', ')) : local ? tf('installed_ver', local.version) : undefined,
+          subtitle: missing.length ? tf('needs_deps', missing.join(', ')) : local ? tf('installed_ver', local.version) : top.date ? tf('published_date', top.date) : undefined,
           icon: inu.icons.common(state === 'installed' ? 'refresh' : 'download'),
-          onClick: () => install(plugin, top, detail),
+          onClick: () => install(plugin, top, detail, source),
         }))
       }
 
@@ -296,6 +437,7 @@ function openPlugin(plugin: CatalogPlugin) {
           id: `v:${version.version}`,
           text: `v${version.version}`,
           subtitle: [version.date, note].filter(Boolean).join('\n') || undefined,
+          icon: inu.icons.common(here ? 'check' : 'bookmark'),
           value: here ? t('status_installed') : version === top ? t('status_latest') : undefined,
           onClick: async () => {
             const missing = unmet(version, installed)
@@ -305,7 +447,7 @@ function openPlugin(plugin: CatalogPlugin) {
               positive: here ? t('btn_reinstall') : local && compare(version.version, local.version) < 0 ? t('btn_downgrade') : tf('btn_install', version.version),
               negative: t('cancel'),
             })
-            if (answer === 'positive') install(plugin, version, detail)
+            if (answer === 'positive') install(plugin, version, detail, source)
           },
         }))
       }
@@ -318,7 +460,7 @@ function openPlugin(plugin: CatalogPlugin) {
 
 // --- marketplace -------------------------------------------------------------------------------------------------
 
-function row(plugin: CatalogPlugin, installed: Installed[]): inu.UIElement {
+function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): inu.UIElement {
   const { state, local } = stateOf(plugin, installed)
   const top = newest(plugin)
   const value = state === 'update' ? `v${top?.version}` : state === 'installed' ? t('status_installed') : top ? `v${top.version}` : undefined
@@ -332,7 +474,7 @@ function row(plugin: CatalogPlugin, installed: Installed[]): inu.UIElement {
     subtitle: subtitle || undefined,
     value,
     icon: icons.get(plugin.id) ?? inu.icons.common(icon),
-    onClick: () => openPlugin(plugin),
+    onClick: () => openPlugin(plugin, source),
   })
 }
 
@@ -340,7 +482,7 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
   title: 'Marketplace',
   items: () => {
     const rows: inu.UIElement[] = []
-    if (!catalog && !loading && !failure) void load()
+    if ([...catalogs.values()].every(group => group === null) && failures.size === 0 && !loading) void load()
 
     rows.push(inu.ui.button({
       id: 'search',
@@ -364,8 +506,10 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
       onChange: (index) => { filter = filters()[index].key },
     }))
 
-    if (!catalog) {
-      rows.push(inu.ui.separator(loading ? t('loading_catalog') : tf('catalog_fail', failure ?? t('unknown_error'))))
+    const loaded = SOURCE_KEYS.filter(key => catalogs.get(key) !== null)
+    if (loaded.length === 0) {
+      const problems = [...failures.entries()].map(([key, error]) => `${sourceLabel(key)}: ${error}`)
+      rows.push(inu.ui.separator(loading ? t('loading_catalog') : problems.length ? tf('catalog_fail', problems.join(' · ')) : t('unknown_error')))
       rows.push(inu.ui.button({
         id: 'retry', text: t('try_again'), icon: inu.icons.common('refresh'), onClick: () => { void load() },
       }))
@@ -374,26 +518,42 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
 
     const installed = installedList()
     const needle = query.toLowerCase()
-    const shown = catalog
-      .filter(p => !needle || [p.name, p.id, p.author, p.description].some(s => s?.toLowerCase().includes(needle)))
-      .map(p => ({ plugin: p, ...stateOf(p, installed) }))
+    const shown = loaded
+      .flatMap(key => (catalogs.get(key) ?? []).map(plugin => ({ key, plugin, ...stateOf(plugin, installed) })))
+      .filter(x => !needle || [x.plugin.name, x.plugin.id, x.plugin.author, x.plugin.description, sourceLabel(x.key)].some(s => s?.toLowerCase().includes(needle)))
       .filter(x => filter === 'all' || (filter === 'installed' ? x.state !== 'new' : x.state === 'update'))
-      .sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
 
-    const sections: [string, typeof shown][] = [
-      [t('sec_updates'), shown.filter(x => x.state === 'update')],
-      [t('sec_installed'), shown.filter(x => x.state === 'installed')],
-      [t('sec_available'), shown.filter(x => x.state === 'new')],
-    ]
-    for (const [title, group] of sections) {
+    for (const key of loaded) {
+      const group = shown.filter(x => x.key === key).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
       if (!group.length) continue
-      rows.push(inu.ui.header(title))
-      for (const x of group) rows.push(row(x.plugin, installed))
+      rows.push(inu.ui.header(sourceLabel(key)))
+      const subsections: [string, typeof group][] = [
+        [t('sec_updates'), group.filter(x => x.state === 'update')],
+        [t('sec_installed'), group.filter(x => x.state === 'installed')],
+        [t('sec_available'), group.filter(x => x.state === 'new')],
+      ]
+      const visible = subsections.filter(([, list]) => list.length > 0)
+      // one state group needs no sub-header: the section header names the state already
+      if (visible.length === 1) {
+        for (const x of visible[0][1]) rows.push(row(x.plugin, x.key, installed))
+      } else {
+        for (const [title, list] of visible) {
+          rows.push(inu.ui.header(title))
+          for (const x of list) rows.push(row(x.plugin, x.key, installed))
+        }
+      }
     }
     if (!shown.length) rows.push(inu.ui.separator(query ? t('empty_search') : t('empty_list')))
 
+    const clock = lastUpdated
+      ? tf('updated_at', `${new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`)
+      : t('never_updated')
     rows.push(inu.ui.button({
-      id: 'refresh', text: t('refresh_catalog'), icon: inu.icons.common('refresh'), onClick: () => { void load() },
+      id: 'refresh',
+      text: refreshing ? t('refreshing') : t('refresh_catalog'),
+      subtitle: refreshing ? t('refreshing_sub') : clock,
+      icon: refreshing ? inu.icons.animation('loading') : inu.icons.common('refresh'),
+      onClick: () => { void load(true) },
     }))
     rows.push(inu.ui.separator(tf('footer_info', SDK_VERSION, embedState, standalone() ? t('standalone_mode') : '')))
     return rows

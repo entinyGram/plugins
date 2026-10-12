@@ -67,6 +67,7 @@ jobs:
           if [ "$FORCE" = 'true' ]; then args+=(--force); fi
           if [ -n "$PLUGIN" ]; then args+=("$PLUGIN"); fi
           bun scripts/build-plugin-index.ts "${args[@]}"
+          bun scripts/build-user-index.ts
           bun scripts/pack-release.ts release
           ls -l release
 
@@ -81,7 +82,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.json plugins/index.json plugins/dist
+          git add index.json plugins/index.json plugins/dist user-plugins/index.json user-plugins/dist
           if git diff --cached --quiet; then
             echo 'Catalog is already up to date'
           else
