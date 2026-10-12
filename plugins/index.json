@@ -26,6 +26,17 @@
       "name": "Calendar systems",
       "versions": [
         {
+          "version": "1.1.0",
+          "date": "2026-10-12",
+          "notes": "- The plugin page shows a sample rendered with the pattern the profile \"registration date\" row uses, so profile dates can be checked without opening a profile\n- Registration, join and birthday dates in the profile follow the chosen calendar: they are formatted by the same app formatter the plugin rewrites\n- Each hook now registers on its own, so one method missing from an app build no longer disables the rest; the page lists what could not be hooked",
+          "file": "dist/entinygram.calendar-systems/1.1.0.inu.js",
+          "sha256": "6d6c02c10549f1b654884150e7a14f073fcc8d96888d5234c1fdf22639a4be18",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        },
+        {
           "version": "1.0.0",
           "date": "2026-10-06",
           "notes": "",

@@ -32,10 +32,20 @@ const STRINGS = {
     ru: 'Сегодня',
     en: 'Today',
   },
+  in_profile: {
+    uk: 'Як у профілі',
+    ru: 'Как в профиле',
+    en: 'As shown in profile',
+  },
   note_update: {
     uk: 'Вже показані дати оновляться при повторному відкритті екрана',
     ru: 'Уже показанные даты обновятся при повторном открытии экрана',
     en: 'Already shown dates update when the screen is reopened',
+  },
+  note_partial: {
+    uk: 'Не вдалося перехопити',
+    ru: 'Не удалось перехватить',
+    en: 'Could not hook',
   },
   note_unsupported: {
     uk: 'Цей пристрій не підтримує перехоплення, необхідні для плагіна',

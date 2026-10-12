@@ -37,9 +37,24 @@ const selected: any = new AtomicReference(localStorage.getItem(STORAGE_KEY) ?? '
 // ICU formats are not thread safe, so each thread keeps its own
 const formats: any = new ConcurrentHashMap()
 
-let hooked = true
-try {
-  inu.xposed.hookMethod(FastDateFormat.getDeclaredMethod('format(J)Ljava/lang/String;'), {
+// Each hook is registered on its own: an app build without one of these methods keeps everything else working.
+const missing: string[] = []
+
+function hook(label: string, register: () => void): boolean {
+  try {
+    register()
+    return true
+  } catch (error) {
+    missing.push(label)
+    console.warn(`cannot hook ${label}`, error)
+    return false
+  }
+}
+
+// rewriting how the app formats dates is what the format() pair does; without it nothing changes
+const hooked = hook('FastDateFormat.format(long)', () => inu.xposed.hookMethod(
+  FastDateFormat.getDeclaredMethod('format(J)Ljava/lang/String;'),
+  {
     after: inu.xposed.routine((ctx: any) => {
       const calendar = selected.get()
       if (calendar === '') return
@@ -55,9 +70,12 @@ try {
       }
       ctx.setReturnValue(format.format(new JDate(ctx.args[0])))
     }),
-  })
+  },
+))
 
-  inu.xposed.hookMethod(FastDateFormat.getDeclaredMethod('format(Ljava/util/Date;)Ljava/lang/String;'), {
+hook('FastDateFormat.format(Date)', () => inu.xposed.hookMethod(
+  FastDateFormat.getDeclaredMethod('format(Ljava/util/Date;)Ljava/lang/String;'),
+  {
     after: inu.xposed.routine((ctx: any) => {
       const calendar = selected.get()
       if (calendar === '') return
@@ -73,10 +91,13 @@ try {
       }
       ctx.setReturnValue(format.format(ctx.args[0]))
     }),
-  })
+  },
+))
 
-  // the date picker header: "Mar 4" or "Mar 4, 2026", and "March" or "March 2026"
-  inu.xposed.hookMethod(LocaleController.getDeclaredMethod('formatYearMonthDay(JZ)Ljava/lang/String;'), {
+// the date picker header: "Mar 4" or "Mar 4, 2026", and "March" or "March 2026"
+hook('LocaleController.formatYearMonthDay', () => inu.xposed.hookMethod(
+  LocaleController.getDeclaredMethod('formatYearMonthDay(JZ)Ljava/lang/String;'),
+  {
     before: inu.xposed.routine((ctx: any) => {
       const calendar = selected.get()
       if (calendar === '') return
@@ -87,9 +108,12 @@ try {
       const pattern = sameYear && !ctx.args[1] ? 'MMM d' : 'MMM d, y'
       ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))
     }),
-  })
+  },
+))
 
-  inu.xposed.hookMethod(LocaleController.getDeclaredMethod('formatYearMont(JZ)Ljava/lang/String;'), {
+hook('LocaleController.formatYearMont', () => inu.xposed.hookMethod(
+  LocaleController.getDeclaredMethod('formatYearMont(JZ)Ljava/lang/String;'),
+  {
     before: inu.xposed.routine((ctx: any) => {
       const calendar = selected.get()
       if (calendar === '') return
@@ -100,28 +124,37 @@ try {
       const pattern = sameYear && !ctx.args[1] ? 'MMMM' : 'MMMM y'
       ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))
     }),
-  })
-} catch (error) {
-  // some devices cannot hook at all; the page says so instead of failing the plugin
-  hooked = false
-  console.warn('hooking is not available', error)
-}
+  },
+))
 
 // plain JS sees Java objects as handles, so members go through call(); routines above use them directly
 function current(): string {
   return selected.call('get')
 }
 
-// today's date in the chosen calendar, built the way the hooks build it, so the page proves the setting works
-function preview(calendar: string): string {
+// today's date in the chosen calendar, built the way the hooks build it, so the page proves the setting works.
+// the pattern is formatted here rather than by calling the app's formatter: a Java call made from this thread
+// would run the hook nested, and a nested hook is skipped, which would show a Gregorian date for a wrong reason
+function preview(pattern: string, calendar: string): string {
   if (calendar === '') return ''
   try {
     const locale = ULocale.callStatic('forLocale', LocaleController.callStatic('getInstance').call('getCurrentLocale'))
       .call('setKeywordValue', 'calendar', calendar)
-    return new SimpleDateFormat('d MMMM y', locale).call('format', new JDate())
+    return new SimpleDateFormat(pattern, locale).call('format', new JDate())
   } catch (error) {
     console.warn('preview failed', error)
     return ''
+  }
+}
+
+// the profile "registration date" row is LocaleController.formatterYear: reading its pattern shows the page
+// rendering a date exactly like that row does
+function profilePattern(): string {
+  try {
+    return String(LocaleController.callStatic('getInstance').call('getFormatterYear').call('getPattern'))
+  } catch (error) {
+    console.warn('profile pattern failed', error)
+    return 'd MMMM y'
   }
 }
 
@@ -134,7 +167,7 @@ embed({
     id: 'calendar',
     type: 'select',
     text: t('calendar_system'),
-    subtitle: current() === '' ? undefined : preview(current()),
+    subtitle: current() === '' ? undefined : preview('d MMMM y', current()),
     options: CALENDAR_IDS.map(calendarTitle),
     selected: Math.max(0, CALENDAR_IDS.indexOf(current())),
   }],
@@ -161,9 +194,12 @@ inu.registerSettings(inu.ui.settingsPage({
         localStorage.setItem(STORAGE_KEY, id)
       },
     }),
-    ...(current() === '' ? [] : [inu.ui.button({ id: 'today', text: t('today'), value: preview(current()), onClick: () => {} })]),
+    ...(current() === '' ? [] : [
+      inu.ui.button({ id: 'today', text: t('today'), value: preview('d MMMM y', current()), onClick: () => {} }),
+      inu.ui.button({ id: 'in_profile', text: t('in_profile'), value: preview(profilePattern(), current()), onClick: () => {} }),
+    ]),
     inu.ui.separator(hooked
-      ? t('note_update')
+      ? missing.length === 0 ? t('note_update') : `${t('note_update')}\n${t('note_partial')}: ${missing.join(', ')}`
       : t('note_unsupported')),
   ],
 }))

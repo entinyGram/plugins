@@ -9,7 +9,7 @@ export default defineConfig({
         id: 'entinygram.calendar-systems',
         name: 'Calendar systems',
         author: 'entinyGram',
-        version: '1.0.0',
+        version: '1.1.0',
         description: 'Show dates in the Hijri, Persian, Indian and other calendars',
         icon: 'inu://calendar',
         // rewrites how the app formats dates, which is what these two grants are for

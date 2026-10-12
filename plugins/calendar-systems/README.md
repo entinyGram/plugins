@@ -2,13 +2,15 @@
 
 Displays dates across alternative calendars (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) throughout entinyGram.
 
-`entinygram.calendar-systems` · version `1.0.0` · requires `entinygram.sdk >=0.1.0-alpha`
+`entinygram.calendar-systems` · version `1.1.0` · requires `entinygram.sdk >=0.1.0-alpha`
 
 ---
 
 ## Overview
 
 **Calendar Systems** enables international date systems throughout entinyGram without patching the core Telegram client. Anywhere a date contains a month or year (chat list rows, in-chat sticky date separators, message timestamps, profile media headers), the date is formatted using the selected calendar.
+
+The profile is covered by the same interception: the **registration date** row, the channel **created/joined date** and the **birthday** row are all rendered through `LocaleController` formatters, which are `FastDateFormat` instances the plugin rewrites. `Settings → Plugins → Calendar systems` prints today's date twice — once in long form and once with the exact pattern the profile row uses — so the result can be checked before opening a profile.
 
 Clock times (hours, minutes, seconds) remain standard and untouched.
 
