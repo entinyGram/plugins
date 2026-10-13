@@ -1,7 +1,7 @@
 import {
   C_BAR, C_BG, C_BTN, C_ERR, C_PILL, C_SUB, C_TEXT,
   Doc, ENCODINGS, FONT_NAMES, KIND, LABELS, MAX_HITS, MAX_SPANS, MD_EXT,
-  TEXTUAL, THEMES, WEB_LABELS,
+  TEXTUAL, THEMES, WEB_LABELS, detectFormat, fileExt,
 } from './types.js'
 import {
   AlertBuilder, BgSpan, Bitmap, ColorDrawable, ColorMatrix, ColorMatrixColorFilter,
@@ -12,12 +12,13 @@ import {
   Matrix, MotionEvent, RectF, rounded, RStyle, runOnUI, ScaleGestureDetector, ScaleType, ScrollView,
   SpannableString, TextView, Toast, TruncateAt, Typeface, View, WebView,
 } from './jvm.js'
-import { buildTextDoc } from './parsers/text.js'
+import { buildTextDoc, looksLikeText } from './parsers/text.js'
 import { buildDoc } from './parsers/office.js'
-import { archiveDoc } from './parsers/archive.js'
+import { archiveDoc, extractArchiveFile, listArchiveFiles } from './parsers/archive.js'
 import { buildWeb } from './parsers/web.js'
 import { decodeImage } from './parsers/image.js'
-import { renderPdfPage } from './parsers/pdf.js'
+import { openPdf, renderPdfPage } from './parsers/pdf.js'
+import { inversionFilter, matrixScale, stringArray } from './native.js'
 import { formatLabel, t } from './i18n.js'
 
 export class DocViewer {
@@ -87,6 +88,8 @@ export class DocViewer {
   density = 1.0
   sizeTxt: string
   cleanupFns: Array<() => void> = []
+  onClose?: () => void
+  children = new Set<DocViewer>()
 
   constructor(
     act: JavaObject,
@@ -591,18 +594,19 @@ export class DocViewer {
   }
 
   close() {
-    this.dlg?.call('dismiss')
+    try { this.dlg?.call('dismiss') } finally { this.cleanup() }
   }
 
   cleanup() {
     if (this.closed) return
     this.closed = true
+    this.token++
+    this.loadTok++
     this.savePos()
-
-    for (const fn of this.cleanupFns) {
-      try { fn() } catch {}
+    for (const child of [...this.children]) {
+      try { child.close() } catch {}
     }
-    this.cleanupFns.length = 0
+    this.children.clear()
 
     if (this.wv) {
       try {
@@ -612,12 +616,23 @@ export class DocViewer {
       this.wv = null
     }
 
-    try {
-      this.renderer?.call('close')
-      this.renderer = null
-      this.pfd?.call('close')
-      this.pfd = null
-    } catch {}
+    try { this.renderer?.call('close') } catch {}
+    this.renderer = null
+    try { this.pfd?.call('close') } catch {}
+    this.pfd = null
+    const bitmaps = new Set([...this.cache.values(), this.bitmap, this.srcBitmap])
+    try { this.iv?.call('setImageBitmap', null) } catch {}
+    for (const bitmap of bitmaps) {
+      try { bitmap?.call('recycle') } catch {}
+    }
+    this.cache.clear()
+    this.cacheOrder.length = 0
+    this.bitmap = this.srcBitmap = null
+    for (const fn of this.cleanupFns) {
+      try { fn() } catch {}
+    }
+    this.cleanupFns.length = 0
+    this.onClose?.()
   }
 
   onKey(code: number, ev: any): boolean {
@@ -859,7 +874,10 @@ export class DocViewer {
   }
 
   setBitmap(src: JavaObject, tok: number) {
-    if (this.closed || tok !== this.token) return
+    if (this.closed || tok !== this.token) {
+      try { src.call('recycle') } catch {}
+      return
+    }
     this.srcBitmap = src
     this.shownTok = tok
     this.display(src)
@@ -884,19 +902,7 @@ export class DocViewer {
   applyInvert() {
     if (!this.iv) return
     if (this.invert) {
-      const JArray = inu.jvm.cls('java.lang.reflect.Array')
-      const FloatType = inu.jvm.cls('java.lang.Float').getStaticField('TYPE')
-      const m = JArray.callStatic('newInstance', FloatType, 20)
-      const values = [
-        -1.0, 0.0, 0.0, 0.0, 255.0,
-        0.0, -1.0, 0.0, 0.0, 255.0,
-        0.0, 0.0, -1.0, 0.0, 255.0,
-        0.0, 0.0, 0.0, 1.0, 0.0,
-      ]
-      for (let i = 0; i < 20; i++) {
-        JArray.callStatic('setFloat', m, i, Number(values[i]))
-      }
-      this.iv.call('setColorFilter', new ColorMatrixColorFilter(new ColorMatrix(m)))
+      this.iv.call('setColorFilter', inversionFilter())
     } else {
       this.iv.call('clearColorFilter')
     }
@@ -920,11 +926,7 @@ export class DocViewer {
   }
 
   curScale(): number {
-    const JArray = inu.jvm.cls('java.lang.reflect.Array')
-    const FloatType = inu.jvm.cls('java.lang.Float').getStaticField('TYPE')
-    if (!this.vals) this.vals = JArray.callStatic('newInstance', FloatType, 9)
-    this.matrix.call('getValues', this.vals)
-    return Number(JArray.callStatic('getFloat', this.vals, 0))
+    return matrixScale(this.matrix)
   }
 
   contentRect(): JavaObject {
@@ -1156,18 +1158,70 @@ export class DocViewer {
     })
     this.cleanupFns.push(unreg)
 
-    const JArray = inu.jvm.cls('java.lang.reflect.Array')
-    const StringCls = inu.jvm.cls('java.lang.String')
-    const arr = JArray.callStatic('newInstance', StringCls, ENCODINGS.length)
-    for (let i = 0; i < ENCODINGS.length; i++) {
-      const label = i === 0 ? t('enc_auto') : ENCODINGS[i][0]
-      JArray.callStatic('set', arr, i, label)
-    }
+    const arr = stringArray(ENCODINGS.map(([label], i) => i === 0 ? String(t('enc_auto')) : label))
 
     const b = this.builder()
     b.call('setTitle', t('menu_encoding'))
     b.call('setItems', arr, dlgClick)
     b.call('show')
+  }
+
+  openArchive() {
+    try {
+      const names = listArchiveFiles(this.path)
+      if (!names.length) { this.toast(String(t('empty_doc'))); return }
+      // Keep each picker bounded even for archives with thousands of entries.
+      const showBatch = (offset: number) => {
+        const batch = names.slice(offset, offset + 200)
+        const more = offset + batch.length < names.length
+        const labels = more ? [...batch, '… →'] : batch
+        const [listener, unregister] = createDlgClickListener((_, which) => {
+          if (more && which === batch.length) { showBatch(offset + batch.length); return }
+          const name = batch[which]
+          if (name) this.openArchiveEntry(name)
+        })
+        this.cleanupFns.push(unregister)
+        const builder = this.builder()
+        builder.call('setTitle', t('archive_open'))
+        builder.call('setItems', stringArray(labels), listener)
+        builder.call('show')
+      }
+      showBatch(0)
+    } catch (error) { this.toast(fmtErr(error)) }
+  }
+
+  openArchiveEntry(name: string) {
+    let path: string | null = null
+    let child: DocViewer | null = null
+    let pdf: ReturnType<typeof openPdf> | null = null
+    try {
+      let format = detectFormat(name)
+      if (!format) throw new Error(String(t('archive_unsupported')))
+      const cache = String(this.act.call('getCacheDir').call('getAbsolutePath'))
+      path = extractArchiveFile(this.path, name, cache)
+      if (format === 'sniff' || TEXTUAL.has(format)) {
+        if (!looksLikeText(path)) throw new Error(String(t('archive_unsupported')))
+        if (format === 'sniff') format = 'text'
+      }
+      if (format === 'pdf') pdf = openPdf(path)
+      child = new DocViewer(this.act, path, name, format, fileExt(name), '', pdf?.renderer, pdf?.pfd, pdf?.count)
+      const opened = child
+      const temporary = path
+      child.onClose = () => {
+        this.children.delete(opened)
+        try { new JFile(temporary).call('delete') } catch {}
+      }
+      this.children.add(child)
+      child.show()
+    } catch (error) {
+      try { child?.close() } catch {}
+      if (!child) {
+        try { pdf?.renderer.call('close') } catch {}
+        try { pdf?.pfd.call('close') } catch {}
+      }
+      try { if (path) new JFile(path).call('delete') } catch {}
+      this.toast(fmtErr(error))
+    }
   }
 
   openMenu() {
@@ -1180,6 +1234,7 @@ export class DocViewer {
     }
 
     const onOff = (v: boolean) => v ? t('on') : t('off')
+    if (this.fmt === 'archive') add(t('archive_open'), () => this.openArchive())
 
     if (this.kind === 'text' && this.doc) {
       add(t('menu_search'), () => this.searchDialog())
@@ -1249,12 +1304,7 @@ export class DocViewer {
     })
     this.cleanupFns.push(unreg)
 
-    const JArray = inu.jvm.cls('java.lang.reflect.Array')
-    const StringCls = inu.jvm.cls('java.lang.String')
-    const arr = JArray.callStatic('newInstance', StringCls, items.length)
-    for (let i = 0; i < items.length; i++) {
-      JArray.callStatic('set', arr, i, items[i])
-    }
+    const arr = stringArray(items)
 
     const b = this.builder()
     b.call('setTitle', t('menu_title'))

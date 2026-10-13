@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "inu build",
-    "check": "inu check"
+    "build": "bun ../../sdk/cli/src/cli.ts build",
+    "check": "bun ../../sdk/cli/src/cli.ts check",
+    "test": "bun test src/parsers/io.test.ts && bun test src/parsers/office.test.ts && bun test src/parsers/native.test.ts"
   },
   "devDependencies": {
     "@entiny/sdk": "workspace:*",

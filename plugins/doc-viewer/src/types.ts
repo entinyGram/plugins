@@ -100,7 +100,7 @@ registerExts('rtf', 'rtf')
 registerExts('eml', 'eml')
 registerExts('epub', 'epub')
 registerExts('fb2', 'fb2')
-registerExts('archive', 'zip jar aar tar tgz tbz2 txz')
+registerExts('archive', 'zip jar aar')
 registerExts('text', [
   'txt text log jsonl ndjson xml plist yaml yml toml ini cfg conf env properties gradle cmake',
   'srt vtt ass ssa lrc tex bib rst adoc org nfo diff patch vcf ics gpx kml tcx opml rss atom',
@@ -132,7 +132,8 @@ export const MIME_FORMAT: Record<string, string> = {
   'application/x-fictionbook+xml': 'fb2',
   'message/rfc822': 'eml',
   'application/zip': 'archive',
-  'application/x-tar': 'archive',
+  'application/x-zip-compressed': 'archive',
+  'application/java-archive': 'archive',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
   'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
@@ -203,10 +204,9 @@ export function fileExt(name: string): string {
 
 export function detectFormat(name: string, mime?: string | null): string | null {
   const low = name.toLowerCase()
-  const ml = (mime ?? '').toLowerCase()
-  if (low.endsWith('.tar.gz') || low.endsWith('.tar.bz2') || low.endsWith('.tar.xz')) {
-    return 'archive'
-  }
+  const ml = (mime ?? '').split(';')[0].trim().toLowerCase()
+  if (['application/x-tar', 'application/gzip', 'application/x-gzip', 'application/x-bzip2', 'application/x-xz'].includes(ml)) return null
+  if (/\.(?:tar(?:\.(?:gz|bz2|xz))?|tgz|tbz2|txz)$/.test(low)) return null
   const ext = fileExt(low)
   if (EXT_FORMAT[ext]) {
     return EXT_FORMAT[ext]

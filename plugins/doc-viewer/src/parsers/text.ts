@@ -1,53 +1,93 @@
 import { CELL_MAX, Doc, MAX_COLS, MAX_ROWS, MAX_TEXT_BYTES, PAGE_CHARS, type ViewerOptions } from '../types.js'
-import { ByteArrayOutputStream, FileInputStream, JFile, JString } from '../jvm.js'
+import { FileInputStream, JFile, JString } from '../jvm.js'
 import { t, tf } from '../i18n.js'
 
-export function readFileBytes(path: string, maxBytes: number = MAX_TEXT_BYTES): { bytes: Uint8Array, cut: boolean } {
-  const file = new JFile(path)
-  const length = Number(file.call('length'))
-  const toRead = Math.min(length, maxBytes)
-  const cut = length > maxBytes
+let readChunk: DefinedClass | null = null
+let decoder: DefinedClass | null = null
 
-  const fis = new FileInputStream(file)
-  const baos = new ByteArrayOutputStream()
-
-  const JArray = inu.jvm.cls('java.lang.reflect.Array')
-  const ByteType = inu.jvm.cls('java.lang.Byte').getStaticField('TYPE')
-  const bufSize = 65536
-  const buffer = JArray.callStatic('newInstance', ByteType, bufSize)
-
-  let total = 0
-  try {
-    while (total < toRead) {
-      const want = Math.min(bufSize, toRead - total)
-      const read = Number(fis.call('read([BII)I', buffer, 0, want))
-      if (read <= 0) break
-      baos.call('write([BII)V', buffer, 0, read)
-      total += read
-    }
-  } finally {
-    try { fis.call('close') } catch {}
+function decodeChunk(bytes: Uint8Array, charset: string): string {
+  if (!decoder) {
+    const StringClass: any = inu.jvm.cls('java.lang.String')
+    decoder = inu.jvm.defineClass({ staticMethods: { decode: {
+      params: ['byte[]', 'java.lang.String'], returns: 'java.lang.String',
+      body: inu.jvm.routine(function (raw: any, encoding: any) {
+        return new StringClass(raw, encoding)
+      }),
+    } } })
   }
+  return String(decoder.callStatic('decode', bytes, charset))
+}
 
-  const bytes: Uint8Array = baos.call('toByteArray')
-  return { bytes, cut }
+// Keep the mutable byte[] on the JVM side: the bridge copies typed arrays.
+function streamChunk(stream: JavaObject, count: number): Uint8Array {
+  if (!readChunk) {
+    const buffer = new Uint8Array(65536)
+    const Arrays: any = inu.jvm.cls('java.util.Arrays')
+    readChunk = inu.jvm.defineClass({ staticMethods: { read: {
+      params: ['java.io.InputStream', 'int'], returns: 'byte[]',
+      body: inu.jvm.routine(function (input: any, size: any) {
+      const n = input.read(buffer, 0, size)
+      if (n < 0) return null
+      if (n === 0) {
+        const value = input.read()
+        if (value < 0) return null
+        buffer[0] = value
+        return Arrays.copyOf(buffer, 1)
+      }
+      return Arrays.copyOf(buffer, n)
+      }),
+    } } })
+  }
+  return readChunk.callStatic('read', stream, count) ?? new Uint8Array(0)
+}
+
+function readBytes(stream: JavaObject, limit: number): Uint8Array {
+  const chunks: Uint8Array[] = []
+  let total = 0
+  while (total < limit) {
+    const chunk = streamChunk(stream, Math.min(65536, limit - total))
+    if (!chunk.length) break
+    chunks.push(chunk)
+    total += chunk.length
+  }
+  const result = new Uint8Array(total)
+  let offset = 0
+  for (const chunk of chunks) {
+    result.set(chunk, offset)
+    offset += chunk.length
+  }
+  return result
+}
+
+export function readStreamBytes(stream: JavaObject, limit = MAX_TEXT_BYTES): Uint8Array {
+  try {
+    const bytes = readBytes(stream, limit)
+    if (bytes.length === limit && Number(stream.call('read()I')) !== -1) {
+      throw new Error(String(t('err_unpack_limit')))
+    }
+    return bytes
+  } finally {
+    try { stream.call('close') } catch {}
+  }
+}
+
+export function readFileBytes(path: string, maxBytes = MAX_TEXT_BYTES): { bytes: Uint8Array, cut: boolean } {
+  const file = new JFile(path)
+  const stream = new FileInputStream(file)
+  try {
+    const bytes = readBytes(stream, maxBytes)
+    return { bytes, cut: Number(file.call('length')) > maxBytes }
+  } finally {
+    try { stream.call('close') } catch {}
+  }
 }
 
 export function looksLikeText(path: string): boolean {
   try {
     const file = new JFile(path)
     if (!file.call('exists') || Number(file.call('length')) === 0) return false
-    const fis = new FileInputStream(file)
-    const JArray = inu.jvm.cls('java.lang.reflect.Array')
-    const ByteType = inu.jvm.cls('java.lang.Byte').getStaticField('TYPE')
-    const buffer = JArray.callStatic('newInstance', ByteType, 8192)
-    const read = Number(fis.call('read([B)I', buffer))
-    fis.call('close')
-    if (read <= 0) return false
-
-    const baos = new ByteArrayOutputStream()
-    baos.call('write([BII)V', buffer, 0, read)
-    const head: Uint8Array = baos.call('toByteArray')
+    const { bytes: head } = readFileBytes(path, 8192)
+    if (!head.length) return false
 
     // Check BOMs
     if (head.length >= 3 && head[0] === 0xEF && head[1] === 0xBB && head[2] === 0xBF) return true
@@ -73,39 +113,71 @@ export function looksLikeText(path: string): boolean {
   }
 }
 
+export function decodeBytes(raw: Uint8Array, charset: string): string {
+  if (/^utf-?8$/i.test(charset)) return new TextDecoder('utf-8').decode(raw)
+  if (/^utf-?16$/i.test(charset)) {
+    const little = raw[0] !== 0xFE || raw[1] !== 0xFF
+    charset = little ? 'utf-16le' : 'utf-16be'
+  }
+  const chunks: string[] = []
+  for (let offset = 0; offset < raw.length;) {
+    let end = Math.min(raw.length, offset + 65536)
+    // Do not decode the two halves of a UTF-16 surrogate pair separately.
+    if (end < raw.length && /^utf-?16(?:le|be)$/i.test(charset)) {
+      const little = /le$/i.test(charset)
+      const unit = little ? raw[end - 2] | (raw[end - 1] << 8) : (raw[end - 2] << 8) | raw[end - 1]
+      if (unit >= 0xD800 && unit <= 0xDBFF) end -= 2
+    }
+    chunks.push(decodeChunk(raw.subarray(offset, end), charset))
+    offset = end
+  }
+  return chunks.join('')
+}
+
 export function decodeText(raw: Uint8Array, enc?: string | null): [text: string, used: string] {
   let text = ''
   let used = enc ?? 'utf-8'
 
   if (enc) {
     try {
-      text = String(new JString(raw, enc))
+      text = decodeBytes(raw, enc)
     } catch {
-      text = String(new JString(raw, 'utf-8'))
+      text = decodeBytes(raw, 'utf-8')
       used = 'utf-8'
     }
   } else {
     // Check BOM
     if (raw.length >= 3 && raw[0] === 0xEF && raw[1] === 0xBB && raw[2] === 0xBF) {
-      text = String(new JString(raw.subarray(3), 'utf-8'))
+      text = decodeBytes(raw.subarray(3), 'utf-8')
       used = 'utf-8'
     } else if (raw.length >= 2 && (
       (raw[0] === 0xFF && raw[1] === 0xFE) || (raw[0] === 0xFE && raw[1] === 0xFF)
     )) {
-      text = String(new JString(raw, 'utf-16'))
+      text = decodeBytes(raw, 'utf-16')
       used = 'utf-16'
     } else {
       // Try UTF-8 first, fallback to windows-1251
       try {
+        // The Android JS runtime has no fatal TextDecoder option.
+        for (let i = 0; i < raw.length;) {
+          const first = raw[i++]
+          if (first < 128) continue
+          const count = first >= 0xC2 && first <= 0xDF ? 1 : first >= 0xE0 && first <= 0xEF ? 2 : first >= 0xF0 && first <= 0xF4 ? 3 : -1
+          if (count < 0 || i + count > raw.length) throw new Error('Invalid UTF-8')
+          const next = raw[i]
+          if ((first === 0xE0 && next < 0xA0) || (first === 0xED && next >= 0xA0)
+              || (first === 0xF0 && next < 0x90) || (first === 0xF4 && next >= 0x90)) throw new Error('Invalid UTF-8')
+          for (let n = 0; n < count; n++) if ((raw[i++] & 0xC0) !== 0x80) throw new Error('Invalid UTF-8')
+        }
         const decoded = new TextDecoder('utf-8').decode(raw)
         text = decoded
         used = 'utf-8'
       } catch {
         try {
-          text = String(new JString(raw, 'windows-1251'))
+          text = decodeBytes(raw, 'windows-1251')
           used = 'windows-1251'
         } catch {
-          text = String(new JString(raw, 'utf-8'))
+          text = decodeBytes(raw, 'utf-8')
           used = 'utf-8'
         }
       }
@@ -120,6 +192,8 @@ export function decodeText(raw: Uint8Array, enc?: string | null): [text: string,
 }
 
 export function paginate(text: string, size = PAGE_CHARS): string[] {
+  if (!Number.isFinite(size) || size < 1) throw new RangeError('Invalid page size')
+  size = Math.floor(size)
   if (text.length <= size) {
     return [text]
   }
@@ -133,6 +207,10 @@ export function paginate(text: string, size = PAGE_CHARS): string[] {
       if (k > i + (size / 2)) {
         j = k + 1
       }
+    }
+    if (j < n && text.charCodeAt(j - 1) >= 0xD800 && text.charCodeAt(j - 1) <= 0xDBFF
+        && text.charCodeAt(j) >= 0xDC00 && text.charCodeAt(j) <= 0xDFFF) {
+      j += j - i === 1 ? 1 : -1
     }
     pages.push(text.slice(i, j))
     i = j
@@ -163,7 +241,13 @@ export function formatRows(rows: string[][], pad: boolean): string {
     return clean.map(r => r.join(' │ ')).join('\n')
   }
 
-  const capped = clean.map(r => r.map(c => c.length <= CELL_MAX ? c : `${c.slice(0, CELL_MAX - 1)}…`))
+  const capped = clean.map(r => r.map(c => {
+    if (c.length <= CELL_MAX) return c
+    let end = CELL_MAX - 1
+    if (c.charCodeAt(end - 1) >= 0xD800 && c.charCodeAt(end - 1) <= 0xDBFF
+        && c.charCodeAt(end) >= 0xDC00 && c.charCodeAt(end) <= 0xDFFF) end--
+    return `${c.slice(0, end)}…`
+  }))
   let cols = 0
   for (const r of capped) {
     cols = Math.max(cols, r.length)
@@ -190,55 +274,78 @@ export function formatRows(rows: string[][], pad: boolean): string {
 }
 
 export function csvTable(text: string, ext: string): string | null {
-  const firstLines = text.split('\n', 20).filter(l => l.trim().length > 0)
-  const head = firstLines[0] ?? ''
-
-  let delim = '\t'
-  if (ext === 'tsv' || ext === 'tab') {
-    delim = '\t'
-  } else {
-    const candidates = [',', ';', '\t', '|']
-    let best = ','
-    let bestCount = 0
-    for (const c of candidates) {
-      const count = (head.match(new RegExp(`\\${c}`, 'g')) || []).length
-      if (count > bestCount) {
-        bestCount = count
-        best = c
+  text = text.replace(/\r\n?/g, '\n')
+  const candidates = [',', ';', '\t', '|']
+  const counts = [0, 0, 0, 0]
+  let quoted = false
+  let started = false
+  // Inspect the first nonempty logical record, not delimiters inside quotes.
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]
+    if (ch === '"') {
+      started = true
+      if (quoted && text[i + 1] === '"') i++
+      else quoted = !quoted
+    } else if (!quoted) {
+      if (ch === '\n') {
+        if (started) break
+      } else {
+        const index = candidates.indexOf(ch)
+        if (index >= 0) counts[index]++
+        if (ch.trim() || index >= 0) started = true
       }
     }
-    if (bestCount === 0) return null
-    delim = best
+  }
+  let delim = '\t'
+  if (!['tsv', 'tab'].includes(ext.toLowerCase())) {
+    const best = Math.max(...counts)
+    if (best === 0) return null
+    delim = candidates[counts.indexOf(best)]
   }
 
-  // Parse CSV lines
   const rows: string[][] = []
   let cut = false
-  const lines = text.split('\n')
-  for (const line of lines) {
-    if (!line.trim() && rows.length === 0) continue
-    // Simple split respecting basic quotes
-    const cells: string[] = []
-    let current = ''
-    let inQuotes = false
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i]
-      if (ch === '"') {
-        inQuotes = !inQuotes
-      } else if (ch === delim && !inQuotes) {
-        cells.push(current.trim())
-        current = ''
-      } else {
-        current += ch
-      }
+  let cells: string[] = []
+  let current = ''
+  let inQuotes = false
+  let recordStarted = false
+  function cell() {
+    if (cells.length < MAX_COLS) cells.push(current.trim())
+    current = ''
+  }
+  function record(): boolean {
+    cell()
+    if (!recordStarted && cells.length === 1 && !cells[0]) {
+      cells = []
+      return true
     }
-    cells.push(current.trim())
-    rows.push(cells.slice(0, MAX_COLS))
-    if (rows.length >= MAX_ROWS) {
-      cut = true
-      break
+    if (rows.length === MAX_ROWS) { cut = true; return false }
+    rows.push(cells)
+    cells = []
+    recordStarted = false
+    return true
+  }
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]
+    if (ch === '"' && (inQuotes || !current.trim())) {
+      recordStarted = true
+      if (inQuotes && text[i + 1] === '"') {
+        if (cells.length < MAX_COLS) current += '"'
+        i++
+      } else inQuotes = !inQuotes
+    } else if (ch === delim && !inQuotes) {
+      recordStarted = true
+      cell()
+    } else if (ch === '\n' && !inQuotes) {
+      if (!record()) break
+    } else {
+      if (ch.trim()) recordStarted = true
+      if (cells.length < MAX_COLS) current += ch
     }
   }
+  // Malformed/truncated quoted data is safer as raw text.
+  if (inQuotes) return null
+  if (!cut && (recordStarted || current || cells.length)) record()
 
   let body = formatRows(rows, true)
   if (cut) {

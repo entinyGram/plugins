@@ -123,12 +123,25 @@ function tryOpen(args: any[]): boolean {
     }
   }
 
+  let viewer: DocViewer | null = null
   try {
-    const viewer = new DocViewer(act, path, name, fmt, ext, mime, renderer, pfd, count)
+    viewer = new DocViewer(act, path, name, fmt, ext, mime, renderer, pfd, count)
+    const opened = viewer
+    viewer.onClose = () => {
+      const index = activeViewers.indexOf(opened)
+      if (index >= 0) activeViewers.splice(index, 1)
+    }
     activeViewers.push(viewer)
     viewer.show()
     return true
   } catch (e) {
+    if (viewer) {
+      try { viewer.close() } catch {}
+      try { viewer.cleanup() } catch {}
+    } else {
+      try { renderer?.call('close') } catch {}
+      try { pfd?.call('close') } catch {}
+    }
     console.warn('DocViewer show error:', e)
     return false
   }

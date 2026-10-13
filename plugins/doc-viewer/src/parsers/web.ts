@@ -26,27 +26,26 @@ function mdAutolink(match: string, url: string): string {
     tail = url[url.length - 1] + tail
     url = url.slice(0, -1)
   }
-  return `<a href="${url}">${url}</a>${tail}`
+  return `<a href="${url.replace(/"/g, '%22')}">${url}</a>${tail}`
 }
 
 export function mdInline(s: string): string {
-  let text = escapeHtml(s)
-  const codes: string[] = []
+  let text = escapeHtml(s.replace(/\0/g, '\uFFFD'))
+  const fragments: string[] = []
+  const stash = (html: string): string => {
+    fragments.push(html.replace(/\0(\d+)\0/g, (_, idx) => fragments[Number(idx)]))
+    return `\0${fragments.length - 1}\0`
+  }
 
-  // Stash inline code
-  text = text.replace(/`([^`]+)`/g, (_, code) => {
-    codes.push(code)
-    return `\0${codes.length - 1}\0`
-  })
-
-  // Images -> text placeholder
-  text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, '<em>[$1]</em>')
-
-  // Links
-  text = text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g, mdLink)
-
-  // Autolinks
-  text = text.replace(/(?<![">=])(https?:\/\/[^\s<]+)/g, mdAutolink)
+  // Generated HTML must never go through URL/emphasis substitutions again.
+  text = text.replace(/`([^`]+)`/g, (_, code) => stash(`<code>${code}</code>`))
+  text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, (_, label) => stash(`<em>[${label}]</em>`))
+  text = text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,
+    (match, label, url) => stash(mdLink(match, label, url)))
+  text = text.replace(/&lt;(https?:\/\/[^\s\0]+?)&gt;/g,
+    (_, url) => stash(mdLink('', url, url)))
+  text = text.replace(/https?:\/\/[^\s\0<>"']+/g,
+    (url) => stash(mdAutolink(url, url)))
 
   // Bold
   text = text.replace(/\*\*(.+?)\*\*|__(.+?)__/g, (_, a, b) => `<strong>${a || b}</strong>`)
@@ -58,8 +57,8 @@ export function mdInline(s: string): string {
   // Strikethrough
   text = text.replace(/~~(.+?)~~/g, '<del>$1</del>')
 
-  // Unstash code
-  text = text.replace(/\0(\d+)\0/g, (_, idx) => `<code>${codes[Number(idx)]}</code>`)
+  // Restore opaque HTML in one pass, without recursive parsing.
+  text = text.replace(/\0(\d+)\0/g, (_, idx) => fragments[Number(idx)])
 
   return text
 }
@@ -84,7 +83,9 @@ function mdTable(head: string[], rows: string[][]): string {
   return out.join('')
 }
 
-export function mdBlocks(lines: string[]): string {
+export function mdBlocks(lines: string[], depth = 0): string {
+  // Bound call-stack use and repeated copying for adversarial quote nesting.
+  if (depth >= 32) return `<pre>${escapeHtml(lines.join('\n'))}</pre>`
   const out: string[] = []
   const para: string[] = []
   let i = 0
@@ -144,7 +145,7 @@ export function mdBlocks(lines: string[]): string {
         quote.push(lines[i].replace(/^\s*>\s?/, ''))
         i++
       }
-      out.push(`<blockquote>${mdBlocks(quote)}</blockquote>`)
+      out.push(`<blockquote>${mdBlocks(quote, depth + 1)}</blockquote>`)
       continue
     }
 

@@ -1,5 +1,6 @@
 {
   "extends": "@inugram/plugin-types/tsconfig.json",
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts"]
 }
 

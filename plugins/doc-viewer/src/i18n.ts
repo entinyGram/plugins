@@ -27,6 +27,21 @@ export function currentLang(): Lang {
 }
 
 const STRINGS = {
+  err_unpack_limit: {
+    uk: 'Файл перевищує ліміт безпечного читання',
+    en: 'File exceeds the safe reading limit',
+    ru: 'Файл превышает лимит безопасного чтения',
+  },
+  archive_open: {
+    uk: 'Відкрити файл з архіву',
+    en: 'Open archive file',
+    ru: 'Открыть файл из архива',
+  },
+  archive_unsupported: {
+    uk: 'Цей формат не підтримується для перегляду',
+    en: 'This format is not supported for viewing',
+    ru: 'Этот формат не поддерживается для просмотра',
+  },
   // Settings
   settings_title: {
     uk: 'Doc Viewer',

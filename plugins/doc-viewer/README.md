@@ -2,7 +2,7 @@
 
 In-app document and file viewer for PDF, office documents, text, code, web markup, e-books, images, and archives throughout entinyGram.
 
-`entinygram.doc-viewer` · version `1.0.0` · requires `entinygram.sdk >=0.1.0-alpha`
+`entinygram.doc-viewer` · version `1.1.0` · requires `entinygram.sdk >=0.1.0-alpha`
 
 ---
 
@@ -26,11 +26,19 @@ Instead of leaving Telegram or relying on third-party viewer apps, files are ope
 | **Jupyter** | `.ipynb` | Custom JS Parser | Cell formatting with `In [x]:` code inputs and `Out:` outputs without ANSI control escape codes. |
 | **Office Documents** | `.docx`, `.xlsx`, `.pptx`, `.odt`, `.ods`, `.odp`, `.rtf`, `.eml` | `java.util.zip.ZipFile` + XML/RTF Parsers | Paragraphs, headings, bullet lists, sheet tables, slide extraction, email RFC 822 headers and body. |
 | **E-Books** | `.epub`, `.fb2` | Zip + XML Parsers | Chapter navigation, author/title metadata extraction, HTML strip to text. |
-| **Archives** | `.zip`, `.jar`, `.aar`, `.tar`, `.tgz` | `java.util.zip.ZipFile` | File listing table with sizes, modification dates, and password protection status without extracting to disk. |
+| **Archives** | `.zip`, `.jar`, `.aar` | `java.util.zip.ZipFile` | File listing with sizes and dates; open supported entries using private temporary files, removed when their viewer closes. |
 
 ---
 
 ## Architecture & How It Works
+
+### Format limitations
+
+- Office documents and e-books are text extraction, not layout-faithful rendering; macros, formulas, embedded objects and DRM are not executed or decoded.
+- Image codecs depend on Android/device support (especially HEIC/HEIF and AVIF). GIF displays a still frame. PDF uses the system renderer; password-protected PDFs are not supported.
+- Markdown is a bounded, simplified renderer. HTML/SVG run with JavaScript, network and local-file access disabled; external resources are unavailable. Web previews are limited to 4 MB.
+- CSV tables are limited to 3,000 rows and 60 columns. Archive extraction is limited to 64 MB per entry; encrypted ZIP entries are not supported.
+- Regression tests cover parser/resource behavior; Android scratch probes validate synthetic fixtures, not every real-world file or complete viewer UI interaction.
 
 ```text
 ┌────────────────────────────────────────────────────────┐
@@ -61,7 +69,7 @@ Instead of leaving Telegram or relying on third-party viewer apps, files are ope
 1. **Method Hooking**:
    Hooks all overloads of `org.telegram.messenger.AndroidUtilities.openForView`. If the tapped file matches any enabled format, the hook cancels the default system intent and launches the in-app viewer.
 2. **Quota-Safe File I/O**:
-   The Inugram bridge limits single cross-bridge string/byte transfers to 1 MB. To safely handle large documents (up to 12 MB), `DocViewer` reads files in 64 KB buffers using native `FileInputStream` and `ByteArrayOutputStream`.
+   Mutable byte buffers stay on the JVM side in compiled routines; only completed 64 KB chunks cross the bridge. Text/XML reads are bounded to 12 MB; archive entry extraction is bounded to 64 MB. ZIP paths are never used as filesystem paths. Encrypted archives are not supported; TAR and compressed TAR files are left to the stock viewer.
 3. **No Heavy External Dependencies**:
    - PDF pages are rendered into hardware-accelerated bitmaps using Android's native `android.graphics.pdf.PdfRenderer`.
    - Office documents (`.docx`, `.xlsx`, `.pptx`, `.epub`) are parsed directly from their internal XML structures via `java.util.zip.ZipFile`, avoiding heavy NPM dependencies.

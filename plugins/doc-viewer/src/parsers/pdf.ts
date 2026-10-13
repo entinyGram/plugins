@@ -7,14 +7,17 @@ export function openPdf(path: string): { renderer: JavaObject, pfd: JavaObject, 
     new JFile(path),
     ParcelFileDescriptor.getStaticField('MODE_READ_ONLY'),
   )
-  const renderer = new PdfRenderer(pfd)
-  const count = Number(renderer.call('getPageCount'))
-  if (count < 1) {
-    renderer.call('close')
-    pfd.call('close')
-    throw new Error(String(t('err_empty_pdf')))
+  let renderer: JavaObject | null = null
+  try {
+    renderer = new PdfRenderer(pfd)
+    const count = Number(renderer.call('getPageCount'))
+    if (!Number.isInteger(count) || count < 1) throw new Error(String(t('err_empty_pdf')))
+    return { renderer, pfd, count }
+  } catch (error) {
+    try { renderer?.call('close') } catch {}
+    try { pfd.call('close') } catch {}
+    throw error
   }
-  return { renderer, pfd, count }
 }
 
 export function renderPdfPage(
@@ -26,17 +29,24 @@ export function renderPdfPage(
   try {
     const pw = Number(page.call('getWidth'))
     const ph = Number(page.call('getHeight'))
+    if (![pw, ph, displayWidth].every(value => Number.isFinite(value) && value > 0)) {
+      throw new Error('Invalid PDF dimensions')
+    }
     let sc = Math.min((displayWidth * 2.0) / pw, 3200.0 / Math.max(pw, ph))
-    sc = Math.max(sc, 0.5)
     const w = Math.max(1, Math.round(pw * sc))
     const h = Math.max(1, Math.round(ph * sc))
 
     const bmp = Bitmap.callStatic('createBitmap', w, h, BitmapConfig.getStaticField('ARGB_8888'))
-    fillWhite(bmp)
-    page.call('render', bmp, null, null, PdfPage.getStaticField('RENDER_MODE_FOR_DISPLAY'))
-    return bmp
+    try {
+      fillWhite(bmp)
+      page.call('render', bmp, null, null, PdfPage.getStaticField('RENDER_MODE_FOR_DISPLAY'))
+      return bmp
+    } catch (error) {
+      try { bmp.call('recycle') } catch {}
+      throw error
+    }
   } finally {
-    page.call('close')
+    try { page.call('close') } catch {}
   }
 }
 
