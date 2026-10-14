@@ -1,3 +1,5 @@
+import { t } from './i18n'
+
 // Keep the native avatar/layout intact: only add a non-interactive photo layer.
 const VoIP: any = inu.jvm.cls('org.telegram.ui.VoIPFragment')
 const VoIPService: any = inu.jvm.cls('org.telegram.messenger.voip.VoIPService')
@@ -204,11 +206,11 @@ inu.onUnload(() => {
 })
 
 inu.registerSettings(inu.ui.settingsPage({
-  title: 'Call avatar',
+  title: t('title'),
   items: () => [
     inu.ui.check({
       id: 'enabled',
-      text: 'Фото на весь екран під час дзвінка',
+      text: t('enabled'),
       checked: enabled(),
       onChange(value) {
         localStorage.setItem('call-avatar.enabled', String(value))
@@ -217,16 +219,14 @@ inu.registerSettings(inu.ui.settingsPage({
     }),
     inu.ui.select({
       id: 'mode',
-      text: 'Коли показувати фото',
-      items: ['Завжди', 'До відповіді', 'Після відповіді'],
+      text: t('mode'),
+      items: [t('always'), t('before'), t('after')],
       selected: modeIndex(),
       onChange(index) {
         localStorage.setItem('call-avatar.mode', modes[index] ?? 'always')
         refresh()
       },
     }),
-    inu.ui.separator(supported
-      ? 'Для голосових дзвінків. Без фото залишається штатний аватар; під час відео фон вимикається.'
-      : 'Ця версія клієнта не підтримує потрібні хуки дзвінків.'),
+    inu.ui.separator(t(supported ? 'supported' : 'unsupported')),
   ],
 }))

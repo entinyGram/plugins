@@ -57,6 +57,17 @@
       "name": "Call avatar",
       "versions": [
         {
+          "version": "1.1",
+          "date": "2026-10-14",
+          "notes": "- Replace the catalog icon with the supplied phone handset and signal arcs SVG.\r\n- Translate settings and compatibility messages into Ukrainian, English and Russian using the application language, with English fallback.\r\n- Extend mocked lifecycle regressions to all three languages and test language selection/fallback.",
+          "file": "dist/entinygram.call-avatar/1.1.inu.js",
+          "sha256": "2c639fc3cdc1c2de2069542979c4ff4d1eb6e22f246260ccdd7c5a45835e0d3b",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        },
+        {
           "version": "1.0",
           "date": "2026-10-14",
           "notes": "- Full-screen caller avatar for voice calls with a dark scrim and raised name/status text.\r\n- Persistent display modes: always, before answer, or after connection is established.\r\n- Semi-transparent dark backgrounds for inactive call buttons; selected and hangup buttons keep their native appearance.\r\n- Restore the native UI for video calls, unavailable photos, disabled display windows, and plugin unload.\r\n- Use public Android handler APIs and Java-thread drawing hooks; add mocked lifecycle regression tests.",

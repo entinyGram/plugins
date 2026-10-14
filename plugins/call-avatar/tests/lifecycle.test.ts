@@ -2,8 +2,9 @@ import { expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { runInNewContext } from 'node:vm'
 
+for (const lang of ['uk', 'en', 'ru']) {
 for (const onMainThread of [true, false]) {
-test(`photo lifecycle and unload (main thread: ${onMainThread})`, () => {
+test(`photo lifecycle and unload (${lang}, main thread: ${onMainThread})`, () => {
   const hooks = new Map<string, any>()
   const storage = new Map<string, string>()
   let unload: () => void = () => {}
@@ -68,6 +69,9 @@ test(`photo lifecycle and unload (main thread: ${onMainThread})`, () => {
   parent.call('addView', mini)
   let hasPhoto = true
   const cls = (name: string): any => {
+    if (name.endsWith('LocaleController')) return {
+      callStatic: () => ({ call: () => ({ getField: () => lang }) }),
+    }
     const C: any = function () { return new Handle() }
     C.getDeclaredMethod = (method: string) => method
     C.getStaticField = () => 1
@@ -90,13 +94,23 @@ test(`photo lifecycle and unload (main thread: ${onMainThread})`, () => {
     registerSettings(value: any) { page = value },
     ui: { settingsPage: (v: any) => v, check: (v: any) => v, select: (v: any) => v, separator: (v: any) => v },
   }
-  const source = readFileSync(new URL('../src/index.ts', import.meta.url), 'utf8')
+  const i18n = readFileSync(new URL('../src/i18n.ts', import.meta.url), 'utf8').replace(/^export /gm, '')
+  const source = i18n + '\n' + readFileSync(new URL('../src/index.ts', import.meta.url), 'utf8').replace("import { t } from './i18n'", '')
   runInNewContext(new Bun.Transpiler({ loader: 'ts' }).transformSync(source), {
     inu, console, localStorage: {
       getItem: (key: string) => storage.get(key) ?? null,
       setItem: (key: string, value: string) => storage.set(key, value),
     },
   })
+  const translated = {
+    uk: ['Фото дзвінка', 'Фото на весь екран під час дзвінка', 'Коли показувати фото', ['Завжди', 'До відповіді', 'Після відповіді']],
+    en: ['Call avatar', 'Full-screen photo during calls', 'When to show the photo', ['Always', 'Before answer', 'After answer']],
+    ru: ['Фото звонка', 'Фото на весь экран во время звонка', 'Когда показывать фото', ['Всегда', 'До ответа', 'После ответа']],
+  }[lang]!
+  expect(page.title).toBe(translated[0])
+  expect(page.items()[0].text).toBe(translated[1])
+  expect(page.items()[1].text).toBe(translated[2])
+  expect(page.items()[1].items).toEqual(translated[3])
   const update = () => {
     fragment.call('showCallingUserAvatarMini(ZZ)V', false, false)
     hooks.get('showCallingUserAvatarMini(ZZ)V').after({ thisObject: fragment })
@@ -182,4 +196,5 @@ test(`photo lifecycle and unload (main thread: ${onMainThread})`, () => {
   expect(hooks.size).toBe(0)
   expect(params.fields.topMargin).toBe(135)
 })
+}
 }
