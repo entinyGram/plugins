@@ -1,3 +1,16 @@
+## 0.2.0
+
+- telegram channels are plugin sources, plugins install straight from channel posts
+- bottom bar with home, plugins and settings
+- home shows updates, new and recently updated plugins
+- plugins has one installed section and a section for every source
+- long sections show five rows, the rest opens on its own screen
+- settings opens installed plugins, sources and plugin entries, and links to the plugins channel
+- add your own channel as a source, long-press it to remove
+- channel plugins show their permissions, unsafe ones are marked
+- tab icons are plain svg files in src/icons, swap them for your own
+- installing from a channel needs an app build with installfile, older builds say so
+
 ## 0.2.0-beta
 
 - Telegram channels are plugin sources: the SDK reads the plugins channel through your own account and installs bundles straight from its posts

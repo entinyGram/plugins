@@ -128,6 +128,15 @@
           "pluginApi": 1
         },
         {
+          "version": "0.2.0",
+          "date": "2026-10-14",
+          "notes": "- telegram channels are plugin sources, plugins install straight from channel posts\n- bottom bar with home, plugins and settings\n- home shows updates, new and recently updated plugins\n- plugins has one installed section and a section for every source\n- long sections show five rows, the rest opens on its own screen\n- settings opens installed plugins, sources and plugin entries, and links to the plugins channel\n- add your own channel as a source, long-press it to remove\n- channel plugins show their permissions, unsafe ones are marked\n- tab icons are plain svg files in src/icons, swap them for your own\n- installing from a channel needs an app build with installfile, older builds say so",
+          "file": "plugins/dist/entinygram.sdk/0.2.0.inu.js",
+          "sha256": "a152b211d7b691e844fdca73988ab01cd2b0554219e2a816873a13b3ba8b9e53",
+          "requires": [],
+          "pluginApi": 1
+        },
+        {
           "version": "0.1.4-beta",
           "date": "2026-10-12",
           "notes": "- The marketplace shows two sections: the official entinyGram catalog and the separate user repository (`user-plugins/index.json`) with community plugins\n- The plugin page is redesigned into icon cards: description, author, source repository, plugin ID (tap to copy), requirements and the latest version, each as its own row with an icon\n- User plugins are exported to the plugin release too (`pack-release.ts` now packs them as `<Name>-<version>.inu.js`), so in plain inugram they are offered as release downloads just like the official ones",
