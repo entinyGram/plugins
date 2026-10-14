@@ -53,6 +53,26 @@
       "icon": "plugins/calendar-systems/icon.svg"
     },
     {
+      "id": "entinygram.call-avatar",
+      "name": "Call avatar",
+      "versions": [
+        {
+          "version": "1.0",
+          "date": "2026-10-14",
+          "notes": "- Full-screen caller avatar for voice calls with a dark scrim and raised name/status text.\r\n- Persistent display modes: always, before answer, or after connection is established.\r\n- Semi-transparent dark backgrounds for inactive call buttons; selected and hangup buttons keep their native appearance.\r\n- Restore the native UI for video calls, unavailable photos, disabled display windows, and plugin unload.\r\n- Use public Android handler APIs and Java-thread drawing hooks; add mocked lifecycle regression tests.",
+          "file": "plugins/dist/entinygram.call-avatar/1.0.inu.js",
+          "sha256": "f257a5968c05ab6bd347d1a2247a306b5474a2e93fecd5561f4c2561ca95baa4",
+          "requires": [
+            "entinygram.sdk >=0.1.0-alpha"
+          ],
+          "pluginApi": 1
+        }
+      ],
+      "author": "entinyGram",
+      "description": "Full-screen caller photo instead of the circular avatar in voice calls",
+      "icon": "plugins/call-avatar/icon.svg"
+    },
+    {
       "id": "entinygram.doc-viewer",
       "name": "Doc Viewer",
       "versions": [

@@ -68,6 +68,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 | [**2GIS**](plugins/2gis/) | `entinygram.2gis` | `1.0.0` | `SDK` | High-resolution 2GIS raster map tiles and location preview images (requires API key). |
 | [**Calendar Systems**](plugins/calendar-systems/) | `entinygram.calendar-systems` | `1.1.0` | `SDK` | Alternative calendar formatting (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) for dates. |
 | [**Doc Viewer**](plugins/doc-viewer/) | `entinygram.doc-viewer` | `1.1.0` | `SDK` | In-app viewer for PDF, DOCX, XLSX, text, code, images, archives and more. |
+| [**Call Avatar**](plugins/call-avatar/) | `entinygram.call-avatar` | `1.0` | `SDK` | Full-screen caller photo, display timing modes, and translucent voice-call buttons. |
 | [**Yandex**](plugins/yandex/) | `entinygram.yandex` | `1.0.0` | `SDK` | In-app translation via Yandex Cloud Translate v2 and Yandex static map previews. |
 
 ---
