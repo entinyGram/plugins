@@ -119,6 +119,15 @@
       "name": "entinyGram SDK",
       "versions": [
         {
+          "version": "0.2.0-beta",
+          "date": "2026-10-14",
+          "notes": "- Telegram channels are plugin sources: the SDK reads the plugins channel through your own account and installs bundles straight from its posts\n- The marketplace has a bottom bar with Home, Plugins and Settings; its icons are plain SVG files in `src/icons`\n- Home shows updates, new plugins and recently updated ones\n- Plugins has one Installed section and a section for each source with what is not installed yet; a long section shows five rows and opens the rest on its own screen\n- Settings opens Installed plugins, Sources (add a channel, long-press an added one to remove it) and Plugin entries, and links to the plugins channel\n- A plugin from a channel shows the permissions it asks for, unsafe ones marked, and asks to confirm before installing from a channel entinyGram does not vet\n- Installing from a channel needs an app build with `installFile` in the market bridge; older builds say so instead of failing silently",
+          "file": "plugins/dist/entinygram.sdk/0.2.0-beta.inu.js",
+          "sha256": "eaed07e81cccb540ee2afd73cb8c98acb88a5d6ad162cc2ebd94382fd148ea66",
+          "requires": [],
+          "pluginApi": 1
+        },
+        {
           "version": "0.1.4-beta",
           "date": "2026-10-12",
           "notes": "- The marketplace shows two sections: the official entinyGram catalog and the separate user repository (`user-plugins/index.json`) with community plugins\n- The plugin page is redesigned into icon cards: description, author, source repository, plugin ID (tap to copy), requirements and the latest version, each as its own row with an icon\n- User plugins are exported to the plugin release too (`pack-release.ts` now packs them as `<Name>-<version>.inu.js`), so in plain inugram they are offered as release downloads just like the official ones",

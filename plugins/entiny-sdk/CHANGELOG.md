@@ -1,3 +1,13 @@
+## 0.2.0-beta
+
+- Telegram channels are plugin sources: the SDK reads the plugins channel through your own account and installs bundles straight from its posts
+- The marketplace has a bottom bar with Home, Plugins and Settings; its icons are plain SVG files in `src/icons`
+- Home shows updates, new plugins and recently updated ones
+- Plugins has one Installed section and a section for each source with what is not installed yet; a long section shows five rows and opens the rest on its own screen
+- Settings opens Installed plugins, Sources (add a channel, long-press an added one to remove it) and Plugin entries, and links to the plugins channel
+- A plugin from a channel shows the permissions it asks for, unsafe ones marked, and asks to confirm before installing from a channel entinyGram does not vet
+- Installing from a channel needs an app build with `installFile` in the market bridge; older builds say so instead of failing silently
+
 ## 0.1.4-beta
 
 - The marketplace shows two sections: the official entinyGram catalog and the separate user repository (`user-plugins/index.json`) with community plugins

@@ -1,24 +1,13 @@
 import { SDK_VERSION } from '@entiny/sdk'
-import { startEmbedEngine } from './embed/engine.js'
-import { t, tf } from './i18n.js'
-
-interface CatalogVersion {
-  version: string
-  date?: string
-  notes?: string
-  file: string
-  sha256?: string
-  requires?: string[]
-}
-
-interface CatalogPlugin {
-  id: string
-  name: string
-  author?: string
-  description?: string
-  icon?: string
-  versions: CatalogVersion[]
-}
+import { type CatalogPlugin, type CatalogVersion, parseChannelFile, riskyGrants } from './catalog.js'
+import { cachedChannel, downloadBundle, forgetChannel, loadChannel, normalizeChannel } from './channel.js'
+import { type EmbeddedEntry, embeddedEntries, startEmbedEngine } from './embed/engine.js'
+import { type StringKey, t, tf } from './i18n.js'
+import homeSvg from './icons/home.svg'
+import pluginsSvg from './icons/plugins.svg'
+import settingsSvg from './icons/settings.svg'
+import { ensureNavbar, navbarReady } from './navbar.js'
+import { DEFAULT_CHANNEL, type Source, addChannel, channelKey, listSources, removeChannel, setEnabled } from './sources.js'
 
 interface Installed {
   id: string
@@ -28,11 +17,8 @@ interface Installed {
 
 type Filter = 'all' | 'installed' | 'updates'
 
-// The marketplace shows two groups: the official entinyGram catalog and the separate user repository with
-// community plugins. Both live in the same GitHub repo; the user index is the one next to the official one.
-type SourceKey = 'official' | 'user'
-
-const SOURCE_KEYS: SourceKey[] = ['official', 'user']
+// The marketplace merges every enabled source: the official and the user GitHub catalogs plus Telegram channels.
+type SourceKey = string
 
 const filters = (): { key: Filter, label: string }[] => [
   { key: 'all', label: t('filter_all') },
@@ -73,14 +59,26 @@ function sourceUrl(key: SourceKey): string {
   return base
 }
 
-function sourceLabel(key: SourceKey): string {
-  return key === 'official' ? t('source_official') : t('source_user')
+function sourceOf(key: SourceKey): Source | undefined {
+  return listSources().find(source => source.key === key)
 }
 
-const catalogs = new Map<SourceKey, CatalogPlugin[] | null>([
-  ['official', null],
-  ['user', null],
-])
+function sourceLabel(key: SourceKey): string {
+  if (key === 'official') return t('source_official')
+  if (key === 'user') return t('source_user')
+  const channel = sourceOf(key)?.channel
+  return channel ? `@${channel}` : key
+}
+
+function sourceIcon(source: Source): inu.UIIcon {
+  return inu.icons.common(source.kind === 'official' ? 'star' : source.kind === 'user' ? 'user' : 'channel')
+}
+
+function activeKeys(): SourceKey[] {
+  return listSources().filter(source => source.enabled).map(source => source.key)
+}
+
+const catalogs = new Map<SourceKey, CatalogPlugin[] | null>()
 let loading = false
 let refreshing = false
 /** epoch ms of the last catalog load that returned at least one index */
@@ -88,6 +86,21 @@ let lastUpdated = 0
 const failures = new Map<SourceKey, string>()
 let query = ''
 let filter: Filter = 'all'
+let sourceFilter = 'all'
+
+// What one render shares between its tabs: the installed list and the merged catalog are built once per pass.
+let frame: { installed: Installed[], merged: Entry[] | null } | null = null
+let installedCache: { at: number, list: Installed[] } | null = null
+let subPage: { invalidate(): void } | null = null
+
+/** the main page and the section page opened from its Settings tab render together */
+function refreshAll() {
+  page.invalidate()
+  try {
+    subPage?.invalidate()
+  } catch {}
+}
+const INSTALLED_TTL_MS = 1500
 const icons = new Map<string, inu.UIIcon>()
 
 // --- versions ----------------------------------------------------------------------------------------------------
@@ -140,7 +153,7 @@ function scanInstalled(): Installed[] {
   return [...found.values()]
 }
 
-function installedList(): Installed[] {
+function readInstalled(): Installed[] {
   const native = bridge()
   if (!native) return scanInstalled()
   try {
@@ -149,6 +162,15 @@ function installedList(): Installed[] {
     console.log('installed list failed', e)
     return []
   }
+}
+
+function installedList(): Installed[] {
+  if (frame) return frame.installed
+  const now = Date.now()
+  if (installedCache && now - installedCache.at < INSTALLED_TTL_MS) return installedCache.list
+  const list = readInstalled()
+  installedCache = { at: now, list }
+  return list
 }
 
 type State = 'new' | 'update' | 'installed'
@@ -196,15 +218,33 @@ async function loadCatalog(key: SourceKey, suffix = ''): Promise<void> {
   failures.set(key, problem)
 }
 
+async function loadFromChannel(key: SourceKey, force: boolean): Promise<void> {
+  const channel = sourceOf(key)?.channel
+  if (!channel) return
+  const cached = cachedChannel(channel)
+  if (cached && !catalogs.get(key)) {
+    catalogs.set(key, cached)
+    refreshAll()
+  }
+  try {
+    catalogs.set(key, await loadChannel(channel, force))
+    failures.delete(key)
+  } catch (e) {
+    failures.set(key, (e as Error).message || String(e))
+  }
+}
+
 async function load(manual = false) {
   if (loading) return
   loading = true
   refreshing = manual
   failures.clear()
-  page.invalidate()
+  refreshAll()
   // a manual refresh bypasses any cache the fetch layer keeps: the query makes the URL fresh
   const suffix = manual ? `?t=${Date.now()}` : ''
-  await Promise.all(SOURCE_KEYS.map(key => loadCatalog(key, suffix)))
+  const keys = activeKeys()
+  for (const key of [...catalogs.keys()]) if (!keys.includes(key)) catalogs.delete(key)
+  await Promise.all(keys.map(key => key === 'official' || key === 'user' ? loadCatalog(key, suffix) : loadFromChannel(key, manual)))
   loading = false
   refreshing = false
   const failed = [...failures.entries()]
@@ -223,7 +263,7 @@ async function load(manual = false) {
     } catch {}
     return
   }
-  page.invalidate()
+  refreshAll()
   void loadIcons()
 }
 
@@ -237,7 +277,7 @@ async function loadIcons() {
       console.log(`icon of ${plugin.id} failed`, e)
     }
   }))
-  page.invalidate()
+  refreshAll()
 }
 
 // Release assets are served as downloads under the same <Name>-<version>.inu.js name the build workflow gives them,
@@ -250,7 +290,44 @@ function releaseUrl(plugin: CatalogPlugin, version: CatalogVersion, key: SourceK
   return `https://github.com/entinyGram/plugins/releases/latest/download/${file}`
 }
 
+async function installFromChannel(plugin: CatalogPlugin, version: CatalogVersion, source: UIPageLike, key: SourceKey): Promise<void> {
+  const native = bridge()
+  if (!native) {
+    inu.ui.toast(t('channel_install_standalone'))
+    return
+  }
+  const ref = parseChannelFile(version.file)
+  if (!ref) return
+  if (!sourceOf(key)?.builtin) {
+    const risky = riskyGrants(version)
+    const answer = await inu.ui.dialog({
+      title: tf('trust_title', sourceLabel(key)),
+      message: tf('trust_msg', (version.grants?.length ? version.grants : [t('trust_none')]).join(', ')) + (risky.length ? `
+
+⚠ ${risky.join(', ')}` : ''),
+      positive: tf('btn_install', version.version),
+      negative: t('cancel'),
+    })
+    if (answer !== 'positive') return
+  }
+  let path: string
+  try {
+    path = await downloadBundle(ref.channel, ref.messageId)
+  } catch (e) {
+    inu.ui.toast(tf('download_failed', (e as Error).message || String(e)))
+    return
+  }
+  try {
+    native.callStatic('installFile', path)
+  } catch {
+    inu.ui.toast(t('channel_install_old'))
+    return
+  }
+  for (const delay of [3000, 8000, 20000]) setTimeout(() => { page.invalidate(); source.invalidate() }, delay)
+}
+
 async function install(plugin: CatalogPlugin, version: CatalogVersion, source: UIPageLike, key: SourceKey) {
+  if (parseChannelFile(version.file)) return installFromChannel(plugin, version, source, key)
   const native = bridge()
   if (!native) {
     // inugram only imports plugins from a file the user opens, so hand over the link and the expected checksum
@@ -288,7 +365,7 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
     id: 'hero',
     text: plugin.name,
     subtitle: [sourceLabel(source), plugin.author].filter(Boolean).join(' · '),
-    icon: icons.get(plugin.id) ?? inu.icons.common(source === 'official' ? 'star' : 'user'),
+    icon: icons.get(plugin.id) ?? inu.icons.common(source === 'official' ? 'star' : source === 'user' ? 'user' : 'channel'),
     value: top ? `v${top.version}` : undefined,
     onClick: async () => {
       await inu.ui.dialog({
@@ -332,12 +409,12 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
   rows.push(inu.ui.button({
     id: 'source',
     text: t('about_source'),
-    subtitle: source === 'official' ? t('source_official_desc') : t('source_user_desc'),
-    icon: inu.icons.common(source === 'official' ? 'star' : 'user'),
+    subtitle: source === 'official' ? t('source_official_desc') : source === 'user' ? t('source_user_desc') : tf('source_channel_desc', sourceLabel(source)),
+    icon: sourceOf(source) ? sourceIcon(sourceOf(source)!) : inu.icons.common('user'),
     onClick: async () => {
       await inu.ui.dialog({
         title: t('about_source'),
-        message: source === 'official' ? t('source_official_msg') : t('source_user_msg'),
+        message: source === 'official' ? t('source_official_msg') : source === 'user' ? t('source_user_msg') : tf('source_channel_msg', sourceLabel(source)),
         positive: t('close'),
       })
     },
@@ -370,6 +447,50 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
     }))
   }
 
+  if (top?.size) {
+    rows.push(inu.ui.button({
+      id: 'size',
+      text: t('size_label'),
+      subtitle: top.size,
+      icon: inu.icons.common('archive'),
+      onClick: () => {
+        // informational row
+      },
+    }))
+  }
+
+  return rows
+}
+
+function permissionText(grant: string): string {
+  const name = grant.trim().replace(/\(.*$/, '')
+  if (name === 'jvm') return t('perm_jvm')
+  if (name === 'xposed') return t('perm_xposed')
+  if (name === 'fetch') return t('perm_fetch')
+  if (name === 'fs') return t('perm_fs')
+  if (/^(peers|messages|dialogs|history|self|draft|read)$/.test(name)) return t('perm_account')
+  return t('perm_other')
+}
+
+// A channel post lists the grants the bundle asks for; the GitHub catalogs do not, so only those plugins get this card.
+function permissionRows(version: CatalogVersion | undefined): inu.UIElement[] {
+  const grants = version?.grants ?? []
+  if (!grants.length) return []
+  const risky = new Set(riskyGrants(version))
+  const rows: inu.UIElement[] = [inu.ui.header(t('perms'))]
+  for (const grant of grants) {
+    rows.push(inu.ui.button({
+      id: `g:${grant}`,
+      text: `${risky.has(grant.trim()) ? '⚠ ' : ''}${grant}`,
+      subtitle: permissionText(grant),
+      icon: inu.icons.common(risky.has(grant.trim()) ? 'eye' : 'lock'),
+      danger: risky.has(grant.trim()),
+      onClick: () => {
+        // informational row
+      },
+    }))
+  }
+  if (risky.size) rows.push(inu.ui.separator(t('perms_footer')))
   return rows
 }
 
@@ -384,6 +505,7 @@ function openPlugin(plugin: CatalogPlugin, source: SourceKey) {
       const rows: inu.UIElement[] = []
 
       rows.push(...aboutRows(plugin, source))
+      rows.push(...permissionRows(top))
 
       rows.push(inu.ui.header(t('installation')))
       if (top) {
@@ -460,10 +582,18 @@ function openPlugin(plugin: CatalogPlugin, source: SourceKey) {
 
 // --- marketplace -------------------------------------------------------------------------------------------------
 
+type Tab = 'home' | 'plugins' | 'settings'
+const TABS: Tab[] = ['home', 'plugins', 'settings']
+let tab: Tab = 'home'
+
+const tabLabel = (key: Tab) => t(`tab_${key}` as StringKey)
+const TAB_SVG: Record<Tab, string> = { home: homeSvg, plugins: pluginsSvg, settings: settingsSvg }
+
 function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): inu.UIElement {
   const { state, local } = stateOf(plugin, installed)
   const top = newest(plugin)
-  const value = state === 'update' ? `v${top?.version}` : state === 'installed' ? t('status_installed') : top ? `v${top.version}` : undefined
+  const mark = riskyGrants(top).length ? '⚠ ' : ''
+  const value = state === 'update' ? `${mark}v${top?.version}` : state === 'installed' ? t('status_installed') : top ? `${mark}v${top.version}` : undefined
   const icon = state === 'update' ? 'refresh' : state === 'installed' ? 'check' : 'download'
   const subtitle = state === 'update' && local
     ? `v${local.version} → v${top?.version}`
@@ -478,84 +608,456 @@ function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): 
   })
 }
 
+interface Entry {
+  key: SourceKey
+  plugin: CatalogPlugin
+  state: State
+  local?: Installed
+}
+
+/** Every loaded plugin once: the same plugin in two sources is listed from the source that comes first. */
+function merged(installed: Installed[]): Entry[] {
+  if (frame?.merged) return frame.merged
+  const seen = new Set<string>()
+  const result = activeKeys().filter(key => catalogs.get(key)).flatMap(key => (catalogs.get(key) ?? [])
+    .filter((plugin) => {
+      if (seen.has(plugin.id)) return false
+      seen.add(plugin.id)
+      return true
+    })
+    .map(plugin => ({ key, plugin, ...stateOf(plugin, installed) })))
+  if (frame) frame.merged = result
+  return result
+}
+
+function refreshRow(unique: number, loadedSources: number): inu.UIElement {
+  const clock = lastUpdated
+    ? tf('updated_at', `${new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`)
+    : t('never_updated')
+  return inu.ui.button({
+    id: 'refresh',
+    text: refreshing ? t('refreshing') : t('refresh_catalog'),
+    subtitle: refreshing ? t('refreshing_sub') : `${clock} · ${tf('catalog_count', unique, loadedSources)}`,
+    icon: refreshing ? inu.icons.animation('loading') : inu.icons.common('refresh'),
+    onClick: () => { void load(true) },
+  })
+}
+
+/** What the catalog tabs show while nothing is loaded yet, or every source failed. */
+function emptyState(): inu.UIElement[] | null {
+  if (activeKeys().some(key => catalogs.get(key))) return null
+  const problems = [...failures.entries()].map(([key, error]) => `${sourceLabel(key)}: ${error}`)
+  return [
+    inu.ui.separator(loading ? t('loading_catalog') : problems.length ? tf('catalog_fail', problems.join(' · ')) : t('unknown_error')),
+    inu.ui.button({ id: 'retry', text: t('try_again'), icon: inu.icons.common('refresh'), onClick: () => { void load() } }),
+    inu.ui.button({ id: 'to-settings', text: tabLabel('settings'), subtitle: t('sources_title'), icon: inu.icons.common('settings'), onClick: () => { tab = 'settings' } }),
+  ]
+}
+
+// --- sources -----------------------------------------------------------------------------------------------------
+
+async function addSource() {
+  const input = await inu.ui.prompt({ title: t('source_add_title'), hint: t('source_add_sub') })
+  if (input === null) return
+  const channel = normalizeChannel(input)
+  if (!channel) {
+    inu.ui.toast(t('source_add_bad'))
+    return
+  }
+  if (listSources().some(source => source.key === channelKey(channel))) {
+    inu.ui.toast(t('source_exists'))
+    return
+  }
+  const answer = await inu.ui.dialog({
+    title: tf('source_add_warn_title', `@${channel}`),
+    message: t('source_add_warn_msg'),
+    positive: t('source_add_confirm'),
+    negative: t('cancel'),
+  })
+  if (answer !== 'positive') return
+  let found: CatalogPlugin[]
+  try {
+    found = await loadChannel(channel, true)
+  } catch (e) {
+    inu.ui.toast(tf('source_failed', (e as Error).message || String(e)))
+    return
+  }
+  if (!found.length) {
+    forgetChannel(channel)
+    inu.ui.toast(t('source_empty'))
+    return
+  }
+  addChannel(channel)
+  catalogs.set(channelKey(channel), found)
+  inu.ui.toast(t('source_added'))
+  refreshAll()
+}
+
+async function removeSource(source: Source) {
+  if (!source.channel) return
+  const answer = await inu.ui.dialog({
+    title: tf('source_remove_title', sourceLabel(source.key)),
+    message: t('source_remove_msg'),
+    positive: t('remove_confirm'),
+    negative: t('cancel'),
+  })
+  if (answer !== 'positive') return
+  removeChannel(source.channel)
+  forgetChannel(source.channel)
+  catalogs.delete(source.key)
+  failures.delete(source.key)
+  if (sourceFilter === source.key) sourceFilter = 'all'
+  refreshAll()
+}
+
+function sourceRows(): inu.UIElement[] {
+  const rows: inu.UIElement[] = []
+  for (const source of listSources()) {
+    const list = catalogs.get(source.key)
+    const error = failures.get(source.key)
+    const status = !source.enabled ? t('source_off') : error ? tf('source_failed', error) : list ? tf('source_count', list.length) : loading ? t('source_loading') : ''
+    const about = source.kind === 'official' ? t('source_official_desc') : source.kind === 'user' ? t('source_user_desc') : tf('source_channel_desc', sourceLabel(source.key))
+    rows.push(inu.ui.check({
+      id: `s:${source.key}`,
+      text: sourceLabel(source.key),
+      subtitle: [about, status].filter(Boolean).join('\n'),
+      icon: sourceIcon(source),
+      checked: source.enabled,
+      onChange: (on) => {
+        setEnabled(source.key, on)
+        void load()
+      },
+      onSecondaryClick: source.builtin ? undefined : () => { void removeSource(source) },
+    }))
+  }
+  rows.push(inu.ui.button({
+    id: 'add',
+    text: t('source_add'),
+    subtitle: t('source_add_sub'),
+    icon: inu.icons.common('plus'),
+    onClick: () => { void addSource() },
+  }))
+  rows.push(inu.ui.separator(t('sources_footer')))
+  return rows
+}
+
+// --- tabs --------------------------------------------------------------------------------------------------------
+
+function homeRows(): inu.UIElement[] {
+  const blocked = emptyState()
+  if (blocked) return blocked
+  const installed = installedList()
+  const all = merged(installed)
+  const rows: inu.UIElement[] = []
+  const byDate = (a: Entry, b: Entry) => (newest(b.plugin)?.date ?? '').localeCompare(newest(a.plugin)?.date ?? '')
+
+  const updates = all.filter(x => x.state === 'update').sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
+  rows.push(inu.ui.header('entinyGram'))
+  rows.push(inu.ui.button({
+    id: 'hero',
+    text: t('home_title'),
+    subtitle: tf('home_stats', installed.length, updates.length, all.length),
+    icon: inu.icons.common('star'),
+    onClick: () => { tab = 'plugins' },
+  }))
+
+  if (updates.length) {
+    rows.push(inu.ui.header(tf('home_updates', updates.length)))
+    for (const x of updates) rows.push(row(x.plugin, x.key, installed))
+  } else if (installed.length) {
+    rows.push(inu.ui.separator(t('home_all_current')))
+  }
+
+  const fresh = all.filter(x => x.state === 'new').sort(byDate).slice(0, 5)
+  if (fresh.length) {
+    rows.push(inu.ui.header(t('home_new')))
+    for (const x of fresh) rows.push(row(x.plugin, x.key, installed))
+  }
+
+  const recent = all.filter(x => x.state !== 'update' && !fresh.includes(x)).sort(byDate).slice(0, 4)
+  if (recent.length) {
+    rows.push(inu.ui.header(t('home_recent')))
+    for (const x of recent) rows.push(row(x.plugin, x.key, installed))
+  }
+  rows.push(inu.ui.button({
+    id: 'more',
+    text: t('home_more'),
+    icon: inu.icons.common('forward'),
+    onClick: () => { tab = 'plugins' },
+  }))
+
+  rows.push(refreshRow(all.length, activeKeys().filter(key => catalogs.get(key)).length))
+  return rows
+}
+
+const PREVIEW_ROWS = 5
+
+/** the whole list of a section on a screen of its own, built fresh from the catalog each time it renders */
+function openList(title: string, pick: (all: Entry[]) => Entry[]) {
+  const sub: inu.ui.UIPage = inu.ui.settingsPage({
+    title,
+    transient: true,
+    onClose: () => { if (subPage === sub) subPage = null },
+    items: () => {
+      const installed = installedList()
+      const list = pick(merged(installed)).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
+      return list.length ? list.map(x => row(x.plugin, x.key, installed)) : [inu.ui.separator(t('empty_list'))]
+    },
+  })
+  subPage = sub
+  inu.ui.openPage(sub)
+}
+
+function moreRow(id: string, count: number, title: string, pick: (all: Entry[]) => Entry[]): inu.UIElement {
+  return inu.ui.button({
+    id: `more:${id}`,
+    text: tf('show_all', count),
+    icon: inu.icons.common('forward'),
+    onClick: () => openList(title, pick),
+  })
+}
+
+function pluginsRows(): inu.UIElement[] {
+  const rows: inu.UIElement[] = []
+  const keys = activeKeys()
+
+  rows.push(inu.ui.button({
+    id: 'search',
+    text: t('search_title'),
+    subtitle: query || t('search_hint'),
+    icon: inu.icons.common('search'),
+    onClick: async () => {
+      const value = await inu.ui.prompt({ title: t('search_prompt_title'), hint: t('search_hint'), value: query, selectAll: true })
+      if (value !== null) {
+        query = value.trim()
+        page.invalidate()
+      }
+    },
+  }))
+  rows.push(inu.ui.select({
+    id: 'filter',
+    text: t('filter_title'),
+    icon: inu.icons.common('more'),
+    items: filters().map(f => f.label),
+    selected: Math.max(0, filters().findIndex(f => f.key === filter)),
+    onChange: (index) => { filter = filters()[index].key },
+  }))
+
+  const blocked = emptyState()
+  if (blocked) return [...rows, ...blocked]
+
+  const installed = installedList()
+  const needle = query.toLowerCase()
+  const unique = merged(installed)
+  const shown = unique
+    .filter(x => sourceFilter === 'all' || x.key === sourceFilter)
+    .filter(x => !needle || [x.plugin.name, x.plugin.id, x.plugin.author, x.plugin.description, sourceLabel(x.key)].some(s => s?.toLowerCase().includes(needle)))
+    .filter(x => filter === 'all' || (filter === 'installed' ? x.state !== 'new' : x.state === 'update'))
+
+  // Installed plugins are one section whatever source they came from, updates first. Every source then gets a section of
+  // its own with what is not installed yet. A long section shows its first few rows and opens the rest on its own screen.
+  const byName = (a: Entry, b: Entry) => a.plugin.name.localeCompare(b.plugin.name)
+  const mine = shown.filter(x => x.state !== 'new').sort((a, b) => (a.state === 'update' ? 0 : 1) - (b.state === 'update' ? 0 : 1) || byName(a, b))
+  if (mine.length) {
+    rows.push(inu.ui.header(`${t('sec_installed')} · ${mine.length}`))
+    for (const x of mine.slice(0, PREVIEW_ROWS)) rows.push(row(x.plugin, x.key, installed))
+    if (mine.length > PREVIEW_ROWS) rows.push(moreRow('installed', mine.length, t('sec_installed'), all => all.filter(x => x.state !== 'new')))
+  }
+
+  for (const key of keys) {
+    const group = shown.filter(x => x.key === key && x.state === 'new').sort(byName)
+    const error = failures.get(key)
+    if (!group.length && !(error && (sourceFilter === 'all' || sourceFilter === key))) continue
+    rows.push(inu.ui.header(group.length ? `${sourceLabel(key)} · ${group.length}` : sourceLabel(key)))
+    if (error) {
+      rows.push(inu.ui.button({
+        id: `err:${key}`,
+        text: tf('source_failed', error),
+        icon: inu.icons.common('info'),
+        danger: true,
+        onClick: () => { tab = 'settings' },
+      }))
+    }
+    for (const x of group.slice(0, PREVIEW_ROWS)) rows.push(row(x.plugin, x.key, installed))
+    if (group.length > PREVIEW_ROWS) rows.push(moreRow(key, group.length, sourceLabel(key), all => all.filter(x => x.key === key && x.state === 'new')))
+  }
+  if (!shown.length) rows.push(inu.ui.separator(query ? t('empty_search') : t('empty_list')))
+
+  rows.push(refreshRow(unique.length, keys.filter(key => catalogs.get(key)).length))
+  return rows
+}
+
+let entriesCache: { at: number, list: EmbeddedEntry[] } | null = null
+const ENTRIES_TTL_MS = 5000
+
+function entriesList(): EmbeddedEntry[] {
+  if (entriesCache && Date.now() - entriesCache.at <= ENTRIES_TTL_MS) return entriesCache.list
+  try {
+    const list = embeddedEntries()
+    entriesCache = { at: Date.now(), list }
+    return list
+  } catch (e) {
+    console.log('reading plugin entries failed', e)
+    return entriesCache?.list ?? []
+  }
+}
+
+function entryRows(): inu.UIElement[] {
+  const entries = entriesList()
+  const rows: inu.UIElement[] = []
+  for (const entry of entries) {
+    rows.push(inu.ui.button({
+      id: `e:${entry.id}`,
+      text: entry.name,
+      subtitle: entry.screen ? t('entry_open') : t('entry_inline'),
+      icon: inu.icons.common(entry.screen ? 'settings' : 'link'),
+      onClick: () => {
+        if (entry.screen) entry.open()
+      },
+    }))
+  }
+  rows.push(inu.ui.separator(entries.length ? t('settings_entries_footer') : t('entry_none')))
+  return rows
+}
+
+function installedRows(): inu.UIElement[] {
+  const installed = installedList()
+  if (!installed.length) return [inu.ui.separator(t('empty_list'))]
+  const known = new Map<string, { plugin: CatalogPlugin, key: SourceKey }>()
+  for (const x of merged(installed)) known.set(x.plugin.id, { plugin: x.plugin, key: x.key })
+  const rows: inu.UIElement[] = []
+  for (const plugin of [...installed].sort((a, b) => a.id.localeCompare(b.id))) {
+    const hit = known.get(plugin.id)
+    rows.push(inu.ui.button({
+      id: `i:${plugin.id}`,
+      text: hit?.plugin.name ?? plugin.id,
+      subtitle: `v${plugin.version}${hit ? '' : ` · ${plugin.id}`}`,
+      value: plugin.enabled ? undefined : t('status_off'),
+      icon: icons.get(plugin.id) ?? inu.icons.common(plugin.enabled ? 'check' : 'eyeOff'),
+      onClick: () => { if (hit) openPlugin(hit.plugin, hit.key) },
+    }))
+  }
+  return rows
+}
+
+// Opens the plugins channel inside the app; if the channel cannot be resolved the link goes to whatever handles t.me.
+async function openPluginsChannel() {
+  try {
+    const peer = await inu.account().resolvePeer(DEFAULT_CHANNEL) as unknown as { _: string, channel_id?: number }
+    if (peer._ === 'inputPeerChannel' && typeof peer.channel_id === 'number') {
+      inu.ui.openPage({ type: 'chat', dialogId: -peer.channel_id })
+      return
+    }
+  } catch (e) {
+    console.log('opening the channel in the app failed', e)
+  }
+  inu.openUrl(`https://t.me/${DEFAULT_CHANNEL}`)
+}
+
+type Section = 'installed' | 'sources' | 'entries'
+
+function openSection(section: Section) {
+  const sub: inu.ui.UIPage = inu.ui.settingsPage({
+    title: section === 'installed' ? t('settings_installed') : section === 'sources' ? t('sources_title') : t('settings_entries'),
+    transient: true,
+    onClose: () => { if (subPage === sub) subPage = null },
+    items: () => section === 'installed' ? installedRows() : section === 'sources' ? sourceRows() : entryRows(),
+  })
+  subPage = sub
+  inu.ui.openPage(sub)
+}
+
+function settingsRows(): inu.UIElement[] {
+  const installed = installedList()
+  const updates = merged(installed).filter(x => x.state === 'update').length
+  const sources = listSources()
+  return [
+    inu.ui.button({
+      id: 'sec-installed',
+      text: t('settings_installed'),
+      subtitle: tf('settings_installed_sub', installed.length, updates),
+      value: String(installed.length),
+      icon: inu.icons.common('download'),
+      onClick: () => openSection('installed'),
+    }),
+    inu.ui.button({
+      id: 'sec-sources',
+      text: t('sources_title'),
+      subtitle: tf('sources_sub', sources.filter(source => source.enabled).length, sources.length),
+      icon: inu.icons.common('channel'),
+      onClick: () => openSection('sources'),
+    }),
+    inu.ui.button({
+      id: 'sec-entries',
+      text: t('settings_entries'),
+      subtitle: tf('settings_entries_sub', entriesList().length),
+      icon: inu.icons.common('settings'),
+      onClick: () => openSection('entries'),
+    }),
+    inu.ui.header(t('settings_about')),
+    inu.ui.button({
+      id: 'about-sdk',
+      text: 'entinyGram SDK',
+      subtitle: tf('settings_about_sub', SDK_VERSION, embedState),
+      icon: inu.icons.common('info'),
+      onClick: () => {
+        // informational row
+      },
+    }),
+    inu.ui.button({
+      id: 'about-channel',
+      text: t('about_channel'),
+      subtitle: `@${DEFAULT_CHANNEL}`,
+      icon: inu.icons.common('channel'),
+      onClick: () => { void openPluginsChannel() },
+    }),
+    inu.ui.separator(tf('footer_info', SDK_VERSION, embedState, standalone() ? t('standalone_mode') : '')),
+  ]
+}
+
+// --- the page ----------------------------------------------------------------------------------------------------
+
 const page: inu.ui.UIPage = inu.ui.settingsPage({
   title: 'Marketplace',
   items: () => {
-    const rows: inu.UIElement[] = []
-    if ([...catalogs.values()].every(group => group === null) && failures.size === 0 && !loading) void load()
+    const started = Date.now()
+    if (activeKeys().every(key => !catalogs.get(key)) && failures.size === 0 && !loading) void load()
+    frame = null
+    frame = { installed: installedList(), merged: null }
 
-    rows.push(inu.ui.button({
-      id: 'search',
-      text: t('search_title'),
-      subtitle: query || t('search_hint'),
-      icon: inu.icons.common('search'),
-      onClick: async () => {
-        const value = await inu.ui.prompt({ title: t('search_prompt_title'), hint: t('search_hint'), value: query, selectAll: true })
-        if (value !== null) {
-          query = value.trim()
-          page.invalidate()
-        }
+    ensureNavbar({
+      title: 'Marketplace',
+      tabs: () => TABS.map((key) => {
+        const label = tabLabel(key)
+        const cut = label.indexOf(' ')
+        return { svg: TAB_SVG[key], emoji: label.slice(0, cut), label: label.slice(cut + 1) }
+      }),
+      selected: () => TABS.indexOf(tab),
+      onSelect: (index) => {
+        if (TABS[index] === tab) return
+        tab = TABS[index]
+        page.invalidate()
       },
-    }))
-    rows.push(inu.ui.select({
-      id: 'filter',
-      text: t('filter_title'),
-      icon: inu.icons.common('more'),
-      items: filters().map(f => f.label),
-      selected: Math.max(0, filters().findIndex(f => f.key === filter)),
-      onChange: (index) => { filter = filters()[index].key },
-    }))
+      onReady: () => page.invalidate(),
+    })
 
-    const loaded = SOURCE_KEYS.filter(key => catalogs.get(key) !== null)
-    if (loaded.length === 0) {
-      const problems = [...failures.entries()].map(([key, error]) => `${sourceLabel(key)}: ${error}`)
-      rows.push(inu.ui.separator(loading ? t('loading_catalog') : problems.length ? tf('catalog_fail', problems.join(' · ')) : t('unknown_error')))
-      rows.push(inu.ui.button({
-        id: 'retry', text: t('try_again'), icon: inu.icons.common('refresh'), onClick: () => { void load() },
-      }))
-      return rows
+    // the bottom bar replaces this row once it is on screen; without it (an app that cannot host the bar) the row stays
+    const rows: inu.UIElement[] = navbarReady()
+      ? []
+      : [inu.ui.select({
+          id: 'tab',
+          text: t('tab_title'),
+          icon: inu.icons.common('bookmark'),
+          items: TABS.map(tabLabel),
+          selected: TABS.indexOf(tab),
+          onChange: (index) => { tab = TABS[index] },
+        })]
+    try {
+      rows.push(...(tab === 'home' ? homeRows() : tab === 'plugins' ? pluginsRows() : settingsRows()))
+    } finally {
+      frame = null
     }
-
-    const installed = installedList()
-    const needle = query.toLowerCase()
-    const shown = loaded
-      .flatMap(key => (catalogs.get(key) ?? []).map(plugin => ({ key, plugin, ...stateOf(plugin, installed) })))
-      .filter(x => !needle || [x.plugin.name, x.plugin.id, x.plugin.author, x.plugin.description, sourceLabel(x.key)].some(s => s?.toLowerCase().includes(needle)))
-      .filter(x => filter === 'all' || (filter === 'installed' ? x.state !== 'new' : x.state === 'update'))
-
-    for (const key of loaded) {
-      const group = shown.filter(x => x.key === key).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
-      if (!group.length) continue
-      rows.push(inu.ui.header(sourceLabel(key)))
-      const subsections: [string, typeof group][] = [
-        [t('sec_updates'), group.filter(x => x.state === 'update')],
-        [t('sec_installed'), group.filter(x => x.state === 'installed')],
-        [t('sec_available'), group.filter(x => x.state === 'new')],
-      ]
-      const visible = subsections.filter(([, list]) => list.length > 0)
-      // one state group needs no sub-header: the section header names the state already
-      if (visible.length === 1) {
-        for (const x of visible[0][1]) rows.push(row(x.plugin, x.key, installed))
-      } else {
-        for (const [title, list] of visible) {
-          rows.push(inu.ui.header(title))
-          for (const x of list) rows.push(row(x.plugin, x.key, installed))
-        }
-      }
-    }
-    if (!shown.length) rows.push(inu.ui.separator(query ? t('empty_search') : t('empty_list')))
-
-    const clock = lastUpdated
-      ? tf('updated_at', `${new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`)
-      : t('never_updated')
-    rows.push(inu.ui.button({
-      id: 'refresh',
-      text: refreshing ? t('refreshing') : t('refresh_catalog'),
-      subtitle: refreshing ? t('refreshing_sub') : clock,
-      icon: refreshing ? inu.icons.animation('loading') : inu.icons.common('refresh'),
-      onClick: () => { void load(true) },
-    }))
-    rows.push(inu.ui.separator(tf('footer_info', SDK_VERSION, embedState, standalone() ? t('standalone_mode') : '')))
+    console.log(`render ${tab}: ${Date.now() - started} ms, ${rows.length} rows`)
     return rows
   },
 })

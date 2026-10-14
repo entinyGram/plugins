@@ -83,9 +83,9 @@ const STRINGS = {
     en: 'Refreshing…',
   },
   refreshing_sub: {
-    uk: 'Завантажуємо обидва каталоги',
-    ru: 'Загружаем оба каталога',
-    en: 'Fetching both catalogs',
+    uk: 'Завантажуємо каталоги всіх джерел',
+    ru: 'Загружаем каталоги всех источников',
+    en: 'Fetching every source',
   },
   catalog_updated: {
     uk: 'Каталог оновлено',
@@ -343,14 +343,349 @@ const STRINGS = {
     en: 'Close',
   },
   footer_info: {
-    uk: 'entinyGram SDK {0}, вбудовування налаштувань {1}{2}. Плагіни надходять з репозиторію GitHub entinyGram; кожне встановлення запитує підтвердження',
-    ru: 'entinyGram SDK {0}, встраивание настроек {1}{2}. Плагины поступают из репозитория GitHub entinyGram; каждая установка запрашивает подтверждение',
-    en: 'entinyGram SDK {0}, settings embedding {1}{2}. Plugins come from the entinyGram GitHub repository; every install asks for confirmation',
+    uk: 'entinyGram SDK {0}, вбудовування налаштувань {1}{2}. Плагіни надходять з активних джерел; кожне встановлення запитує підтвердження',
+    ru: 'entinyGram SDK {0}, встраивание настроек {1}{2}. Плагины поступают из активных источников; каждая установка запрашивает подтверждение',
+    en: 'entinyGram SDK {0}, settings embedding {1}{2}. Plugins come from your active sources; every install asks for confirmation',
   },
   standalone_mode: {
     uk: ', автономний режим (встановлення через файл)',
     ru: ', автономный режим (установка через файл)',
     en: ', standalone mode (installing goes through a file)',
+  },
+  source_channel: {
+    uk: 'Спільнота (Telegram)',
+    ru: 'Сообщество (Telegram)',
+    en: 'Community (Telegram)',
+  },
+  source_channel_desc: {
+    uk: 'Плагіни з каналу {0}',
+    ru: 'Плагины из канала {0}',
+    en: 'Plugins from the {0} channel',
+  },
+  source_channel_msg: {
+    uk: 'Плагін опубліковано в Telegram-каналі {0}. Його читає ваш клієнт напряму, без стороннього сервера.',
+    ru: 'Плагин опубликован в Telegram-канале {0}. Его читает ваш клиент напрямую, без стороннего сервера.',
+    en: 'This plugin is published in the {0} Telegram channel. Your client reads it directly, no third-party server involved.',
+  },
+  sources_title: {
+    uk: 'Джерела',
+    ru: 'Источники',
+    en: 'Sources',
+  },
+  sources_sub: {
+    uk: 'Активно {0} з {1}',
+    ru: 'Активно {0} из {1}',
+    en: '{0} of {1} active',
+  },
+  sources_footer: {
+    uk: 'Канал читається через ваш обліковий запис Telegram. Тримайте довгий тап на доданому каналі, щоб прибрати його',
+    ru: 'Канал читается через ваш аккаунт Telegram. Удерживайте добавленный канал, чтобы убрать его',
+    en: 'A channel is read through your own Telegram account. Long-press an added channel to remove it',
+  },
+  source_add: {
+    uk: 'Додати канал',
+    ru: 'Добавить канал',
+    en: 'Add a channel',
+  },
+  source_add_sub: {
+    uk: '@канал або посилання t.me',
+    ru: '@канал или ссылка t.me',
+    en: '@channel or a t.me link',
+  },
+  source_add_title: {
+    uk: 'Канал із плагінами',
+    ru: 'Канал с плагинами',
+    en: 'Plugin channel',
+  },
+  source_add_bad: {
+    uk: 'Це не схоже на публічний канал',
+    ru: 'Это не похоже на публичный канал',
+    en: 'That does not look like a public channel',
+  },
+  source_add_warn_title: {
+    uk: 'Додати {0}?',
+    ru: 'Добавить {0}?',
+    en: 'Add {0}?',
+  },
+  source_add_warn_msg: {
+    uk: 'Канал не перевіряється entinyGram. Плагіни можуть містити небезпечний код. Додавайте лише канали, яким довіряєте.',
+    ru: 'Канал не проверяется entinyGram. Плагины могут содержать опасный код. Добавляйте только каналы, которым доверяете.',
+    en: 'entinyGram does not vet this channel. Its plugins may contain unsafe code. Only add channels you trust.',
+  },
+  source_add_confirm: {
+    uk: 'Додати',
+    ru: 'Добавить',
+    en: 'Add',
+  },
+  source_added: {
+    uk: 'Джерело додано',
+    ru: 'Источник добавлен',
+    en: 'Source added',
+  },
+  source_exists: {
+    uk: 'Це джерело вже є',
+    ru: 'Этот источник уже есть',
+    en: 'That source is already added',
+  },
+  source_empty: {
+    uk: 'У каналі немає плагінів у форматі entinyGram',
+    ru: 'В канале нет плагинов в формате entinyGram',
+    en: 'No entinyGram plugins found in that channel',
+  },
+  source_remove_title: {
+    uk: 'Прибрати {0}?',
+    ru: 'Убрать {0}?',
+    en: 'Remove {0}?',
+  },
+  source_remove_msg: {
+    uk: 'Канал зникне зі списку джерел. Вже встановлені плагіни залишаться.',
+    ru: 'Канал исчезнет из списка источников. Уже установленные плагины останутся.',
+    en: 'The channel leaves your sources. Plugins you already installed stay.',
+  },
+  source_count: {
+    uk: '{0} плагінів',
+    ru: '{0} плагинов',
+    en: '{0} plugins',
+  },
+  source_off: {
+    uk: 'вимкнено',
+    ru: 'отключено',
+    en: 'off',
+  },
+  source_failed: {
+    uk: 'помилка: {0}',
+    ru: 'ошибка: {0}',
+    en: 'failed: {0}',
+  },
+  source_loading: {
+    uk: 'завантаження…',
+    ru: 'загрузка…',
+    en: 'loading…',
+  },
+  source_filter: {
+    uk: 'Джерело',
+    ru: 'Источник',
+    en: 'Source',
+  },
+  source_all: {
+    uk: 'Усі джерела',
+    ru: 'Все источники',
+    en: 'All sources',
+  },
+  perms: {
+    uk: 'Дозволи',
+    ru: 'Разрешения',
+    en: 'Permissions',
+  },
+  perms_footer: {
+    uk: '⚠ позначає небезпечні дозволи: плагін отримує повний доступ до застосунку',
+    ru: '⚠ отмечает опасные разрешения: плагин получает полный доступ к приложению',
+    en: '⚠ marks unsafe permissions: the plugin gets full access to the app',
+  },
+  perm_jvm: {
+    uk: 'Повний доступ до коду застосунку',
+    ru: 'Полный доступ к коду приложения',
+    en: 'Full access to the app code',
+  },
+  perm_xposed: {
+    uk: 'Підміна методів застосунку',
+    ru: 'Подмена методов приложения',
+    en: 'Hooks app methods',
+  },
+  perm_fetch: {
+    uk: 'Доступ до мережі',
+    ru: 'Доступ к сети',
+    en: 'Network access',
+  },
+  perm_fs: {
+    uk: 'Доступ до файлів',
+    ru: 'Доступ к файлам',
+    en: 'File access',
+  },
+  perm_account: {
+    uk: 'Читання даних акаунта',
+    ru: 'Чтение данных аккаунта',
+    en: 'Reads account data',
+  },
+  perm_other: {
+    uk: 'Додатковий дозвіл',
+    ru: 'Дополнительное разрешение',
+    en: 'Extra permission',
+  },
+  trust_title: {
+    uk: 'Встановити з {0}?',
+    ru: 'Установить из {0}?',
+    en: 'Install from {0}?',
+  },
+  trust_msg: {
+    uk: 'Це джерело не перевіряється entinyGram.\nЗапитані дозволи: {0}\n\nВстановлюйте, лише якщо довіряєте автору.',
+    ru: 'Этот источник не проверяется entinyGram.\nЗапрошенные разрешения: {0}\n\nУстанавливайте, только если доверяете автору.',
+    en: 'entinyGram does not vet this source.\nPermissions asked: {0}\n\nInstall only if you trust the author.',
+  },
+  trust_none: {
+    uk: 'не вказано',
+    ru: 'не указаны',
+    en: 'not listed',
+  },
+  download_failed: {
+    uk: 'Не вдалося завантажити: {0}',
+    ru: 'Не удалось скачать: {0}',
+    en: 'Download failed: {0}',
+  },
+  channel_install_old: {
+    uk: 'Ця збірка застосунку ще не вміє ставити плагіни з каналів. Оновіть entinyGram.',
+    ru: 'Эта сборка приложения ещё не умеет ставить плагины из каналов. Обновите entinyGram.',
+    en: 'This app build cannot install plugins from channels yet. Update entinyGram.',
+  },
+  channel_install_standalone: {
+    uk: 'Встановлення з каналу працює лише в entinyGram.',
+    ru: 'Установка из канала работает только в entinyGram.',
+    en: 'Installing from a channel works only in entinyGram.',
+  },
+  size_label: {
+    uk: 'Розмір',
+    ru: 'Размер',
+    en: 'Size',
+  },
+  open_post: {
+    uk: 'Пост у каналі',
+    ru: 'Пост в канале',
+    en: 'Channel post',
+  },
+  tab_title: {
+    uk: 'Розділ',
+    ru: 'Раздел',
+    en: 'Section',
+  },
+  tab_home: {
+    uk: '🏠 Головна',
+    ru: '🏠 Главная',
+    en: '🏠 Home',
+  },
+  tab_plugins: {
+    uk: '🧩 Плагіни',
+    ru: '🧩 Плагины',
+    en: '🧩 Plugins',
+  },
+  tab_settings: {
+    uk: '⚙️ Налаштування',
+    ru: '⚙️ Настройки',
+    en: '⚙️ Settings',
+  },
+  home_summary: {
+    uk: '{0} плагінів у каталозі · {1} встановлено',
+    ru: '{0} плагинов в каталоге · {1} установлено',
+    en: '{0} plugins in the catalog · {1} installed',
+  },
+  home_summary_sub: {
+    uk: 'Торкніться, щоб відкрити каталог',
+    ru: 'Нажмите, чтобы открыть каталог',
+    en: 'Tap to open the catalog',
+  },
+  home_updates: {
+    uk: 'Оновлення · {0}',
+    ru: 'Обновления · {0}',
+    en: 'Updates · {0}',
+  },
+  home_new: {
+    uk: 'Нове в каталозі',
+    ru: 'Новое в каталоге',
+    en: 'New in the catalog',
+  },
+  home_all_current: {
+    uk: 'Усе встановлене актуальне',
+    ru: 'Всё установленное актуально',
+    en: 'Everything you installed is up to date',
+  },
+  home_more: {
+    uk: 'Усі плагіни',
+    ru: 'Все плагины',
+    en: 'All plugins',
+  },
+  settings_entries: {
+    uk: 'Записи плагінів',
+    ru: 'Записи плагинов',
+    en: 'Plugin entries',
+  },
+  settings_entries_footer: {
+    uk: 'Плагіни, що додають власні розділи в налаштування застосунку',
+    ru: 'Плагины, добавляющие собственные разделы в настройки приложения',
+    en: 'Plugins that add their own sections to the app settings',
+  },
+  entry_open: {
+    uk: 'Відкрити налаштування плагіна',
+    ru: 'Открыть настройки плагина',
+    en: 'Open the plugin settings',
+  },
+  entry_inline: {
+    uk: 'Вбудовано в налаштування застосунку',
+    ru: 'Встроено в настройки приложения',
+    en: 'Built into the app settings',
+  },
+  entry_none: {
+    uk: 'Жоден плагін ще не додає записів',
+    ru: 'Ни один плагин пока не добавляет записи',
+    en: 'No plugin adds entries yet',
+  },
+  settings_installed: {
+    uk: 'Встановлені плагіни',
+    ru: 'Установленные плагины',
+    en: 'Installed plugins',
+  },
+  status_off: {
+    uk: 'Вимкнено',
+    ru: 'Отключено',
+    en: 'Off',
+  },
+  settings_about: {
+    uk: 'Про SDK',
+    ru: 'О SDK',
+    en: 'About the SDK',
+  },
+  settings_about_sub: {
+    uk: 'Версія {0}, вбудовування {1}',
+    ru: 'Версия {0}, встраивание {1}',
+    en: 'Version {0}, embedding {1}',
+  },
+  settings_installed_sub: {
+    uk: 'Встановлено {0} · оновлень: {1}',
+    ru: 'Установлено {0} · обновлений: {1}',
+    en: '{0} installed · {1} updates',
+  },
+  settings_entries_sub: {
+    uk: 'Плагінів із власними розділами: {0}',
+    ru: 'Плагинов с собственными разделами: {0}',
+    en: '{0} plugins add their own sections',
+  },
+  home_title: {
+    uk: 'Маркетплейс',
+    ru: 'Маркетплейс',
+    en: 'Marketplace',
+  },
+  home_stats: {
+    uk: 'Встановлено {0} · оновлень {1} · у каталозі {2}',
+    ru: 'Установлено {0} · обновлений {1} · в каталоге {2}',
+    en: '{0} installed · {1} updates · {2} in the catalog',
+  },
+  home_recent: {
+    uk: 'Нещодавно оновлені',
+    ru: 'Недавно обновлённые',
+    en: 'Recently updated',
+  },
+  show_all: {
+    uk: 'Показати всі ({0})',
+    ru: 'Показать все ({0})',
+    en: 'Show all ({0})',
+  },
+  about_channel: {
+    uk: 'Канал із плагінами',
+    ru: 'Канал с плагинами',
+    en: 'Channel with plugins',
+  },
+  catalog_count: {
+    uk: '{0} плагінів у {1} джерелах',
+    ru: '{0} плагинов в {1} источниках',
+    en: '{0} plugins in {1} sources',
   },
 } as const
 

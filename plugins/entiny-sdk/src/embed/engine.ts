@@ -615,3 +615,21 @@ export function startEmbedEngine(): EmbedEngine {
   }, 0)
   return { hooked: true }
 }
+
+export interface EmbeddedEntry {
+  id: string
+  name: string
+  /** the plugin adds a row that opens its own page */
+  screen: boolean
+  open: () => void
+}
+
+/** the plugins that registered with the embed engine, for the marketplace's settings tab */
+export function embeddedEntries(): EmbeddedEntry[] {
+  return registrations().map(reg => ({
+    id: reg.id,
+    name: reg.name,
+    screen: (reg.placements.screen ?? []).length > 0,
+    open: () => { reg.handler.call('apply', 'open', '') },
+  }))
+}
