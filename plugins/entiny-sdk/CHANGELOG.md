@@ -1,3 +1,10 @@
+## 0.2.1
+
+- fix crash when updating catalog from channel (@entinyGramPlugins: no such property 'find' on a TL vector)
+- parse any telegram channel by .inu.js files, supporting community channels like inugramplugins
+- group older versions under the same plugin in channel catalogs instead of displaying duplicates
+- add Persian (fa) localization
+
 ## 0.2.0
 
 - telegram channels are plugin sources, plugins install straight from channel posts

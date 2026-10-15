@@ -168,6 +168,7 @@ function getLangIndex(): number {
   if (v === 'uk') return 1
   if (v === 'en') return 2
   if (v === 'ru') return 3
+  if (v === 'fa') return 4
   return 0
 }
 
@@ -179,10 +180,10 @@ const settingsPage = inu.ui.settingsPage({
     inu.ui.select({
       id: 'docviewer_lang',
       text: t('header_language'),
-      items: [t('lang_auto'), 'Українська', 'English', 'Русский'],
+      items: [t('lang_auto'), 'Українська', 'English', 'Русский', 'فارسی'],
       selected: getLangIndex(),
       onChange: (index) => {
-        const val = index === 1 ? 'uk' : index === 2 ? 'en' : index === 3 ? 'ru' : 'auto'
+        const val = index === 1 ? 'uk' : index === 2 ? 'en' : index === 3 ? 'ru' : index === 4 ? 'fa' : 'auto'
         localStorage.setItem('docviewer_lang', val)
       },
     }),

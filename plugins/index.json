@@ -10,7 +10,7 @@
           "date": "2026-10-07",
           "notes": "",
           "file": "dist/entinygram.2gis/1.0.0.inu.js",
-          "sha256": "cbe1828ee3cd07287b4464a83aa0fde28c38dddffee4fe0c427f574059c620c1",
+          "sha256": "852912e7e7d038c0b38d81bbdaebd466795f2465c0f4c840345777decb427247",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -30,7 +30,7 @@
           "date": "2026-10-12",
           "notes": "- The plugin page shows a sample rendered with the pattern the profile \"registration date\" row uses, so profile dates can be checked without opening a profile\n- Registration, join and birthday dates in the profile follow the chosen calendar: they are formatted by the same app formatter the plugin rewrites\n- Each hook now registers on its own, so one method missing from an app build no longer disables the rest; the page lists what could not be hooked",
           "file": "dist/entinygram.calendar-systems/1.1.0.inu.js",
-          "sha256": "6d6c02c10549f1b654884150e7a14f073fcc8d96888d5234c1fdf22639a4be18",
+          "sha256": "a04de420245d36144e9ddda2ba4e28308d6611490f14956da7073a4a31a9695e",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -61,7 +61,7 @@
           "date": "2026-10-14",
           "notes": "- Replace the catalog icon with the supplied phone handset and signal arcs SVG.\r\n- Translate settings and compatibility messages into Ukrainian, English and Russian using the application language, with English fallback.\r\n- Extend mocked lifecycle regressions to all three languages and test language selection/fallback.",
           "file": "dist/entinygram.call-avatar/1.1.inu.js",
-          "sha256": "2c639fc3cdc1c2de2069542979c4ff4d1eb6e22f246260ccdd7c5a45835e0d3b",
+          "sha256": "fa0bf356daea4a71271edd92aaa05e5374c56c358f4c0891b93e0c7a78250cf2",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -92,7 +92,7 @@
           "date": "2026-10-13",
           "notes": "- Fix copied JVM byte buffers and bounded chunked reads without reflection.\n- Repair XLSX sheet relationships, sparse cells and rich strings; EPUB manifests, chapter paths and XML entities; FB2 encodings and namespaces.\n- Browse ZIP/JAR/AAR entries and open supported files in-app with bounded, private temporary extraction and cleanup.\n- Fix archive totals and remove incorrect password detection. Unsupported TAR/compressed TAR files now use the stock viewer.\n- Remove reflection from viewer controls and fix viewer resource cleanup.\n- Repair DOCX namespaces, PPTX slide ordering, bounded ODF repeated cells, RTF escapes/codepages and MIME email decoding.\n- Fix CSV quoted/multiline fields, Markdown links and recursion limits, Unicode chunk boundaries and JVM string decoding.\n- Handle mirrored EXIF orientations and PDF failure cleanup; add parser and native-resource regression tests.",
           "file": "dist/entinygram.doc-viewer/1.1.0.inu.js",
-          "sha256": "5570c943d5833e68c9618ad9ca4d54f0c42095f109d447272d0abe1039c75385",
+          "sha256": "63ed9717da85e0730de9aadf0d715bc7987548848c48fb3cfca9a7f88bf5808c",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -118,6 +118,15 @@
       "id": "entinygram.sdk",
       "name": "entinyGram SDK",
       "versions": [
+        {
+          "version": "0.2.1",
+          "date": "2026-10-15",
+          "notes": "- fix crash when updating catalog from channel (@entinyGramPlugins: no such property 'find' on a TL vector)\n- parse any telegram channel by .inu.js files, supporting community channels like inugramplugins\n- group older versions under the same plugin in channel catalogs instead of displaying duplicates\n- add Persian (fa) localization",
+          "file": "dist/entinygram.sdk/0.2.1.inu.js",
+          "sha256": "40848d7f7d963b1b3a1aabc0a7b2dfbacbede281bcd8b0717af3c1076f03ca1d",
+          "requires": [],
+          "pluginApi": 1
+        },
         {
           "version": "0.2.0-beta",
           "date": "2026-10-14",
@@ -186,7 +195,7 @@
           "date": "2026-10-08",
           "notes": "",
           "file": "dist/entinygram.text-animation/1.0.0.inu.js",
-          "sha256": "e9574f343eeddc597bd472fea018866a0839bdb121885ee52f582f870be37130",
+          "sha256": "5a7e08d3c65a7850ef890f0d7136a8e55a2f856068d3a4be70cbc8317618b1b9",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -206,7 +215,7 @@
           "date": "2026-10-06",
           "notes": "",
           "file": "dist/entinygram.yandex/1.0.0.inu.js",
-          "sha256": "786ee82d57035d8872089e932d65670e8d1973fe0fdf87f7fe6cf8e923cbdb14",
+          "sha256": "242a8110ebab761b8af460e3ad1e8d10aafebf38efd73c94f5cd7d811d456a38",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
