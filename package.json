@@ -14,6 +14,7 @@
     "plugins-index": "bun scripts/build-plugin-index.ts",
     "pack": "bun scripts/pack-release.ts release",
     "pack:rebuild": "bun scripts/build-plugin-index.ts --pack=release",
+    "release": "bun scripts/publish-release.ts",
     "inu": "bun --conditions=development sdk/cli/src/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc -b"
