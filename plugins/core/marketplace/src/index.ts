@@ -19,7 +19,7 @@ interface Installed {
 
 type Filter = 'all' | 'installed' | 'updates'
 
-// The marketplace merges every enabled source: the official and the user GitHub catalogs plus Telegram channels.
+// The marketplace merges every enabled source: the official GitHub catalog plus Telegram channels.
 type SourceKey = string
 
 const filters = (): { key: Filter, label: string }[] => [
@@ -57,7 +57,6 @@ const standalone = () => bridge() === null
 
 function sourceUrl(key: SourceKey): string {
   const base = (bridge()?.callStatic('indexUrl') as string | undefined) ?? DEFAULT_INDEX_URL
-  if (key === 'user') return base.replace(/index\.json$/, 'plugins/user/index.json')
   return base
 }
 
@@ -67,13 +66,12 @@ function sourceOf(key: SourceKey): Source | undefined {
 
 function sourceLabel(key: SourceKey): string {
   if (key === 'official') return t('source_official')
-  if (key === 'user') return t('source_user')
   const channel = sourceOf(key)?.channel
   return channel ? `@${channel}` : key
 }
 
 function sourceIcon(source: Source): inu.UIIcon {
-  return inu.icons.common(source.kind === 'official' ? 'star' : source.kind === 'user' ? 'user' : 'channel')
+  return inu.icons.common(source.kind === 'official' ? 'star' : 'channel')
 }
 
 function activeKeys(): SourceKey[] {
@@ -248,7 +246,7 @@ async function load(manual = false) {
   const suffix = manual ? `?t=${Date.now()}` : ''
   const keys = activeKeys()
   for (const key of [...catalogs.keys()]) if (!keys.includes(key)) catalogs.delete(key)
-  await Promise.all(keys.map(key => key === 'official' || key === 'user' ? loadCatalog(key, suffix) : loadFromChannel(key, manual)))
+  await Promise.all(keys.map(key => key === 'official' ? loadCatalog(key, suffix) : loadFromChannel(key, manual)))
   loading = false
   refreshing = false
   const failed = [...failures.entries()]
@@ -289,7 +287,7 @@ async function loadIcons() {
 
 // Release assets are served as downloads under the same <Name>-<version>.inu.js name the build workflow gives them,
 // so in inugram (no entinyGram bridge) the newest version is fetched from the latest release instead of a raw file the
-// browser would just display. Official packages keep the `entinyGram ` prefix, user plugins keep their own name.
+// browser would just display. Official packages keep the `entinyGram ` prefix.
 function releaseUrl(plugin: CatalogPlugin, version: CatalogVersion, key: SourceKey): string {
   if (newest(plugin)?.version !== version.version) return version.file
   const base = key === 'official' && !/^entinygram/i.test(plugin.name) ? `entinyGram ${plugin.name}` : plugin.name
@@ -391,7 +389,7 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
     })
   }
   const heroSubtitle = [sourceLabel(source), plugin.author].filter(Boolean).join(' · ')
-  const heroIcon: CommonIcon = source === 'official' ? 'star' : source === 'user' ? 'user' : 'channel'
+  const heroIcon: CommonIcon = source === 'official' ? 'star' : 'channel'
   // the version leads the title as a pill, which only a row drawn as a view can do
   rows.push(nativeRow({
     title: plugin.name,
@@ -437,12 +435,12 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
   rows.push(inu.ui.button({
     id: 'source',
     text: t('about_source'),
-    subtitle: source === 'official' ? t('source_official_desc') : source === 'user' ? t('source_user_desc') : tf('source_channel_desc', sourceLabel(source)),
+    subtitle: source === 'official' ? t('source_official_desc') : tf('source_channel_desc', sourceLabel(source)),
     icon: sourceOf(source) ? sourceIcon(sourceOf(source)!) : inu.icons.common('user'),
     onClick: async () => {
       await inu.ui.dialog({
         title: t('about_source'),
-        message: source === 'official' ? t('source_official_msg') : source === 'user' ? t('source_user_msg') : tf('source_channel_msg', sourceLabel(source)),
+        message: source === 'official' ? t('source_official_msg') : tf('source_channel_msg', sourceLabel(source)),
         positive: t('close'),
       })
     },
@@ -754,7 +752,7 @@ function sourceRows(): inu.UIElement[] {
     const list = catalogs.get(source.key)
     const error = failures.get(source.key)
     const status = !source.enabled ? t('source_off') : error ? tf('source_failed', error) : list ? tf('source_count', list.length) : loading ? t('source_loading') : ''
-    const about = source.kind === 'official' ? t('source_official_desc') : source.kind === 'user' ? t('source_user_desc') : tf('source_channel_desc', sourceLabel(source.key))
+    const about = source.kind === 'official' ? t('source_official_desc') : tf('source_channel_desc', sourceLabel(source.key))
     rows.push(inu.ui.check({
       id: `s:${source.key}`,
       text: sourceLabel(source.key),

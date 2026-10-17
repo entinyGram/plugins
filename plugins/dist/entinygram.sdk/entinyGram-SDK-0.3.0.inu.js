@@ -1543,35 +1543,17 @@ var STRINGS = {
     en: "entinyGram",
     fa: "entinyGram"
   },
-  source_user: {
-    uk: "Користувацький репозиторій",
-    ru: "Пользовательский репозиторий",
-    en: "User repository",
-    fa: "مخزن کاربران"
-  },
   source_official_desc: {
     uk: "Офіційні плагіни entinyGram",
     ru: "Официальные плагины entinyGram",
     en: "Official entinyGram plugins",
     fa: "پلاگین‌های رسمی entinyGram"
   },
-  source_user_desc: {
-    uk: "Плагіни з користувацького репозиторію",
-    ru: "Плагины из пользовательского репозитория",
-    en: "Plugins from the user repository",
-    fa: "پلاگین‌های مخزن کاربران"
-  },
   source_official_msg: {
     uk: "Плагін опубліковано в офіційному каталозі entinyGram.",
     ru: "Плагин опубликован в официальном каталоге entinyGram.",
     en: "This plugin is published in the official entinyGram catalog.",
     fa: "این پلاگین در کاتالوگ رسمی entinyGram منتشر شده است."
-  },
-  source_user_msg: {
-    uk: "Плагін опубліковано в користувацькому репозиторії спільноти.",
-    ru: "Плагин опубликован в пользовательском репозитории сообщества.",
-    en: "This plugin is published in the community user repository.",
-    fa: "این پلاگین در مخزن کاربران جامعه منتشر شده است."
   },
   about_desc: {
     uk: "Опис",
@@ -2485,7 +2467,6 @@ function listSources() {
   const saved = read();
   const all = [
     { key: "official", kind: "official", builtin: true, enabled: true },
-    { key: "user", kind: "user", builtin: true, enabled: true },
     { key: channelKey(DEFAULT_CHANNEL), kind: "channel", channel: DEFAULT_CHANNEL, builtin: true, enabled: true },
     ...saved.added.map((channel) => ({ key: channelKey(channel), kind: "channel", channel, builtin: false, enabled: true }))
   ];
@@ -2544,7 +2525,6 @@ function bridge() {
 var standalone = () => bridge() === null;
 function sourceUrl(key) {
   const base = bridge()?.callStatic("indexUrl") ?? DEFAULT_INDEX_URL;
-  if (key === "user") return base.replace(/index\.json$/, "plugins/user/index.json");
   return base;
 }
 function sourceOf(key) {
@@ -2552,12 +2532,11 @@ function sourceOf(key) {
 }
 function sourceLabel(key) {
   if (key === "official") return t("source_official");
-  if (key === "user") return t("source_user");
   const channel = sourceOf(key)?.channel;
   return channel ? `@${channel}` : key;
 }
 function sourceIcon(source) {
-  return inu.icons.common(source.kind === "official" ? "star" : source.kind === "user" ? "user" : "channel");
+  return inu.icons.common(source.kind === "official" ? "star" : "channel");
 }
 function activeKeys() {
   return listSources().filter((source) => source.enabled).map((source) => source.key);
@@ -2704,7 +2683,7 @@ async function load(manual = false) {
   const suffix = manual ? `?t=${Date.now()}` : "";
   const keys = activeKeys();
   for (const key of [...catalogs.keys()]) if (!keys.includes(key)) catalogs.delete(key);
-  await Promise.all(keys.map((key) => key === "official" || key === "user" ? loadCatalog(key, suffix) : loadFromChannel(key, manual)));
+  await Promise.all(keys.map((key) => key === "official" ? loadCatalog(key, suffix) : loadFromChannel(key, manual)));
   loading = false;
   refreshing = false;
   const failed = [...failures.entries()];
@@ -2836,7 +2815,7 @@ function aboutRows(plugin, source) {
     });
   };
   const heroSubtitle = [sourceLabel(source), plugin.author].filter(Boolean).join(" · ");
-  const heroIcon = source === "official" ? "star" : source === "user" ? "user" : "channel";
+  const heroIcon = source === "official" ? "star" : "channel";
   rows.push(nativeRow({
     title: plugin.name,
     subtitle: heroSubtitle,
@@ -2878,12 +2857,12 @@ function aboutRows(plugin, source) {
   rows.push(inu.ui.button({
     id: "source",
     text: t("about_source"),
-    subtitle: source === "official" ? t("source_official_desc") : source === "user" ? t("source_user_desc") : tf("source_channel_desc", sourceLabel(source)),
+    subtitle: source === "official" ? t("source_official_desc") : tf("source_channel_desc", sourceLabel(source)),
     icon: sourceOf(source) ? sourceIcon(sourceOf(source)) : inu.icons.common("user"),
     onClick: async () => {
       await inu.ui.dialog({
         title: t("about_source"),
-        message: source === "official" ? t("source_official_msg") : source === "user" ? t("source_user_msg") : tf("source_channel_msg", sourceLabel(source)),
+        message: source === "official" ? t("source_official_msg") : tf("source_channel_msg", sourceLabel(source)),
         positive: t("close")
       });
     }
@@ -3157,7 +3136,7 @@ function sourceRows() {
     const list = catalogs.get(source.key);
     const error = failures.get(source.key);
     const status = !source.enabled ? t("source_off") : error ? tf("source_failed", error) : list ? tf("source_count", list.length) : loading ? t("source_loading") : "";
-    const about = source.kind === "official" ? t("source_official_desc") : source.kind === "user" ? t("source_user_desc") : tf("source_channel_desc", sourceLabel(source.key));
+    const about = source.kind === "official" ? t("source_official_desc") : tf("source_channel_desc", sourceLabel(source.key));
     rows.push(inu.ui.check({
       id: `s:${source.key}`,
       text: sourceLabel(source.key),

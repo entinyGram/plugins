@@ -193,35 +193,17 @@ const STRINGS = {
     en: 'entinyGram',
     fa: 'entinyGram',
   },
-  source_user: {
-    uk: 'Користувацький репозиторій',
-    ru: 'Пользовательский репозиторий',
-    en: 'User repository',
-    fa: 'مخزن کاربران',
-  },
   source_official_desc: {
     uk: 'Офіційні плагіни entinyGram',
     ru: 'Официальные плагины entinyGram',
     en: 'Official entinyGram plugins',
     fa: 'پلاگین‌های رسمی entinyGram',
   },
-  source_user_desc: {
-    uk: 'Плагіни з користувацького репозиторію',
-    ru: 'Плагины из пользовательского репозитория',
-    en: 'Plugins from the user repository',
-    fa: 'پلاگین‌های مخزن کاربران',
-  },
   source_official_msg: {
     uk: 'Плагін опубліковано в офіційному каталозі entinyGram.',
     ru: 'Плагин опубликован в официальном каталоге entinyGram.',
     en: 'This plugin is published in the official entinyGram catalog.',
     fa: 'این پلاگین در کاتالوگ رسمی entinyGram منتشر شده است.',
-  },
-  source_user_msg: {
-    uk: 'Плагін опубліковано в користувацькому репозиторії спільноти.',
-    ru: 'Плагин опубликован в пользовательском репозитории сообщества.',
-    en: 'This plugin is published in the community user repository.',
-    fa: 'این پلاگین در مخزن کاربران جامعه منتشر شده است.',
   },
   about_desc: {
     uk: 'Опис',

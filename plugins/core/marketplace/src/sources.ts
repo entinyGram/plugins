@@ -1,7 +1,7 @@
-// Where the marketplace reads plugins from. Two GitHub catalogs and the plugins channel ship with the SDK; the user can
+// Where the marketplace reads plugins from. The GitHub catalog and the plugins channel ship with the SDK; the user can
 // add more channels. A channel needs no host grant: it is read through the user's own Telegram session.
 
-export type SourceKind = 'official' | 'user' | 'channel'
+export type SourceKind = 'official' | 'channel'
 
 export interface Source {
   key: string
@@ -50,7 +50,6 @@ export function listSources(): Source[] {
   const saved = read()
   const all: Source[] = [
     { key: 'official', kind: 'official', builtin: true, enabled: true },
-    { key: 'user', kind: 'user', builtin: true, enabled: true },
     { key: channelKey(DEFAULT_CHANNEL), kind: 'channel', channel: DEFAULT_CHANNEL, builtin: true, enabled: true },
     ...saved.added.map((channel): Source => ({ key: channelKey(channel), kind: 'channel', channel, builtin: false, enabled: true })),
   ]

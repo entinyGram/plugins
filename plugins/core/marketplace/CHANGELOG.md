@@ -5,6 +5,7 @@
 - tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin
 - rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)
 - fix oversized text in the card rows
+- the separate user repository source is gone: community plugins come from Telegram channels
 
 ## 0.2.1
 
