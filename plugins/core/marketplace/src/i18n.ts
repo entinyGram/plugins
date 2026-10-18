@@ -787,6 +787,18 @@ const STRINGS = {
     en: '{0} plugins add their own sections',
     fa: '{0} پلاگین بخش‌های اختصاصی اضافه می‌کنند',
   },
+  home_dev_title: {
+    uk: 'Плагіни від розробника',
+    ru: 'Плагины от разработчика',
+    en: 'Plugins from the developer',
+    fa: 'پلاگین‌های توسعه‌دهنده',
+  },
+  home_dev_sub: {
+    uk: 'Офіційний каталог entinyGram',
+    ru: 'Официальный каталог entinyGram',
+    en: 'The official entinyGram catalog',
+    fa: 'کاتالوگ رسمی entinyGram',
+  },
   home_title: {
     uk: 'Маркетплейс',
     ru: 'Маркетплейс',

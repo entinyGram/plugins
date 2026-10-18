@@ -19,7 +19,7 @@ type Extra = NonNullable<Manifest['extra']>
 
 /** the plugin that carries the SDK: the app honours the directives below only from plugins that require it */
 export const SDK_ID = 'entinygram.sdk'
-export const SDK_VERSION = '0.2.1'
+export const SDK_VERSION = '0.3.0'
 /** the oldest SDK the feature plugins work with; kept apart from SDK_VERSION so an SDK release does not republish them */
 export const SDK_MIN_VERSION = '0.1.0-alpha'
 

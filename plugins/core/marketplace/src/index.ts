@@ -2,12 +2,14 @@ import { SDK_VERSION } from '@entiny/sdk'
 import { type CatalogPlugin, type CatalogVersion, parseChannelFile, riskyGrants } from './catalog.js'
 import { cachedChannel, downloadBundle, forgetChannel, loadChannel, normalizeChannel } from './channel.js'
 import { type EmbeddedEntry, embeddedEntries, startEmbedEngine } from './embed/engine.js'
+import { type CommonIcon, type RowIcon, nativeRow } from './row.js'
 import { type StringKey, t, tf } from './i18n.js'
 import homeSvg from './icons/home.svg'
 import pluginsSvg from './icons/plugins.svg'
 import settingsSvg from './icons/settings.svg'
 import { ensureNavbar, navbarReady } from './navbar.js'
 import { DEFAULT_CHANNEL, type Source, addChannel, channelKey, listSources, removeChannel, setEnabled } from './sources.js'
+import { withVersion } from './span.js'
 
 interface Installed {
   id: string
@@ -55,7 +57,7 @@ const standalone = () => bridge() === null
 
 function sourceUrl(key: SourceKey): string {
   const base = (bridge()?.callStatic('indexUrl') as string | undefined) ?? DEFAULT_INDEX_URL
-  if (key === 'user') return base.replace(/index\.json$/, 'user-plugins/index.json')
+  if (key === 'user') return base.replace(/index\.json$/, 'plugins/user/index.json')
   return base
 }
 
@@ -101,7 +103,9 @@ function refreshAll() {
   } catch {}
 }
 const INSTALLED_TTL_MS = 1500
-const icons = new Map<string, inu.UIIcon>()
+// the plugin's own icon, kept as the svg source too: a row drawn as a view rasterizes it itself, the declarative
+// fallback takes the engine's parsed icon
+const icons = new Map<string, { svg: string, ui: inu.UIIcon }>()
 
 // --- versions ----------------------------------------------------------------------------------------------------
 
@@ -272,7 +276,10 @@ async function loadIcons() {
     if (!plugin.icon || icons.has(plugin.id)) return
     try {
       const res = await fetch(plugin.icon)
-      if (res.ok) icons.set(plugin.id, inu.icons.svg(await res.text()))
+      if (res.ok) {
+        const svg = await res.text()
+        icons.set(plugin.id, { svg, ui: inu.icons.svg(svg) })
+      }
     } catch (e) {
       console.log(`icon of ${plugin.id} failed`, e)
     }
@@ -354,6 +361,17 @@ type UIPageLike = { invalidate(): void }
 
 // --- plugin page -------------------------------------------------------------------------------------------------
 
+/** the plugin's own svg for a row drawn as a view, falling back to one of the engine's common icons */
+function pluginIcon(id: string, fallback: CommonIcon): RowIcon {
+  const svg = icons.get(id)?.svg
+  return svg ? { svg } : { common: fallback }
+}
+
+/** the same icon the way a declarative row takes it */
+function catalogIcon(id: string, fallback: CommonIcon): inu.UIIcon {
+  return icons.get(id)?.ui ?? inu.icons.common(fallback)
+}
+
 // The "about" card: description, author, where the plugin comes from, its id and the SDK it needs, each row with an
 // icon. Tap a row to see the full text.
 function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
@@ -361,23 +379,33 @@ function aboutRows(plugin: CatalogPlugin, source: SourceKey): inu.UIElement[] {
   const top = newest(plugin)
 
   rows.push(inu.ui.header(t('about')))
-  rows.push(inu.ui.button({
+  const openAbout = async () => {
+    await inu.ui.dialog({
+      title: plugin.name,
+      message: [
+        plugin.id,
+        tf('published_versions', plugin.versions.length),
+        top ? `${t('status_latest')}: v${top.version}${top.date ? ` (${top.date})` : ''}` : '',
+      ].filter(Boolean).join('\n'),
+      positive: t('close'),
+    })
+  }
+  const heroSubtitle = [sourceLabel(source), plugin.author].filter(Boolean).join(' · ')
+  const heroIcon: CommonIcon = source === 'official' ? 'star' : source === 'user' ? 'user' : 'channel'
+  // the version leads the title as a pill, which only a row drawn as a view can do
+  rows.push(nativeRow({
+    title: plugin.name,
+    subtitle: heroSubtitle,
+    pill: top ? `v${top.version}` : undefined,
+    icon: pluginIcon(plugin.id, heroIcon),
+    onClick: openAbout,
+  }) ?? inu.ui.button({
     id: 'hero',
-    text: plugin.name,
-    subtitle: [sourceLabel(source), plugin.author].filter(Boolean).join(' · '),
-    icon: icons.get(plugin.id) ?? inu.icons.common(source === 'official' ? 'star' : source === 'user' ? 'user' : 'channel'),
+    text: withVersion(plugin.name, top?.version),
+    subtitle: heroSubtitle,
+    icon: catalogIcon(plugin.id, heroIcon),
     value: top ? `v${top.version}` : undefined,
-    onClick: async () => {
-      await inu.ui.dialog({
-        title: plugin.name,
-        message: [
-          plugin.id,
-          tf('published_versions', plugin.versions.length),
-          top ? `${t('status_latest')}: v${top.version}${top.date ? ` (${top.date})` : ''}` : '',
-        ].filter(Boolean).join('\n'),
-        positive: t('close'),
-      })
-    },
+    onClick: openAbout,
   }))
 
   rows.push(inu.ui.button({
@@ -593,17 +621,27 @@ function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): 
   const { state, local } = stateOf(plugin, installed)
   const top = newest(plugin)
   const mark = riskyGrants(top).length ? '⚠ ' : ''
-  const value = state === 'update' ? `${mark}v${top?.version}` : state === 'installed' ? t('status_installed') : top ? `${mark}v${top.version}` : undefined
-  const icon = state === 'update' ? 'refresh' : state === 'installed' ? 'check' : 'download'
+  const value = state === 'update' ? t('filter_updates') : state === 'installed' ? t('status_installed') : undefined
+  const fallback: CommonIcon = state === 'update' ? 'refresh' : state === 'installed' ? 'check' : 'download'
+  const version = top?.version ?? local?.version
   const subtitle = state === 'update' && local
-    ? `v${local.version} → v${top?.version}`
+    ? `${tf('installed_ver', local.version)} → v${top?.version}`
     : [plugin.author, plugin.description].filter(Boolean).join(' · ')
-  return inu.ui.button({
-    id: `p:${plugin.id}`,
-    text: plugin.name,
+  // The version rides in a pill in front of the title, and the trailing `value` keeps the row's state. Only a row
+  // drawn as a view can draw the pill; without one the plain row shows the version in the title instead.
+  return nativeRow({
+    title: `${mark}${plugin.name}`,
     subtitle: subtitle || undefined,
     value,
-    icon: icons.get(plugin.id) ?? inu.icons.common(icon),
+    pill: version ? `v${version}` : undefined,
+    icon: pluginIcon(plugin.id, fallback),
+    onClick: () => openPlugin(plugin, source),
+  }) ?? inu.ui.button({
+    id: `p:${plugin.id}`,
+    text: `${mark}${withVersion(plugin.name, version)}`,
+    subtitle: subtitle || undefined,
+    value,
+    icon: catalogIcon(plugin.id, fallback),
     onClick: () => openPlugin(plugin, source),
   })
 }
@@ -752,13 +790,24 @@ function homeRows(): inu.UIElement[] {
   const byDate = (a: Entry, b: Entry) => (newest(b.plugin)?.date ?? '').localeCompare(newest(a.plugin)?.date ?? '')
 
   const updates = all.filter(x => x.state === 'update').sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
-  rows.push(inu.ui.header('entinyGram'))
-  rows.push(inu.ui.button({
+  // The developer's own catalog gets the top card, which opens the official plugins on a screen of their own. The
+  // card is a real view so the version can sit in a pill before the title; without it the plain row still leads there.
+  const open = () => openList(t('home_dev_title'), list => list.filter(x => x.key === 'official'), t('home_dev_sub'))
+  const title = t('home_dev_title')
+  const subtitle = tf('home_stats', installed.length, updates.length, all.length)
+  rows.push(nativeRow({
+    title,
+    subtitle,
+    pill: `v${SDK_VERSION}`,
+    icon: { svg: pluginsSvg },
+    hero: true,
+    onClick: open,
+  }) ?? inu.ui.button({
     id: 'hero',
-    text: t('home_title'),
-    subtitle: tf('home_stats', installed.length, updates.length, all.length),
+    text: withVersion(title, SDK_VERSION),
+    subtitle,
     icon: inu.icons.common('star'),
-    onClick: () => { tab = 'plugins' },
+    onClick: open,
   }))
 
   if (updates.length) {
@@ -793,7 +842,7 @@ function homeRows(): inu.UIElement[] {
 const PREVIEW_ROWS = 5
 
 /** the whole list of a section on a screen of its own, built fresh from the catalog each time it renders */
-function openList(title: string, pick: (all: Entry[]) => Entry[]) {
+function openList(title: string, pick: (all: Entry[]) => Entry[], footer?: string) {
   const sub: inu.ui.UIPage = inu.ui.settingsPage({
     title,
     transient: true,
@@ -801,7 +850,9 @@ function openList(title: string, pick: (all: Entry[]) => Entry[]) {
     items: () => {
       const installed = installedList()
       const list = pick(merged(installed)).sort((a, b) => a.plugin.name.localeCompare(b.plugin.name))
-      return list.length ? list.map(x => row(x.plugin, x.key, installed)) : [inu.ui.separator(t('empty_list'))]
+      const rows: inu.UIElement[] = list.length ? list.map(x => row(x.plugin, x.key, installed)) : [inu.ui.separator(t('empty_list'))]
+      if (footer) rows.push(inu.ui.separator(footer))
+      return rows
     },
   })
   subPage = sub
@@ -928,12 +979,20 @@ function installedRows(): inu.UIElement[] {
   const rows: inu.UIElement[] = []
   for (const plugin of [...installed].sort((a, b) => a.id.localeCompare(b.id))) {
     const hit = known.get(plugin.id)
-    rows.push(inu.ui.button({
+    const fallback: CommonIcon = plugin.enabled ? 'check' : 'eyeOff'
+    rows.push(nativeRow({
+      title: hit?.plugin.name ?? plugin.id,
+      subtitle: hit ? undefined : plugin.id,
+      value: plugin.enabled ? undefined : t('status_off'),
+      pill: `v${plugin.version}`,
+      icon: pluginIcon(plugin.id, fallback),
+      onClick: () => { if (hit) openPlugin(hit.plugin, hit.key) },
+    }) ?? inu.ui.button({
       id: `i:${plugin.id}`,
       text: hit?.plugin.name ?? plugin.id,
       subtitle: `v${plugin.version}${hit ? '' : ` · ${plugin.id}`}`,
       value: plugin.enabled ? undefined : t('status_off'),
-      icon: icons.get(plugin.id) ?? inu.icons.common(plugin.enabled ? 'check' : 'eyeOff'),
+      icon: catalogIcon(plugin.id, fallback),
       onClick: () => { if (hit) openPlugin(hit.plugin, hit.key) },
     }))
   }

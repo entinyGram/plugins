@@ -1,15 +1,15 @@
 // Builds the user-plugin catalog. Unlike the official plugins these ship as ready-made bundles (they are not built
 // from source in this repo): every bundle already carries its ==InuPlugin== header, so the catalog only reads it,
-// hashes the file and publishes an immutable copy under user-plugins/dist/<id>/<version>.inu.js.
+// hashes the file and publishes an immutable copy under plugins/user/dist/<id>/<version>.inu.js.
 //
 // The marketplace keeps the official and the user catalog apart; the user index is served from
-// `<repo>/user-plugins/index.json` and lists the plugins of the separate "User plugins" section.
+// `<repo>/plugins/user/index.json` and lists the plugins of the separate "User plugins" section.
 import { createHash } from 'node:crypto'
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const root = join(import.meta.dir, '..')
-const userDir = join(root, 'user-plugins')
+const userDir = join(root, 'plugins/user')
 const bundlesDir = join(userDir, 'bundles')
 const iconsDir = join(userDir, 'icons')
 const indexFile = join(userDir, 'index.json')

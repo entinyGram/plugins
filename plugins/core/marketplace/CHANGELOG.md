@@ -1,3 +1,11 @@
+## 0.3.0
+
+- home opens with a card for the developer's own plugins, "Plugins from the developer", instead of a plain entinyGram header
+- the card is a real Android view, so the SDK version sits in a colored pill in front of the title
+- tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin
+- rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)
+- fix oversized text in the card rows
+
 ## 0.2.1
 
 - fix crash when updating catalog from channel (@entinyGramPlugins: no such property 'find' on a TL vector)

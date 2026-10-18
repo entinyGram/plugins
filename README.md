@@ -63,34 +63,34 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 | Plugin | Package ID | Version | Requires | Description |
 | :--- | :--- | :---: | :---: | :--- |
-| [**entinyGram SDK**](plugins/entiny-sdk/) | `entinygram.sdk` | `0.1.2-beta` | *None* | In-app Marketplace UI and shared settings embedding engine. |
-| [**Text Animation**](plugins/text-animation/) | `entinygram.text-animation` | `1.0.0` | `SDK` | Fluid typing feedback animations and particle burst effects on backspace/deletion. |
-| [**2GIS**](plugins/2gis/) | `entinygram.2gis` | `1.0.0` | `SDK` | High-resolution 2GIS raster map tiles and location preview images (requires API key). |
-| [**Calendar Systems**](plugins/calendar-systems/) | `entinygram.calendar-systems` | `1.1.0` | `SDK` | Alternative calendar formatting (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) for dates. |
-| [**Doc Viewer**](plugins/doc-viewer/) | `entinygram.doc-viewer` | `1.1.0` | `SDK` | In-app viewer for PDF, DOCX, XLSX, text, code, images, archives and more. |
-| [**Call Avatar**](plugins/call-avatar/) | `entinygram.call-avatar` | `1.1` | `SDK` | Full-screen caller photo, display timing modes, translucent voice-call buttons, and uk/en/ru settings. |
-| [**Yandex**](plugins/yandex/) | `entinygram.yandex` | `1.0.0` | `SDK` | In-app translation via Yandex Cloud Translate v2 and Yandex static map previews. |
+| [**entinyGram SDK**](plugins/core/marketplace/) | `entinygram.sdk` | `0.1.2-beta` | *None* | In-app Marketplace UI and shared settings embedding engine. |
+| [**Text Animation**](plugins/features/text-animation/) | `entinygram.text-animation` | `1.0.0` | `SDK` | Fluid typing feedback animations and particle burst effects on backspace/deletion. |
+| [**2GIS**](plugins/features/2gis/) | `entinygram.2gis` | `1.0.0` | `SDK` | High-resolution 2GIS raster map tiles and location preview images (requires API key). |
+| [**Calendar Systems**](plugins/features/calendar-systems/) | `entinygram.calendar-systems` | `1.1.0` | `SDK` | Alternative calendar formatting (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) for dates. |
+| [**Doc Viewer**](plugins/features/doc-viewer/) | `entinygram.doc-viewer` | `1.1.0` | `SDK` | In-app viewer for PDF, DOCX, XLSX, text, code, images, archives and more. |
+| [**Call Avatar**](plugins/features/call-avatar/) | `entinygram.call-avatar` | `1.1` | `SDK` | Full-screen caller photo, display timing modes, translucent voice-call buttons, and uk/en/ru settings. |
+| [**Yandex**](plugins/features/yandex/) | `entinygram.yandex` | `1.0.0` | `SDK` | In-app translation via Yandex Cloud Translate v2 and Yandex static map previews. |
 
 ---
 
 ## User Repository
 
-Besides the official catalog the marketplace shows a separate **User plugins** section backed by [`user-plugins/index.json`](user-plugins/index.json). It is the place for community plugins that are distributed as ready-made `.inu.js` bundles instead of being built from source in this repo.
+Besides the official catalog the marketplace shows a separate **User plugins** section backed by [`plugins/user/index.json`](plugins/user/index.json). It is the place for community plugins that are distributed as ready-made `.inu.js` bundles instead of being built from source in this repo.
 
 To add or update a user plugin:
 
-1. Drop the ready-made bundle into `user-plugins/bundles/` with proper `@id`, `@version` and `@description` in its `==InuPlugin==` header.
-2. Add `@id` matching `user-plugins/icons/<id>.svg` for the marketplace icon.
-3. Run `bun run build:user` — it hashes the bundle, publishes an immutable copy to `user-plugins/dist/<id>/<version>.inu.js` and refreshes the index.
-4. Commit. The marketplace picks the plugin up from `<repo>/main/user-plugins/index.json`.
+1. Drop the ready-made bundle into `plugins/user/bundles/` with proper `@id`, `@version` and `@description` in its `==InuPlugin==` header.
+2. Add `@id` matching `plugins/user/icons/<id>.svg` for the marketplace icon.
+3. Run `bun run build:user` — it hashes the bundle, publishes an immutable copy to `plugins/user/dist/<id>/<version>.inu.js` and refreshes the index.
+4. Commit. The marketplace picks the plugin up from `<repo>/main/plugins/user/index.json`.
 
 Current user plugins:
 
 | Plugin | ID | Version | Author | Description |
 | :--- | :--- | :---: | :---: | :--- |
-| [**Display Resize**](user-plugins/bundles/display-resize.inu.js) | `user.display-resize` | `1.0.0` | Pixuz | Control the full size of Telegram's UI (scale density) with presets and a custom factor. |
-| [**Hide Folder Tags**](user-plugins/bundles/hide-folder-tags.inu.js) | `user.hide-folder-tags` | `1.1.0` | Pixuz | Hide the colored folder badges (SH, BOT, GR, CH…) under chat names. |
-| [**Local Message Edit**](user-plugins/bundles/local-message-edit.inu.js) | `user.local-message-edit` | `1.7.0` | Pixuz | Local edit/reset of message text in chats, groups, channels and bots. |
+| [**Display Resize**](plugins/user/bundles/display-resize.inu.js) | `user.display-resize` | `1.0.0` | Pixuz | Control the full size of Telegram's UI (scale density) with presets and a custom factor. |
+| [**Hide Folder Tags**](plugins/user/bundles/hide-folder-tags.inu.js) | `user.hide-folder-tags` | `1.1.0` | Pixuz | Hide the colored folder badges (SH, BOT, GR, CH…) under chat names. |
+| [**Local Message Edit**](plugins/user/bundles/local-message-edit.inu.js) | `user.local-message-edit` | `1.7.0` | Pixuz | Local edit/reset of message text in chats, groups, channels and bots. |
 
 ---
 
@@ -181,12 +181,12 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 
 ## Publishing to the Catalog
 
-1. Ensure the plugin resides in `plugins/<name>` with an `inu.config.ts`, `icon.svg` (24×24 single-color), and `README.md`.
+1. Ensure the plugin resides in `plugins/features/<name>` with an `inu.config.ts`, `icon.svg` (24×24 single-color), and `README.md`.
 2. Build and update the catalog:
    ```sh
    bun run build:plugins
    ```
-   This compiles all plugins into `plugins/dist/<id>/<version>.inu.js`, computes their SHA-256 hashes, and refreshes [`plugins/index.json`](plugins/index.json) and [`index.json`](index.json).
+   This compiles all plugins into `plugins/dist/<id>/entinyGram-<Name>-<version>.inu.js`, computes their SHA-256 hashes, and refreshes [`plugins/index.json`](plugins/index.json) and [`index.json`](index.json).
 3. Commit and push your changes to GitHub. The in-app marketplace automatically detects published updates.
 
 ### Named bundles and the manual workflow
@@ -202,16 +202,13 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 ├── plugins/
 │   ├── index.json         # Catalog for the marketplace (paths relative to plugins/)
 │   ├── dist/              # Published immutable .inu.js release files
-│   ├── 2gis/              # 2GIS map tiles and static previews plugin
-│   ├── calendar-systems/  # Alternative calendar systems plugin
-│   ├── entiny-sdk/        # Marketplace UI and SDK runtime plugin
-│   ├── text-animation/    # Message input typing & deletion animation plugin
-│   └── yandex/            # Yandex Translate & static maps plugin
-├── user-plugins/          # Community "User plugins" marketplace section
-│   ├── index.json         # User catalog read by the marketplace
-│   ├── bundles/           # Ready-made .inu.js bundles (source of truth)
-│   ├── icons/             # Marketplace icons, one per plugin id
-│   └── dist/              # Published immutable copies of user bundles
+│   ├── core/marketplace/  # The entinygram.sdk plugin: marketplace UI and settings embedding (not the @entiny/sdk library)
+│   ├── features/          # Feature plugins (2gis, calendar-systems, call-avatar, doc-viewer, text-animation, yandex)
+│   └── user/              # Community "User plugins" marketplace section
+│       ├── index.json     # User catalog read by the marketplace
+│       ├── bundles/       # Ready-made .inu.js bundles (source of truth)
+│       ├── icons/         # Marketplace icons, one per plugin id
+│       └── dist/          # Published immutable copies of user bundles
 ├── sdk/
 │   ├── entiny/            # @entiny/sdk: settings placement, slots, map utilities
 │   ├── cli/               # @inugram/cli tooling
@@ -219,7 +216,7 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 │   └── docs/              # Guides for engine APIs (grants, UI, JVM, Xposed)
 └── scripts/
     ├── build-plugin-index.ts # Compiles official plugins and regenerates index.json
-    ├── build-user-index.ts   # Publishes user bundles and regenerates user-plugins/index.json
+    ├── build-user-index.ts   # Publishes user bundles and regenerates plugins/user/index.json
     └── generate-slots.ts     # Extracts available settings slots from app strings
 ```
 

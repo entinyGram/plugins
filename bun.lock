@@ -16,7 +16,15 @@
         "typescript": "^5.9.3",
       },
     },
-    "plugins/2gis": {
+    "plugins/core/marketplace": {
+      "name": "@entiny-plugins/marketplace",
+      "devDependencies": {
+        "@entiny/sdk": "workspace:*",
+        "@inugram/cli": "workspace:*",
+        "@inugram/plugin-types": "workspace:*",
+      },
+    },
+    "plugins/features/2gis": {
       "name": "@entiny-plugins/2gis",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -24,7 +32,7 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
-    "plugins/calendar-systems": {
+    "plugins/features/calendar-systems": {
       "name": "@entiny-plugins/calendar-systems",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -32,7 +40,7 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
-    "plugins/call-avatar": {
+    "plugins/features/call-avatar": {
       "name": "@entiny-plugins/call-avatar",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -40,7 +48,7 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
-    "plugins/doc-viewer": {
+    "plugins/features/doc-viewer": {
       "name": "@entiny-plugins/doc-viewer",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -48,15 +56,7 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
-    "plugins/entiny-sdk": {
-      "name": "@entiny-plugins/entiny-sdk",
-      "devDependencies": {
-        "@entiny/sdk": "workspace:*",
-        "@inugram/cli": "workspace:*",
-        "@inugram/plugin-types": "workspace:*",
-      },
-    },
-    "plugins/text-animation": {
+    "plugins/features/text-animation": {
       "name": "@entiny-plugins/text-animation",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -64,7 +64,7 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
-    "plugins/yandex": {
+    "plugins/features/yandex": {
       "name": "@entiny-plugins/yandex",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
@@ -139,19 +139,19 @@
 
     "@e18e/eslint-plugin": ["@e18e/eslint-plugin@0.3.0", "", { "dependencies": { "eslint-plugin-depend": "1.5.0" }, "optionalDependencies": { "eslint": "10.2.0" } }, "sha512-hHgfpxsrZ2UYHcicA+tGZnmk19uJTaye9VH79O+XS8R4ona2Hx3xjhXghclNW58uXMk3xXlbYEOMr8thsoBmWg=="],
 
-    "@entiny-plugins/2gis": ["@entiny-plugins/2gis@workspace:plugins/2gis"],
+    "@entiny-plugins/2gis": ["@entiny-plugins/2gis@workspace:plugins/features/2gis"],
 
-    "@entiny-plugins/calendar-systems": ["@entiny-plugins/calendar-systems@workspace:plugins/calendar-systems"],
+    "@entiny-plugins/calendar-systems": ["@entiny-plugins/calendar-systems@workspace:plugins/features/calendar-systems"],
 
-    "@entiny-plugins/call-avatar": ["@entiny-plugins/call-avatar@workspace:plugins/call-avatar"],
+    "@entiny-plugins/call-avatar": ["@entiny-plugins/call-avatar@workspace:plugins/features/call-avatar"],
 
-    "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/doc-viewer"],
+    "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/features/doc-viewer"],
 
-    "@entiny-plugins/entiny-sdk": ["@entiny-plugins/entiny-sdk@workspace:plugins/entiny-sdk"],
+    "@entiny-plugins/marketplace": ["@entiny-plugins/marketplace@workspace:plugins/core/marketplace"],
 
-    "@entiny-plugins/text-animation": ["@entiny-plugins/text-animation@workspace:plugins/text-animation"],
+    "@entiny-plugins/text-animation": ["@entiny-plugins/text-animation@workspace:plugins/features/text-animation"],
 
-    "@entiny-plugins/yandex": ["@entiny-plugins/yandex@workspace:plugins/yandex"],
+    "@entiny-plugins/yandex": ["@entiny-plugins/yandex@workspace:plugins/features/yandex"],
 
     "@entiny/sdk": ["@entiny/sdk@workspace:sdk/entiny"],
 

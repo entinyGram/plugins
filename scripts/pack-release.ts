@@ -1,7 +1,7 @@
-// Copies the latest published bundle (or all versions with --all) from plugins/dist and user-plugins/dist into
+// Copies the latest published bundle (or all versions with --all) from plugins/dist and plugins/user/dist into
 // <dir> as <Name>-<version>.inu.js, checking each against its catalog hash. Official bundles keep the `entinyGram `
 // prefix (the marketplace fetches those release assets by name); user bundles are named by their plugin name so the
-// community plugins from user-plugins/ are exported to the release too.
+// community plugins from plugins/user/ are exported to the release too.
 // The published files are the source of truth (their hashes are in the catalog), so nothing is rebuilt here.
 import { createHash } from 'node:crypto'
 import { copyFileSync, mkdirSync, readFileSync, rmSync } from 'node:fs'
@@ -17,7 +17,7 @@ type SourceKey = 'official' | 'user'
 
 const catalogs: { key: SourceKey, indexFile: string, distDir: string }[] = [
   { key: 'official', indexFile: join(root, 'plugins/index.json'), distDir: join(root, 'plugins') },
-  { key: 'user', indexFile: join(root, 'user-plugins/index.json'), distDir: join(root, 'user-plugins') },
+  { key: 'user', indexFile: join(root, 'plugins/user/index.json'), distDir: join(root, 'plugins/user') },
 ]
 
 // official bundles get the `entinyGram ` prefix the marketplace release links use; user ones their own name

@@ -19,3 +19,4 @@ execFileSync('gh', ['release', 'create', tag, ...files, '--title', tag, '--notes
 })
 
 console.log(`Successfully published release: ${tag}`)
+

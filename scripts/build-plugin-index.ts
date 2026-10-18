@@ -1,4 +1,4 @@
-// Builds every plugin in plugins/, keeps each version as plugins/dist/<id>/<version>.inu.js and writes plugins/index.json,
+// Builds every plugin in plugins/, keeps each version as plugins/dist/<id>/entinyGram-<Name>-<version>.inu.js and writes plugins/index.json,
 // the catalog the marketplace reads. A version is published once: its file never changes and is never removed, so older
 // versions stay installable. Re-running with an unchanged plugin does nothing; a changed file under a published version
 // is an error (bump the version), `--force` overwrites it anyway.
@@ -50,10 +50,23 @@ function notesFor(dir: string, version: string): string {
 
 const today = new Date().toISOString().slice(0, 10)
 let added = 0
-for (const name of readdirSync(pluginsDir, { withFileTypes: true })) {
+// plugins sit in plugins/<name> or one level down in a group folder (plugins/core, plugins/features)
+const GROUPS = ['core', 'features']
+const found: { name: string, rel: string }[] = []
+for (const entry of readdirSync(pluginsDir, { withFileTypes: true })) {
+  if (!entry.isDirectory()) continue
+  if (GROUPS.includes(entry.name)) {
+    for (const child of readdirSync(join(pluginsDir, entry.name), { withFileTypes: true })) {
+      if (child.isDirectory()) found.push({ name: child.name, rel: `${entry.name}/${child.name}` })
+    }
+  } else {
+    found.push({ name: entry.name, rel: entry.name })
+  }
+}
+for (const name of found) {
   if (selectedPlugins.size > 0 && !selectedPlugins.has(name.name)) continue
-  const dir = join(pluginsDir, name.name)
-  if (!name.isDirectory() || !existsSync(join(dir, 'inu.config.ts'))) continue
+  const dir = join(pluginsDir, name.rel)
+  if (!existsSync(join(dir, 'inu.config.ts'))) continue
   const built = Bun.spawnSync(['bun', cli, 'build'], { cwd: dir, env: { ...process.env, INU_OUT_DIR: join(pluginsDir, '.release-build', name.name) }, stdout: 'pipe', stderr: 'pipe' })
   if (built.exitCode !== 0) throw new Error(`${name.name}: build failed\n${built.stderr.toString()}`)
   const buildDir = join(pluginsDir, '.release-build', name.name)
@@ -64,7 +77,7 @@ for (const name of readdirSync(pluginsDir, { withFileTypes: true })) {
     const version = h.version?.[0]
     if (!id || !version) throw new Error(`${name.name}/${file}: the plugin needs @id and @version to be published`)
     const sha256 = createHash('sha256').update(bytes).digest('hex')
-    const relative = `dist/${id}/${version}.inu.js`
+    const relative = `dist/${id}/${packedName(h.name?.[0] ?? id, version)}`
     const target = join(pluginsDir, relative)
     const entry = index.plugins.find(p => p.id === id) ?? (index.plugins.push({ id, name: id, versions: [] }), index.plugins.at(-1)!)
     const existing = entry.versions.find(v => v.version === version)
@@ -74,7 +87,7 @@ for (const name of readdirSync(pluginsDir, { withFileTypes: true })) {
     entry.name = h.name?.[0] ?? entry.name
     entry.author = h.author?.[0] ?? entry.author
     entry.description = h.description?.[0] ?? entry.description
-    if (existsSync(join(dir, 'icon.svg'))) entry.icon = `${name.name}/icon.svg`
+    if (existsSync(join(dir, 'icon.svg'))) entry.icon = `${name.rel}/icon.svg`
     const record: Version = {
       version,
       date: existing?.date ?? today,
