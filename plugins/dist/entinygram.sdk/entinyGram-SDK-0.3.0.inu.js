@@ -1154,6 +1154,8 @@ var NO_ICON_LEFT_DP = 23;
 var TEXT_LEFT_DP = 58;
 var VALUE_RIGHT_DP = 17;
 var PILL_GAP_DP = 8;
+var WARN_DP = 15;
+var WARN_GAP_DP = 6;
 var SUBTITLE_GAP_DP = 4;
 var TEXT_LEFT = 3;
 var TEXT_RIGHT = 5;
@@ -1193,23 +1195,37 @@ function click() {
   }
   return clicker;
 }
+var classCache = /* @__PURE__ */ new Map();
+function cls(name) {
+  let handle = classCache.get(name);
+  if (handle === void 0) {
+    handle = inu.jvm.cls(name);
+    classCache.set(name, handle);
+  }
+  return handle;
+}
+var density = 0;
 function dp(context, value) {
-  const density = context.call("getResources").call("getDisplayMetrics").getField("density");
+  if (!density) density = context.call("getResources").call("getDisplayMetrics").getField("density");
   return Math.round(value * density);
 }
 function theme(key) {
-  const Theme = inu.jvm.cls("org.telegram.ui.ActionBar.Theme");
+  const Theme = cls("org.telegram.ui.ActionBar.Theme");
   return Theme.callStatic("getColor(I)I", Theme.getStaticField(key));
 }
+var rtl;
 function isRtl() {
-  try {
-    return !!inu.jvm.cls("org.telegram.messenger.LocaleController").getStaticField("isRTL");
-  } catch (e) {
-    return false;
+  if (rtl === void 0) {
+    try {
+      rtl = !!cls("org.telegram.messenger.LocaleController").getStaticField("isRTL");
+    } catch (e) {
+      rtl = false;
+    }
   }
+  return rtl;
 }
 function shape(color2, radius, alpha = 255) {
-  const drawable = new (inu.jvm.cls("android.graphics.drawable.GradientDrawable"))();
+  const drawable = new (cls("android.graphics.drawable.GradientDrawable"))();
   drawable.call("setShape", 0);
   drawable.call("setColor", alpha << 24 | color2 & 16777215);
   drawable.call("setCornerRadius", radius);
@@ -1217,105 +1233,142 @@ function shape(color2, radius, alpha = 255) {
 }
 function emoji(text2) {
   try {
-    return inu.jvm.cls("org.telegram.messenger.Emoji").callStatic("replaceEmoji", text2, null, false) ?? text2;
+    return cls("org.telegram.messenger.Emoji").callStatic("replaceEmoji", text2, null, false) ?? text2;
   } catch (e) {
     return text2;
   }
 }
 function label(context, text2, sizeDp, colorKey, gravity, bold = false, plain = false) {
-  const view = new (inu.jvm.cls("android.widget.TextView"))(context);
+  const view = new (cls("android.widget.TextView"))(context);
   view.call("setText", plain ? text2 : emoji(text2));
   view.call("setTextSize", UNIT_PX, dp(context, sizeDp));
   view.call("setTextColor", theme(colorKey));
   view.call("setSingleLine", true);
-  view.call("setEllipsize", inu.jvm.cls("android.text.TextUtils$TruncateAt").getStaticField("END"));
+  view.call("setEllipsize", cls("android.text.TextUtils$TruncateAt").getStaticField("END"));
   view.call("setIncludeFontPadding", false);
   view.call("setGravity", gravity);
-  if (bold) view.call("setTypeface", inu.jvm.cls("android.graphics.Typeface").getStaticField("DEFAULT_BOLD"));
+  if (bold) view.call("setTypeface", cls("android.graphics.Typeface").getStaticField("DEFAULT_BOLD"));
   return view;
 }
 function pill(context, label2, tint) {
-  const view = new (inu.jvm.cls("android.widget.TextView"))(context);
+  const view = new (cls("android.widget.TextView"))(context);
   view.call("setText", label2);
   view.call("setTextSize", UNIT_PX, dp(context, 11));
   view.call("setTextColor", tint);
-  view.call("setTypeface", inu.jvm.cls("android.graphics.Typeface").getStaticField("DEFAULT_BOLD"));
+  view.call("setTypeface", cls("android.graphics.Typeface").getStaticField("DEFAULT_BOLD"));
   view.call("setSingleLine", true);
   view.call("setIncludeFontPadding", false);
   view.call("setBackground", shape(tint, dp(context, 5), 40));
   view.call("setPadding", dp(context, 6), dp(context, 2), dp(context, 6), dp(context, 2));
   return view;
 }
+var masks = /* @__PURE__ */ new Map();
+function svgDrawable(context, svg, sizeDp) {
+  const size = dp(context, sizeDp);
+  const key = `${size}:${svg}`;
+  let bitmap = masks.get(key);
+  if (bitmap === void 0) {
+    bitmap = cls("org.telegram.messenger.SvgHelper").callStatic("getBitmap", svg.replace(MASK_STROKE, "#ffffff"), size, size, true);
+    if (!bitmap) return null;
+    masks.set(key, bitmap);
+  }
+  return new (cls("android.graphics.drawable.BitmapDrawable"))(context.call("getResources"), bitmap);
+}
+var filters = /* @__PURE__ */ new Map();
+function tinted(context, drawable, tint) {
+  let filter2 = filters.get(tint);
+  if (filter2 === void 0) {
+    filter2 = new (cls("android.graphics.PorterDuffColorFilter"))(tint, cls("android.graphics.PorterDuff$Mode").getStaticField("SRC_IN"));
+    filters.set(tint, filter2);
+  }
+  const view = new (cls("android.widget.ImageView"))(context);
+  view.call("setScaleType", cls("android.widget.ImageView$ScaleType").getStaticField("FIT_CENTER"));
+  view.call("setImageDrawable", drawable);
+  view.call("setColorFilter", filter2);
+  return view;
+}
 function iconView(context, icon, tint) {
   if (!icon) return null;
   try {
-    const drawable = icon.svg ? new (inu.jvm.cls("android.graphics.drawable.BitmapDrawable"))(
-      context.call("getResources"),
-      inu.jvm.cls("org.telegram.messenger.SvgHelper").callStatic("getBitmap", icon.svg.replace(MASK_STROKE, "#ffffff"), dp(context, ICON_DP), dp(context, ICON_DP), true)
-    ) : commonIcon(context, icon.common);
-    if (!drawable) return null;
-    const view = new (inu.jvm.cls("android.widget.ImageView"))(context);
-    view.call("setScaleType", inu.jvm.cls("android.widget.ImageView$ScaleType").getStaticField("FIT_CENTER"));
-    view.call("setImageDrawable", drawable);
-    view.call("setColorFilter", new (inu.jvm.cls("android.graphics.PorterDuffColorFilter"))(
-      tint,
-      inu.jvm.cls("android.graphics.PorterDuff$Mode").getStaticField("SRC_IN")
-    ));
-    return view;
+    const drawable = icon.svg ? svgDrawable(context, icon.svg, ICON_DP) : commonIcon(context, icon.common);
+    return drawable ? tinted(context, drawable, tint) : null;
   } catch (e) {
     console.log("row icon skipped", e);
     return null;
   }
 }
+function warnView(context, svg) {
+  try {
+    const drawable = svgDrawable(context, svg, WARN_DP);
+    return drawable ? tinted(context, drawable, theme("key_text_RedRegular")) : null;
+  } catch (e) {
+    return null;
+  }
+}
+var drawableIds = /* @__PURE__ */ new Map();
 function commonIcon(context, name) {
   const resource = name ? COMMON_DRAWABLE[name] : void 0;
   if (!resource) return null;
   const resources = context.call("getResources");
-  const id = resources.call("getIdentifier", resource, "drawable", context.call("getPackageName"));
+  let id = drawableIds.get(resource);
+  if (id === void 0) {
+    id = resources.call("getIdentifier", resource, "drawable", context.call("getPackageName"));
+    drawableIds.set(resource, id);
+  }
   return id ? resources.call("getDrawable", id, context.call("getTheme")) : null;
 }
 function build3(context, spec2) {
+  const LinearLayout = cls("android.widget.LinearLayout");
+  const LinearParams = cls("android.widget.LinearLayout$LayoutParams");
   const hero = !!spec2.hero;
   const pad = hero ? HERO_PAD_DP : 0;
-  const rtl = isRtl();
-  const align = rtl ? TEXT_RIGHT : TEXT_LEFT;
+  const rtl2 = isRtl();
+  const align = rtl2 ? TEXT_RIGHT : TEXT_LEFT;
   const icon = iconView(
     context,
     spec2.icon,
     theme(hero ? "key_windowBackgroundWhiteBlueHeader" : "key_windowBackgroundWhiteGrayIcon")
   );
-  const row2 = new (inu.jvm.cls("android.widget.LinearLayout"))(context);
+  const row2 = new LinearLayout(context);
   row2.call("setOrientation", 0);
   row2.call("setGravity", CENTER_VERTICAL);
   row2.call("setMinimumHeight", dp(context, ROW_DP + 2 * pad));
   row2.call("setTag", VIEW_TAG);
   row2.call("setPaddingRelative", dp(context, icon ? ICON_LEFT_DP : NO_ICON_LEFT_DP), dp(context, pad), dp(context, VALUE_RIGHT_DP), dp(context, pad));
-  const column = new (inu.jvm.cls("android.widget.LinearLayout"))(context);
+  const column = new LinearLayout(context);
   column.call("setOrientation", 1);
-  const line = new (inu.jvm.cls("android.widget.LinearLayout"))(context);
+  const line = new LinearLayout(context);
   line.call("setOrientation", 0);
   line.call("setGravity", CENTER_VERTICAL);
   if (spec2.pill) {
     const badge = pill(context, spec2.pill, theme("key_windowBackgroundWhiteBlueHeader"));
-    const badgeParams = new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(WRAP, WRAP);
+    const badgeParams = new LinearParams(WRAP, WRAP);
     badgeParams.call("setMarginEnd", dp(context, PILL_GAP_DP));
     line.call("addView", badge, badgeParams);
   }
-  line.call("addView", label(context, spec2.title, 16, "key_windowBackgroundWhiteBlackText", align, hero), new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(WRAP, WRAP));
-  column.call("addView", line, new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(WRAP, WRAP));
+  if (spec2.warn) {
+    const mark = warnView(context, spec2.warn);
+    if (mark) {
+      const markParams = new LinearParams(dp(context, WARN_DP), dp(context, WARN_DP));
+      markParams.call("setMarginEnd", dp(context, WARN_GAP_DP));
+      line.call("addView", mark, markParams);
+    }
+  }
+  line.call("addView", label(context, spec2.title, 16, "key_windowBackgroundWhiteBlackText", align, hero), new LinearParams(WRAP, WRAP));
+  column.call("addView", line, new LinearParams(WRAP, WRAP));
   if (spec2.subtitle) {
-    const params = new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(WRAP, WRAP);
+    const params = new LinearParams(WRAP, WRAP);
     params.call("setMargins", 0, dp(context, SUBTITLE_GAP_DP), 0, 0);
     column.call("addView", label(context, spec2.subtitle, 13, "key_windowBackgroundWhiteGrayText", align), params);
   }
   if (icon) {
-    const params = new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(dp(context, ICON_BOX_DP), dp(context, ICON_BOX_DP));
+    const params = new LinearParams(dp(context, ICON_BOX_DP), dp(context, ICON_BOX_DP));
     params.call("setMarginEnd", dp(context, TEXT_LEFT_DP - ICON_LEFT_DP - ICON_BOX_DP));
     row2.call("addView", icon, params);
   }
-  row2.call("addView", column, new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(0, WRAP, WEIGHT));
+  row2.call("addView", column, new LinearParams(0, WRAP, WEIGHT));
   if (spec2.value) {
-    const params = new (inu.jvm.cls("android.widget.LinearLayout$LayoutParams"))(WRAP, WRAP);
+    const params = new LinearParams(WRAP, WRAP);
     params.call("setMarginStart", dp(context, PILL_GAP_DP));
     row2.call("addView", label(context, spec2.value, 16, "key_windowBackgroundWhiteValueText", align | CENTER_VERTICAL), params);
   }
@@ -1904,10 +1957,10 @@ var STRINGS = {
     fa: "دسترسی‌ها"
   },
   perms_footer: {
-    uk: "⚠ позначає небезпечні дозволи: плагін отримує повний доступ до застосунку",
-    ru: "⚠ отмечает опасные разрешения: плагин получает полный доступ к приложению",
-    en: "⚠ marks unsafe permissions: the plugin gets full access to the app",
-    fa: "علامت ⚠ دسترسی‌های ناامن را مشخص می‌کند: پلاگین دسترسی کامل به برنامه را دریافت می‌کند"
+    uk: "Червоні дозволи небезпечні: плагін отримує повний доступ до застосунку",
+    ru: "Красные разрешения опасны: плагин получает полный доступ к приложению",
+    en: "Red permissions are unsafe: the plugin gets full access to the app",
+    fa: "دسترسی‌های قرمز ناامن هستند: پلاگین دسترسی کامل به برنامه را دریافت می‌کند"
   },
   perm_jvm: {
     uk: "Повний доступ до коду застосунку",
@@ -1963,6 +2016,12 @@ var STRINGS = {
     en: "not listed",
     fa: "ذکر نشده"
   },
+  trust_danger: {
+    uk: "Небезпечні дозволи: {0}",
+    ru: "Опасные разрешения: {0}",
+    en: "Unsafe permissions: {0}",
+    fa: "دسترسی‌های ناامن: {0}"
+  },
   download_failed: {
     uk: "Не вдалося завантажити: {0}",
     ru: "Не удалось скачать: {0}",
@@ -2000,22 +2059,22 @@ var STRINGS = {
     fa: "بخش"
   },
   tab_home: {
-    uk: "🏠 Головна",
-    ru: "🏠 Главная",
-    en: "🏠 Home",
-    fa: "🏠 خانه"
+    uk: "Головна",
+    ru: "Главная",
+    en: "Home",
+    fa: "خانه"
   },
   tab_plugins: {
-    uk: "🧩 Плагіни",
-    ru: "🧩 Плагины",
-    en: "🧩 Plugins",
-    fa: "🧩 پلاگین‌ها"
+    uk: "Плагіни",
+    ru: "Плагины",
+    en: "Plugins",
+    fa: "پلاگین‌ها"
   },
   tab_settings: {
-    uk: "⚙️ Налаштування",
-    ru: "⚙️ Настройки",
-    en: "⚙️ Settings",
-    fa: "⚙️ تنظیمات"
+    uk: "Налаштування",
+    ru: "Настройки",
+    en: "Settings",
+    fa: "تنظیمات"
   },
   home_summary: {
     uk: "{0} плагінів у каталозі · {1} встановлено",
@@ -2191,6 +2250,9 @@ var plugins_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height
 // src/icons/settings.svg
 var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.7 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.07.63-.07.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.12.22.37.29.61.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.49 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>\r\n';
 
+// src/icons/warn.svg
+var warn_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3.6 21.2 19.4H2.8Z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 9.6v4"/><circle cx="12" cy="16.5" r="1.15" fill="currentColor"/></svg>\n';
+
 // src/navbar.ts
 var BAR_TAG = "entiny.navbar";
 var TAB_TAG = "entiny.tab:";
@@ -2209,13 +2271,22 @@ var listRef = null;
 var barHeight = 0;
 var spec = null;
 var mainHandler2;
+var classCache2 = /* @__PURE__ */ new Map();
+function cls2(name) {
+  let handle = classCache2.get(name);
+  if (handle === void 0) {
+    handle = inu.jvm.cls(name);
+    classCache2.set(name, handle);
+  }
+  return handle;
+}
 function navbarReady() {
   return ready;
 }
 function handler() {
   if (!mainHandler2) {
-    const Handler = inu.jvm.cls("android.os.Handler");
-    const Looper = inu.jvm.cls("android.os.Looper");
+    const Handler = cls2("android.os.Handler");
+    const Looper = cls2("android.os.Looper");
     mainHandler2 = new Handler(Looper.callStatic("getMainLooper"));
   }
   return mainHandler2;
@@ -2224,7 +2295,7 @@ function text(value) {
   return typeof value === "string" ? value : value === null ? "" : String(value.call("toString"));
 }
 function color(key) {
-  const Theme = inu.jvm.cls("org.telegram.ui.ActionBar.Theme");
+  const Theme = cls2("org.telegram.ui.ActionBar.Theme");
   return Theme.callStatic("getColor(I)I", Theme.getStaticField(key));
 }
 function isList(view) {
@@ -2295,51 +2366,52 @@ function paint(bar, current) {
     tab2.call("setAlpha", index === selected ? 1 : 0.85);
   }
 }
+var masks2 = /* @__PURE__ */ new Map();
 function pictogram(context, tab2, px) {
   try {
     const size = px(ICON_DP2);
-    const bitmap = inu.jvm.cls("org.telegram.messenger.SvgHelper").callStatic("getBitmap", tab2.svg.replace(/currentColor/g, "#ffffff"), size, size, true);
+    let bitmap = masks2.get(tab2.svg);
+    if (bitmap === void 0) {
+      bitmap = cls2("org.telegram.messenger.SvgHelper").callStatic("getBitmap", tab2.svg.replace(/currentColor/g, "#ffffff"), size, size, true);
+      if (bitmap) masks2.set(tab2.svg, bitmap);
+    }
     if (bitmap) {
-      const view = new (inu.jvm.cls("android.widget.ImageView"))(context);
+      const view = new (cls2("android.widget.ImageView"))(context);
       view.call("setImageBitmap", bitmap);
       return view;
     }
   } catch (e) {
     console.log("navbar: svg icon failed", e);
   }
-  const fallback = new (inu.jvm.cls("android.widget.TextView"))(context);
-  fallback.call("setText", tab2.emoji);
-  fallback.call("setTextSize", 2, 18);
-  fallback.call("setGravity", 17);
-  return fallback;
+  return new (cls2("android.view.View"))(context);
 }
-function build4(context, current, px, navigationInset) {
-  const LinearLayout = inu.jvm.cls("android.widget.LinearLayout");
-  const TextView = inu.jvm.cls("android.widget.TextView");
-  const LinearParams = inu.jvm.cls("android.widget.LinearLayout$LayoutParams");
-  const OnClick = inu.jvm.cls("android.view.View$OnClickListener");
-  const Listener = inu.jvm.defineClass({
-    interfaces: [OnClick],
-    methods: {
-      onClick: (_self, view) => {
-        const tag = text(view.call("getTag"));
-        if (!tag.startsWith(TAB_TAG)) return;
-        const index = Number(tag.slice(TAB_TAG.length));
-        if (index === current.selected()) return;
-        try {
-          softSwap(view);
-        } catch (e) {
-          console.log("navbar: soft swap skipped", e);
-        }
-        current.onSelect(index);
-        try {
-          paint(view.call("getParent"), current);
-        } catch {
-        }
+var listener = new (inu.jvm.defineClass({
+  interfaces: [cls2("android.view.View$OnClickListener")],
+  methods: {
+    onClick: (_self, view) => {
+      const current = spec;
+      if (!current) return;
+      const tag = text(view.call("getTag"));
+      if (!tag.startsWith(TAB_TAG)) return;
+      const index = Number(tag.slice(TAB_TAG.length));
+      if (index === current.selected()) return;
+      try {
+        softSwap(view);
+      } catch (e) {
+        console.log("navbar: soft swap skipped", e);
+      }
+      current.onSelect(index);
+      try {
+        paint(view.call("getParent"), current);
+      } catch {
       }
     }
-  });
-  const listener = new Listener();
+  }
+}))();
+function build4(context, current, px, navigationInset) {
+  const LinearLayout = cls2("android.widget.LinearLayout");
+  const TextView = cls2("android.widget.TextView");
+  const LinearParams = cls2("android.widget.LinearLayout$LayoutParams");
   const bar = new LinearLayout(context);
   bar.call("setOrientation", 0);
   bar.call("setTag", BAR_TAG);
@@ -2366,7 +2438,7 @@ function build4(context, current, px, navigationInset) {
 function attach() {
   const current = spec;
   if (!current) return true;
-  const LaunchActivity = inu.jvm.cls("org.telegram.ui.LaunchActivity");
+  const LaunchActivity = cls2("org.telegram.ui.LaunchActivity");
   const fragment = LaunchActivity.callStatic("getSafeLastFragment");
   if (!fragment) return false;
   if (text(fragment.call("getTitle")) !== current.title) return false;
@@ -2376,41 +2448,58 @@ function attach() {
   if (existing) {
     if (listRef) reserveSpace(listRef, barHeight);
     if (painted !== current.selected()) paint(existing, current);
+    if (!ready) {
+      ready = true;
+      current.onReady();
+    }
     return true;
   }
   const context = root.call("getContext");
-  const density = context.call("getResources").call("getDisplayMetrics").getField("density");
-  const px = (dp2) => Math.round(dp2 * density);
+  const density2 = context.call("getResources").call("getDisplayMetrics").getField("density");
+  const px = (dp2) => Math.round(dp2 * density2);
   let navigationInset = 0;
   try {
-    navigationInset = Number(inu.jvm.cls("org.telegram.messenger.AndroidUtilities").getStaticField("navigationBarHeight")) || 0;
+    navigationInset = Number(cls2("org.telegram.messenger.AndroidUtilities").getStaticField("navigationBarHeight")) || 0;
   } catch {
   }
   const bar = build4(context, current, px, navigationInset);
-  const FrameParams = inu.jvm.cls("android.widget.FrameLayout$LayoutParams");
+  const FrameParams = cls2("android.widget.FrameLayout$LayoutParams");
   root.call("addView", bar, new FrameParams(-1, px(BAR_DP) + navigationInset, 80));
-  const line = new (inu.jvm.cls("android.view.View"))(context);
+  const line = new (cls2("android.view.View"))(context);
   line.call("setBackgroundColor", color("key_divider"));
   line.call("setTag", LINE_TAG);
   const lineParams = new FrameParams(-1, 1, 80);
   lineParams.call("setMargins", 0, 0, 0, px(BAR_DP) + navigationInset);
   root.call("addView", line, lineParams);
-  const list = findList(root);
-  barHeight = px(BAR_DP) + navigationInset;
-  listRef = list;
-  if (list) {
-    try {
-      list.call("setItemAnimator", null);
-    } catch {
-    }
-    reserveSpace(list, barHeight);
-  }
-  paint(bar, current);
-  if (!ready) {
-    ready = true;
-    current.onReady();
-  }
+  settle(root, bar, current, px(BAR_DP) + navigationInset);
   return true;
+}
+function settle(root, bar, current, height) {
+  try {
+    handler().call("postDelayed", inu.jvm.runnable(() => {
+      try {
+        const list = findList(root);
+        barHeight = height;
+        listRef = list;
+        if (list) {
+          try {
+            list.call("setItemAnimator", null);
+          } catch {
+          }
+          reserveSpace(list, barHeight);
+        }
+        paint(bar, current);
+        if (!ready) {
+          ready = true;
+          current.onReady();
+        }
+      } catch (e) {
+        console.log("navbar: not settled", e);
+      }
+    }), 0);
+  } catch (e) {
+    console.log("navbar: not settled", e);
+  }
 }
 function schedule(delay) {
   pending = true;
@@ -2497,7 +2586,7 @@ function withVersion(string, version) {
 }
 
 // src/index.ts
-var filters = () => [
+var filters2 = () => [
   { key: "all", label: t("filter_all") },
   { key: "installed", label: t("filter_installed") },
   { key: "updates", label: t("filter_updates") }
@@ -2575,8 +2664,12 @@ function compare(a, b) {
   if (preB === void 0) return -1;
   return preA < preB ? -1 : 1;
 }
+var newestOf = /* @__PURE__ */ new WeakMap();
 function newest(plugin) {
-  return [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0];
+  if (newestOf.has(plugin)) return newestOf.get(plugin);
+  const top = [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0];
+  newestOf.set(plugin, top);
+  return top;
 }
 function scanInstalled() {
   const found = /* @__PURE__ */ new Map();
@@ -2744,7 +2837,7 @@ async function installFromChannel(plugin, version, source, key) {
       title: tf("trust_title", sourceLabel(key)),
       message: tf("trust_msg", (version.grants?.length ? version.grants : [t("trust_none")]).join(", ")) + (risky.length ? `
 
-⚠ ${risky.join(", ")}` : ""),
+${tf("trust_danger", risky.join(", "))}` : ""),
       positive: tf("btn_install", version.version),
       negative: t("cancel")
     });
@@ -2919,7 +3012,7 @@ function permissionRows(version) {
   for (const grant of grants) {
     rows.push(inu.ui.button({
       id: `g:${grant}`,
-      text: `${risky.has(grant.trim()) ? "⚠ " : ""}${grant}`,
+      text: grant,
       subtitle: permissionText(grant),
       icon: inu.icons.common(risky.has(grant.trim()) ? "eye" : "lock"),
       danger: risky.has(grant.trim()),
@@ -3021,24 +3114,26 @@ var TAB_SVG = { home: home_default, plugins: plugins_default, settings: settings
 function row(plugin, source, installed) {
   const { state, local } = stateOf(plugin, installed);
   const top = newest(plugin);
-  const mark = riskyGrants(top).length ? "⚠ " : "";
+  const risky = riskyGrants(top).length > 0;
   const value = state === "update" ? t("filter_updates") : state === "installed" ? t("status_installed") : void 0;
   const fallback = state === "update" ? "refresh" : state === "installed" ? "check" : "download";
   const version = top?.version ?? local?.version;
   const subtitle = state === "update" && local ? `${tf("installed_ver", local.version)} → v${top?.version}` : [plugin.author, plugin.description].filter(Boolean).join(" · ");
   return nativeRow({
-    title: `${mark}${plugin.name}`,
+    title: plugin.name,
     subtitle: subtitle || void 0,
     value,
     pill: version ? `v${version}` : void 0,
+    warn: risky ? warn_default : void 0,
     icon: pluginIcon(plugin.id, fallback),
     onClick: () => openPlugin(plugin, source)
   }) ?? inu.ui.button({
     id: `p:${plugin.id}`,
-    text: `${mark}${withVersion(plugin.name, version)}`,
+    text: withVersion(plugin.name, version),
     subtitle: subtitle || void 0,
     value,
     icon: catalogIcon(plugin.id, fallback),
+    danger: risky,
     onClick: () => openPlugin(plugin, source)
   });
 }
@@ -3263,10 +3358,10 @@ function pluginsRows() {
     id: "filter",
     text: t("filter_title"),
     icon: inu.icons.common("more"),
-    items: filters().map((f) => f.label),
-    selected: Math.max(0, filters().findIndex((f) => f.key === filter)),
+    items: filters2().map((f) => f.label),
+    selected: Math.max(0, filters2().findIndex((f) => f.key === filter)),
     onChange: (index) => {
-      filter = filters()[index].key;
+      filter = filters2()[index].key;
     }
   }));
   const blocked = emptyState();
@@ -3441,17 +3536,12 @@ function settingsRows() {
 var page = inu.ui.settingsPage({
   title: "Marketplace",
   items: () => {
-    const started = Date.now();
     if (activeKeys().every((key) => !catalogs.get(key)) && failures.size === 0 && !loading) void load();
     frame = null;
     frame = { installed: installedList(), merged: null };
     ensureNavbar({
       title: "Marketplace",
-      tabs: () => TABS.map((key) => {
-        const label2 = tabLabel(key);
-        const cut = label2.indexOf(" ");
-        return { svg: TAB_SVG[key], emoji: label2.slice(0, cut), label: label2.slice(cut + 1) };
-      }),
+      tabs: () => TABS.map((key) => ({ svg: TAB_SVG[key], label: tabLabel(key) })),
       selected: () => TABS.indexOf(tab),
       onSelect: (index) => {
         if (TABS[index] === tab) return;
@@ -3475,7 +3565,6 @@ var page = inu.ui.settingsPage({
     } finally {
       frame = null;
     }
-    console.log(`render ${tab}: ${Date.now() - started} ms, ${rows.length} rows`);
     return rows;
   }
 });
