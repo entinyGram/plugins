@@ -121,9 +121,9 @@
         {
           "version": "0.3.0",
           "date": "2026-10-17",
-          "notes": "- home opens with a card for the developer's own plugins, \"Plugins from the developer\", instead of a plain entinyGram header\r\n- the card is a real Android view, so the SDK version sits in a colored pill in front of the title\r\n- tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin\r\n- rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)\r\n- fix oversized text in the card rows",
+          "notes": "- home opens with a card for the developer's own plugins, \"Plugins from the developer\", instead of a plain entinyGram header\r\n- the card is a real Android view, so the SDK version sits in a colored pill in front of the title\r\n- tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin\r\n- rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)\r\n- fix oversized text in the card rows\r\n- the separate user repository source is gone: community plugins come from Telegram channels",
           "file": "plugins/dist/entinygram.sdk/entinyGram-SDK-0.3.0.inu.js",
-          "sha256": "5e317e49db4c7b188ad21c4ce7075fcb6bb0ff3237d3a649ba6ee1330aa923d0",
+          "sha256": "3198b7336a6b0d71847d6056c17d49c87c6e2187ea4ac38e3d0f235c6908f34b",
           "requires": [],
           "pluginApi": 1
         },
