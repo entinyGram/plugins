@@ -5,8 +5,7 @@
 export interface NavbarTab {
   /** svg markup; drawn as a white mask and tinted */
   svg: string
-  /** shown instead when the svg cannot be drawn */
-  emoji: string
+  /** the tab's text, under the icon */
   label: string
 }
 
@@ -43,14 +42,26 @@ let spec: NavbarSpec | null = null
 type Jvm = ReturnType<typeof inu.jvm.cls>
 let mainHandler: any
 
+// `inu.jvm.cls` is a bridge call; the bar is rebuilt on every open and a repaint asks for the same classes again
+const classCache = new Map<string, any>()
+
+function cls(name: string): any {
+  let handle = classCache.get(name)
+  if (handle === undefined) {
+    handle = inu.jvm.cls(name)
+    classCache.set(name, handle)
+  }
+  return handle
+}
+
 export function navbarReady(): boolean {
   return ready
 }
 
 function handler(): any {
   if (!mainHandler) {
-    const Handler: Jvm = inu.jvm.cls('android.os.Handler')
-    const Looper: Jvm = inu.jvm.cls('android.os.Looper')
+    const Handler: Jvm = cls('android.os.Handler')
+    const Looper: Jvm = cls('android.os.Looper')
     mainHandler = new Handler(Looper.callStatic('getMainLooper'))
   }
   return mainHandler
@@ -61,7 +72,7 @@ function text(value: any): string {
 }
 
 function color(key: string): number {
-  const Theme: Jvm = inu.jvm.cls('org.telegram.ui.ActionBar.Theme')
+  const Theme: Jvm = cls('org.telegram.ui.ActionBar.Theme')
   return Theme.callStatic('getColor(I)I', Theme.getStaticField(key))
 }
 
@@ -148,54 +159,62 @@ function paint(bar: any, current: NavbarSpec) {
 }
 
 // The svg is drawn by the app's own SvgHelper as a white mask, so a tint recolors it; `currentColor` (the usual stroke
-// of icon packs) is turned white for the same reason. An svg the helper cannot read falls back to the emoji.
+// of icon packs) is turned white for the same reason. The raster is kept: the bar is rebuilt whenever the page is
+// opened, and rasterizing the same three icons again is the slowest part of that. An unreadable svg leaves the tab
+// with its label and no glyph.
+const masks = new Map<string, any>()
+
 function pictogram(context: any, tab: NavbarTab, px: (dp: number) => number): any {
   try {
     const size = px(ICON_DP)
-    const bitmap: any = inu.jvm.cls('org.telegram.messenger.SvgHelper')
-      .callStatic('getBitmap', tab.svg.replace(/currentColor/g, '#ffffff'), size, size, true)
+    let bitmap = masks.get(tab.svg)
+    if (bitmap === undefined) {
+      bitmap = cls('org.telegram.messenger.SvgHelper')
+        .callStatic('getBitmap', tab.svg.replace(/currentColor/g, '#ffffff'), size, size, true)
+      if (bitmap) masks.set(tab.svg, bitmap)
+    }
     if (bitmap) {
-      const view = new (inu.jvm.cls('android.widget.ImageView'))(context)
+      const view = new (cls('android.widget.ImageView'))(context)
       view.call('setImageBitmap', bitmap)
       return view
     }
   } catch (e) {
     console.log('navbar: svg icon failed', e)
   }
-  const fallback = new (inu.jvm.cls('android.widget.TextView'))(context)
-  fallback.call('setText', tab.emoji)
-  fallback.call('setTextSize', 2, 18)
-  fallback.call('setGravity', 17)
-  return fallback
+  return new (cls('android.view.View'))(context)
 }
 
-function build(context: any, current: NavbarSpec, px: (dp: number) => number, navigationInset: number): any {
-  const LinearLayout: Jvm = inu.jvm.cls('android.widget.LinearLayout')
-  const TextView: Jvm = inu.jvm.cls('android.widget.TextView')
-  const LinearParams: Jvm = inu.jvm.cls('android.widget.LinearLayout$LayoutParams')
-  const OnClick: Jvm = inu.jvm.cls('android.view.View$OnClickListener')
-
-  const Listener: Jvm = inu.jvm.defineClass({
-    interfaces: [OnClick],
-    methods: {
-      onClick: (_self: any, view: any) => {
-        const tag = text(view.call('getTag'))
-        if (!tag.startsWith(TAB_TAG)) return
-        const index = Number(tag.slice(TAB_TAG.length))
-        if (index === current.selected()) return
-        try {
-          softSwap(view)
-        } catch (e) {
-          console.log('navbar: soft swap skipped', e)
-        }
-        current.onSelect(index)
-        try {
-          paint(view.call('getParent'), current)
-        } catch {}
-      },
+// One generated class serves every tab of every open. A `defineClass` is a dex build and a fresh class loader on the
+// host, it is never unloaded, and the sandbox stops a call that runs past two seconds, so it is made once while the
+// plugin loads instead of on every open. A click reads the selection from the current spec, so the same instance stays
+// right across a re-render.
+const listener: any = new (inu.jvm.defineClass({
+  interfaces: [cls('android.view.View$OnClickListener')],
+  methods: {
+    onClick: (_self: any, view: any) => {
+      const current = spec
+      if (!current) return
+      const tag = text(view.call('getTag'))
+      if (!tag.startsWith(TAB_TAG)) return
+      const index = Number(tag.slice(TAB_TAG.length))
+      if (index === current.selected()) return
+      try {
+        softSwap(view)
+      } catch (e) {
+        console.log('navbar: soft swap skipped', e)
+      }
+      current.onSelect(index)
+      try {
+        paint(view.call('getParent'), current)
+      } catch {}
     },
-  })
-  const listener = new Listener()
+  },
+}))()
+
+function build(context: any, current: NavbarSpec, px: (dp: number) => number, navigationInset: number): any {
+  const LinearLayout: Jvm = cls('android.widget.LinearLayout')
+  const TextView: Jvm = cls('android.widget.TextView')
+  const LinearParams: Jvm = cls('android.widget.LinearLayout$LayoutParams')
 
   const bar = new LinearLayout(context)
   bar.call('setOrientation', 0)
@@ -227,7 +246,7 @@ function build(context: any, current: NavbarSpec, px: (dp: number) => number, na
 function attach(): boolean {
   const current = spec
   if (!current) return true
-  const LaunchActivity: Jvm = inu.jvm.cls('org.telegram.ui.LaunchActivity')
+  const LaunchActivity: Jvm = cls('org.telegram.ui.LaunchActivity')
   const fragment: any = LaunchActivity.callStatic('getSafeLastFragment')
   if (!fragment) return false
   if (text(fragment.call('getTitle')) !== current.title) return false
@@ -238,6 +257,10 @@ function attach(): boolean {
   if (existing) {
     if (listRef) reserveSpace(listRef, barHeight)
     if (painted !== current.selected()) paint(existing, current)
+    if (!ready) {
+      ready = true
+      current.onReady()
+    }
     return true
   }
 
@@ -246,34 +269,53 @@ function attach(): boolean {
   const px = (dp: number) => Math.round(dp * density)
   let navigationInset = 0
   try {
-    navigationInset = Number(inu.jvm.cls('org.telegram.messenger.AndroidUtilities').getStaticField('navigationBarHeight')) || 0
+    navigationInset = Number(cls('org.telegram.messenger.AndroidUtilities').getStaticField('navigationBarHeight')) || 0
   } catch {}
 
   const bar = build(context, current, px, navigationInset)
-  const FrameParams: Jvm = inu.jvm.cls('android.widget.FrameLayout$LayoutParams')
+  const FrameParams: Jvm = cls('android.widget.FrameLayout$LayoutParams')
   root.call('addView', bar, new FrameParams(-1, px(BAR_DP) + navigationInset, 80))
   // a hairline instead of a shadow: a shadow under a full-width bar is redrawn with every frame of the list behind it
-  const line: any = new (inu.jvm.cls('android.view.View'))(context)
+  const line: any = new (cls('android.view.View'))(context)
   line.call('setBackgroundColor', color('key_divider'))
   line.call('setTag', LINE_TAG)
   const lineParams: any = new FrameParams(-1, 1, 80)
   lineParams.call('setMargins', 0, 0, 0, px(BAR_DP) + navigationInset)
   root.call('addView', line, lineParams)
-  const list = findList(root)
-  barHeight = px(BAR_DP) + navigationInset
-  listRef = list
-  if (list) {
-    try {
-      list.call('setItemAnimator', null)
-    } catch {}
-    reserveSpace(list, barHeight)
-  }
-  paint(bar, current)
-  if (!ready) {
-    ready = true
-    current.onReady()
-  }
+
+  // The walk over the page's own view tree and the repaint that follows it are the longest part of an attach, and the
+  // bar is already up by now, so they run in a call of their own instead of one long one: a sandbox stops a call that
+  // runs past two seconds, and one long attach is what took the whole plugin down with it.
+  settle(root, bar, current, px(BAR_DP) + navigationInset)
   return true
+}
+
+/** the second half of an attach: finds the list the bar sits over, makes room for it and paints the tabs */
+function settle(root: any, bar: any, current: NavbarSpec, height: number): void {
+  try {
+    handler().call('postDelayed', inu.jvm.runnable(() => {
+      try {
+        const list = findList(root)
+        barHeight = height
+        listRef = list
+        if (list) {
+          try {
+            list.call('setItemAnimator', null)
+          } catch {}
+          reserveSpace(list, barHeight)
+        }
+        paint(bar, current)
+        if (!ready) {
+          ready = true
+          current.onReady()
+        }
+      } catch (e) {
+        console.log('navbar: not settled', e)
+      }
+    }), 0)
+  } catch (e) {
+    console.log('navbar: not settled', e)
+  }
 }
 
 function schedule(delay: number) {

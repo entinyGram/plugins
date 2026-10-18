@@ -7,6 +7,7 @@ import { type StringKey, t, tf } from './i18n.js'
 import homeSvg from './icons/home.svg'
 import pluginsSvg from './icons/plugins.svg'
 import settingsSvg from './icons/settings.svg'
+import warnSvg from './icons/warn.svg'
 import { ensureNavbar, navbarReady } from './navbar.js'
 import { DEFAULT_CHANNEL, type Source, addChannel, channelKey, listSources, removeChannel, setEnabled } from './sources.js'
 import { withVersion } from './span.js'
@@ -122,8 +123,16 @@ function compare(a: string, b: string): number {
   return preA < preB ? -1 : 1
 }
 
+// One render asks for a plugin's newest version again and again - once per row and once per step of every sort that
+// orders rows by date - and the answer changes only when the catalog reloads, which replaces the plugin objects. The
+// memo is keyed on the object itself, so a reload drops it along with them.
+const newestOf = new WeakMap<CatalogPlugin, CatalogVersion | undefined>()
+
 function newest(plugin: CatalogPlugin): CatalogVersion | undefined {
-  return [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0]
+  if (newestOf.has(plugin)) return newestOf.get(plugin)
+  const top = [...plugin.versions].sort((x, y) => compare(y.version, x.version))[0]
+  newestOf.set(plugin, top)
+  return top
 }
 
 // Without the bridge the installed set is read from the app's plugin directory: every .inu.js there carries its
@@ -309,7 +318,7 @@ async function installFromChannel(plugin: CatalogPlugin, version: CatalogVersion
       title: tf('trust_title', sourceLabel(key)),
       message: tf('trust_msg', (version.grants?.length ? version.grants : [t('trust_none')]).join(', ')) + (risky.length ? `
 
-⚠ ${risky.join(', ')}` : ''),
+${tf('trust_danger', risky.join(', '))}` : ''),
       positive: tf('btn_install', version.version),
       negative: t('cancel'),
     })
@@ -507,7 +516,7 @@ function permissionRows(version: CatalogVersion | undefined): inu.UIElement[] {
   for (const grant of grants) {
     rows.push(inu.ui.button({
       id: `g:${grant}`,
-      text: `${risky.has(grant.trim()) ? '⚠ ' : ''}${grant}`,
+      text: grant,
       subtitle: permissionText(grant),
       icon: inu.icons.common(risky.has(grant.trim()) ? 'eye' : 'lock'),
       danger: risky.has(grant.trim()),
@@ -618,7 +627,7 @@ const TAB_SVG: Record<Tab, string> = { home: homeSvg, plugins: pluginsSvg, setti
 function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): inu.UIElement {
   const { state, local } = stateOf(plugin, installed)
   const top = newest(plugin)
-  const mark = riskyGrants(top).length ? '⚠ ' : ''
+  const risky = riskyGrants(top).length > 0
   const value = state === 'update' ? t('filter_updates') : state === 'installed' ? t('status_installed') : undefined
   const fallback: CommonIcon = state === 'update' ? 'refresh' : state === 'installed' ? 'check' : 'download'
   const version = top?.version ?? local?.version
@@ -626,20 +635,23 @@ function row(plugin: CatalogPlugin, source: SourceKey, installed: Installed[]): 
     ? `${tf('installed_ver', local.version)} → v${top?.version}`
     : [plugin.author, plugin.description].filter(Boolean).join(' · ')
   // The version rides in a pill in front of the title, and the trailing `value` keeps the row's state. Only a row
-  // drawn as a view can draw the pill; without one the plain row shows the version in the title instead.
+  // drawn as a view can draw the pill or the warning mark; without one the plain row shows the version in the title
+  // and leaves the warning to the row's own red.
   return nativeRow({
-    title: `${mark}${plugin.name}`,
+    title: plugin.name,
     subtitle: subtitle || undefined,
     value,
     pill: version ? `v${version}` : undefined,
+    warn: risky ? warnSvg : undefined,
     icon: pluginIcon(plugin.id, fallback),
     onClick: () => openPlugin(plugin, source),
   }) ?? inu.ui.button({
     id: `p:${plugin.id}`,
-    text: `${mark}${withVersion(plugin.name, version)}`,
+    text: withVersion(plugin.name, version),
     subtitle: subtitle || undefined,
     value,
     icon: catalogIcon(plugin.id, fallback),
+    danger: risky,
     onClick: () => openPlugin(plugin, source),
   })
 }
@@ -1077,18 +1089,13 @@ function settingsRows(): inu.UIElement[] {
 const page: inu.ui.UIPage = inu.ui.settingsPage({
   title: 'Marketplace',
   items: () => {
-    const started = Date.now()
     if (activeKeys().every(key => !catalogs.get(key)) && failures.size === 0 && !loading) void load()
     frame = null
     frame = { installed: installedList(), merged: null }
 
     ensureNavbar({
       title: 'Marketplace',
-      tabs: () => TABS.map((key) => {
-        const label = tabLabel(key)
-        const cut = label.indexOf(' ')
-        return { svg: TAB_SVG[key], emoji: label.slice(0, cut), label: label.slice(cut + 1) }
-      }),
+      tabs: () => TABS.map(key => ({ svg: TAB_SVG[key], label: tabLabel(key) })),
       selected: () => TABS.indexOf(tab),
       onSelect: (index) => {
         if (TABS[index] === tab) return
@@ -1114,7 +1121,6 @@ const page: inu.ui.UIPage = inu.ui.settingsPage({
     } finally {
       frame = null
     }
-    console.log(`render ${tab}: ${Date.now() - started} ms, ${rows.length} rows`)
     return rows
   },
 })
