@@ -238,8 +238,8 @@ try {
     after: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx) => {\r
-            if (ctx.thisObject === styledProvider.get()) ctx.setReturnValue(buttonPaint)\r
+      (ctx) => {
+            if (ctx.thisObject === styledProvider.get()) ctx.setReturnValue(buttonPaint)
           }`,
       captures: ["styledProvider", "buttonPaint"],
       slots: 0,
@@ -259,8 +259,8 @@ try {
     after: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx) => {\r
-            if (ctx.thisObject === styledProvider.get()) ctx.setReturnValue(revealPaint)\r
+      (ctx) => {
+            if (ctx.thisObject === styledProvider.get()) ctx.setReturnValue(revealPaint)
           }`,
       captures: ["styledProvider", "revealPaint"],
       slots: 0,

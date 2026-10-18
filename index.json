@@ -10,7 +10,7 @@
           "date": "2026-10-07",
           "notes": "",
           "file": "plugins/dist/entinygram.2gis/entinyGram-2GIS-1.0.0.inu.js",
-          "sha256": "852912e7e7d038c0b38d81bbdaebd466795f2465c0f4c840345777decb427247",
+          "sha256": "75cf3a15e3549ebed874344a21bf2cb4e12e628f3583b19f86b6beb9ecdfd7eb",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -30,7 +30,7 @@
           "date": "2026-10-12",
           "notes": "- The plugin page shows a sample rendered with the pattern the profile \"registration date\" row uses, so profile dates can be checked without opening a profile\n- Registration, join and birthday dates in the profile follow the chosen calendar: they are formatted by the same app formatter the plugin rewrites\n- Each hook now registers on its own, so one method missing from an app build no longer disables the rest; the page lists what could not be hooked",
           "file": "plugins/dist/entinygram.calendar-systems/entinyGram-Calendar-systems-1.1.0.inu.js",
-          "sha256": "a04de420245d36144e9ddda2ba4e28308d6611490f14956da7073a4a31a9695e",
+          "sha256": "ae6daed196f89932de24a539def2a62fec472b426f095165dee221afec6b86b2",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -59,9 +59,9 @@
         {
           "version": "1.1",
           "date": "2026-10-14",
-          "notes": "- Replace the catalog icon with the supplied phone handset and signal arcs SVG.\r\n- Translate settings and compatibility messages into Ukrainian, English and Russian using the application language, with English fallback.\r\n- Extend mocked lifecycle regressions to all three languages and test language selection/fallback.",
+          "notes": "- Replace the catalog icon with the supplied phone handset and signal arcs SVG.\n- Translate settings and compatibility messages into Ukrainian, English and Russian using the application language, with English fallback.\n- Extend mocked lifecycle regressions to all three languages and test language selection/fallback.",
           "file": "plugins/dist/entinygram.call-avatar/entinyGram-Call-avatar-1.1.inu.js",
-          "sha256": "fa0bf356daea4a71271edd92aaa05e5374c56c358f4c0891b93e0c7a78250cf2",
+          "sha256": "ef3b50adf6817165eaff0b42d412f9c215aadc4c79a8a27ef5567091f3a51844",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -92,7 +92,7 @@
           "date": "2026-10-13",
           "notes": "- Fix copied JVM byte buffers and bounded chunked reads without reflection.\n- Repair XLSX sheet relationships, sparse cells and rich strings; EPUB manifests, chapter paths and XML entities; FB2 encodings and namespaces.\n- Browse ZIP/JAR/AAR entries and open supported files in-app with bounded, private temporary extraction and cleanup.\n- Fix archive totals and remove incorrect password detection. Unsupported TAR/compressed TAR files now use the stock viewer.\n- Remove reflection from viewer controls and fix viewer resource cleanup.\n- Repair DOCX namespaces, PPTX slide ordering, bounded ODF repeated cells, RTF escapes/codepages and MIME email decoding.\n- Fix CSV quoted/multiline fields, Markdown links and recursion limits, Unicode chunk boundaries and JVM string decoding.\n- Handle mirrored EXIF orientations and PDF failure cleanup; add parser and native-resource regression tests.",
           "file": "plugins/dist/entinygram.doc-viewer/entinyGram-Doc-Viewer-1.1.0.inu.js",
-          "sha256": "63ed9717da85e0730de9aadf0d715bc7987548848c48fb3cfca9a7f88bf5808c",
+          "sha256": "d096cf00f8881a696e8f0ea4efe18f975dfaeea1e32d17179ac32629b38b52f3",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -121,9 +121,9 @@
         {
           "version": "0.3.0",
           "date": "2026-10-17",
-          "notes": "- home opens with a card for the developer's own plugins, \"Plugins from the developer\", instead of a plain entinyGram header\r\n- the card is a real Android view, so the SDK version sits in a colored pill in front of the title\r\n- tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin\r\n- rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)\r\n- fix oversized text in the card rows\r\n- the separate user repository source is gone: community plugins come from Telegram channels",
+          "notes": "- home opens with a card for the developer's own plugins, \"Plugins from the developer\", instead of a plain entinyGram header\n- the card is a real Android view, so the SDK version sits in a colored pill in front of the title\n- tapping the card opens a screen of its own with the official catalog as icon cards, one row per plugin\n- rows show the version in the title (`v0.3.0  2GIS`) built by `withVersion`, so the trailing value carries the state (Installed, Updates)\n- fix oversized text in the card rows\n- the separate user repository source is gone: community plugins come from Telegram channels",
           "file": "plugins/dist/entinygram.sdk/entinyGram-SDK-0.3.0.inu.js",
-          "sha256": "6859ac4ca53c452156a6999503e6985639d976d43f14fcbc45dfca41dff50a56",
+          "sha256": "f715a33006e03f88a00eb55ba07960165d3f8f8bb12c24dd2a36fcdb066a1112",
           "requires": [],
           "pluginApi": 1
         },
@@ -204,7 +204,7 @@
           "date": "2026-10-08",
           "notes": "",
           "file": "plugins/dist/entinygram.text-animation/entinyGram-Text-animation-1.0.0.inu.js",
-          "sha256": "5a7e08d3c65a7850ef890f0d7136a8e55a2f856068d3a4be70cbc8317618b1b9",
+          "sha256": "a59d278a29ffd6d880b9ec772a40fc2765fd806efbbb52aca29a8b552c1a51f0",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],
@@ -224,7 +224,7 @@
           "date": "2026-10-06",
           "notes": "",
           "file": "plugins/dist/entinygram.yandex/entinyGram-Yandex-1.0.0.inu.js",
-          "sha256": "242a8110ebab761b8af460e3ad1e8d10aafebf38efd73c94f5cd7d811d456a38",
+          "sha256": "db6c870998168bd888e1994b4fc1e0688b8201dd8f1abc0c9055e49739ee15ba",
           "requires": [
             "entinygram.sdk >=0.1.0-alpha"
           ],

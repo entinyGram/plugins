@@ -15,7 +15,7 @@
 // ==/InuPlugin==
 
 
-// ../../sdk/entiny/src/embed.ts
+// ../../../sdk/entiny/src/embed.ts
 var REGISTRY_KEY = "entiny.embed";
 var CHANGED_KEY = "__changed";
 function embedRegistry() {

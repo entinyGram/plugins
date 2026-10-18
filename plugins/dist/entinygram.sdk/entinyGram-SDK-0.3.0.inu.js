@@ -324,33 +324,33 @@ var Indexer = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (res: any, base: any, from: any, to: any) {\r
-                const sb = new StringBuilder()\r
-                let misses = 0\r
-                for (let i = from; i < to; i++) {\r
-                  const id = base + i\r
-                  let name = null\r
-                  try {\r
-                    name = res.getResourceEntryName(id)\r
-                    misses = 0\r
-                  } catch (e) {\r
-                    // ids can have gaps; a long run of them means the type is over\r
-                    misses++\r
-                    if (misses >= 64) {\r
-                      sb.append(END)\r
-                      break\r
-                    }\r
-                    continue\r
-                  }\r
-                  if (name.startsWith('Inu') && !name.endsWith('Info')) {\r
-                    try {\r
-                      sb.append(name).append(FIELD_SEP).append(res.getString(id)).append(ROW_SEP)\r
-                    } catch (e) {\r
-                      // not a plain string\r
-                    }\r
-                  }\r
-                }\r
-                return sb.toString()\r
+        function (res: any, base: any, from: any, to: any) {
+                const sb = new StringBuilder()
+                let misses = 0
+                for (let i = from; i < to; i++) {
+                  const id = base + i
+                  let name = null
+                  try {
+                    name = res.getResourceEntryName(id)
+                    misses = 0
+                  } catch (e) {
+                    // ids can have gaps; a long run of them means the type is over
+                    misses++
+                    if (misses >= 64) {
+                      sb.append(END)
+                      break
+                    }
+                    continue
+                  }
+                  if (name.startsWith('Inu') && !name.endsWith('Info')) {
+                    try {
+                      sb.append(name).append(FIELD_SEP).append(res.getString(id)).append(ROW_SEP)
+                    } catch (e) {
+                      // not a plain string
+                    }
+                  }
+                }
+                return sb.toString()
               }`,
         captures: ["StringBuilder", "END", "FIELD_SEP", "ROW_SEP"],
         slots: 4,
@@ -488,18 +488,18 @@ var Dumper = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (fragment: any, items: any) {\r
-                const sb = new StringBuilder()\r
-                // Object.toString is \`package.Class@hash\`; a Class value inside a routine is a class reference, not an object\r
-                sb.append(fragment.toString()).append(ROW_SEP)\r
-                for (const it of items) {\r
-                  // a number is ambiguous for StringBuilder.append inside a routine; a string is not\r
-                  sb.append('' + it.viewType).append(FIELD_SEP).append('' + it.id).append(FIELD_SEP)\r
-                  const text = it.text\r
-                  if (text !== null) sb.append(text.toString())\r
-                  sb.append(ROW_SEP)\r
-                }\r
-                return sb.toString()\r
+        function (fragment: any, items: any) {
+                const sb = new StringBuilder()
+                // Object.toString is \`package.Class@hash\`; a Class value inside a routine is a class reference, not an object
+                sb.append(fragment.toString()).append(ROW_SEP)
+                for (const it of items) {
+                  // a number is ambiguous for StringBuilder.append inside a routine; a string is not
+                  sb.append('' + it.viewType).append(FIELD_SEP).append('' + it.id).append(FIELD_SEP)
+                  const text = it.text
+                  if (text !== null) sb.append(text.toString())
+                  sb.append(ROW_SEP)
+                }
+                return sb.toString()
               }`,
         captures: ["StringBuilder", "ROW_SEP", "FIELD_SEP"],
         slots: 0,
@@ -714,9 +714,9 @@ var mainHandler = new (inu.jvm.cls("android.os.Handler"))(inu.jvm.cls("android.o
 var redraw = inu.jvm.routine({
   v: 1,
   source: `
-  () => {\r
-    const fragment = Launch.getSafeLastFragment()\r
-    if (fragment !== null && fragment instanceof UniversalFragment) fragment.listView.adapter.update(true)\r
+  () => {
+    const fragment = Launch.getSafeLastFragment()
+    if (fragment !== null && fragment instanceof UniversalFragment) fragment.listView.adapter.update(true)
   }`,
   captures: ["Launch", "UniversalFragment"],
   slots: 1,
@@ -804,12 +804,12 @@ var Pick = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (index: any) {\r
-                const size = pickState.get(1)\r
-                if (index < size) pickState.get(0).invoke(index)\r
-                pickQueue.add(\`\${pickState.get(2)}|\${index}|\${size}\`)\r
-                mainHandler.post(drainPicks)\r
-                return pickState.get(3)\r
+        function (index: any) {
+                const size = pickState.get(1)
+                if (index < size) pickState.get(0).invoke(index)
+                pickQueue.add(\`\${pickState.get(2)}|\${index}|\${size}\`)
+                mainHandler.post(drainPicks)
+                return pickState.get(3)
               }`,
         captures: ["pickState", "pickQueue", "mainHandler", "drainPicks"],
         slots: 0,
@@ -953,8 +953,8 @@ var TapWrapper = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (view: any, position: any) {\r
-                return tapState.get('' + JSystem.identityHashCode(this)).get(0).hasDoubleTap(view, position)\r
+        function (view: any, position: any) {
+                return tapState.get('' + JSystem.identityHashCode(this)).get(0).hasDoubleTap(view, position)
               }`,
         captures: ["tapState", "JSystem"],
         slots: 0,
@@ -980,8 +980,8 @@ var TapWrapper = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (view: any, position: any, x: any, y: any) {\r
-                tapState.get('' + JSystem.identityHashCode(this)).get(0).onDoubleTap(view, position, x, y)\r
+        function (view: any, position: any, x: any, y: any) {
+                tapState.get('' + JSystem.identityHashCode(this)).get(0).onDoubleTap(view, position, x, y)
               }`,
         captures: ["tapState", "JSystem"],
         slots: 0,
@@ -1008,15 +1008,15 @@ var TapWrapper = inu.jvm.defineClass({
       body: inu.jvm.routine({
         v: 1,
         source: `
-        function (view: any, position: any, x: any, y: any) {\r
-                const state = tapState.get('' + JSystem.identityHashCode(this))\r
-                const item = state.get(1).getItem(position)\r
-                if (item !== null && ownedIds.containsKey('' + item.id)) {\r
-                  tapQueue.add('' + item.id)\r
-                  mainHandler.post(drainTaps)\r
-                } else {\r
-                  state.get(0).onItemClick(view, position, x, y)\r
-                }\r
+        function (view: any, position: any, x: any, y: any) {
+                const state = tapState.get('' + JSystem.identityHashCode(this))
+                const item = state.get(1).getItem(position)
+                if (item !== null && ownedIds.containsKey('' + item.id)) {
+                  tapQueue.add('' + item.id)
+                  mainHandler.post(drainTaps)
+                } else {
+                  state.get(0).onItemClick(view, position, x, y)
+                }
               }`,
         captures: ["tapState", "JSystem", "ownedIds", "tapQueue", "mainHandler", "drainTaps"],
         slots: 1,
@@ -1106,8 +1106,8 @@ function startEmbedEngine() {
         body: inu.jvm.routine({
           v: 1,
           source: `
-          function () {\r
-                    mainHandler.post(redraw)\r
+          function () {
+                    mainHandler.post(redraw)
                   }`,
           captures: ["mainHandler", "redraw"],
           slots: 0,
@@ -2242,13 +2242,13 @@ function tf(key, ...args) {
 }
 
 // src/icons/home.svg
-var home_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg>\r\n';
+var home_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg>\n';
 
 // src/icons/plugins.svg
-var plugins_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5a2.5 2.5 0 0 0-5 0V5H4a2 2 0 0 0-2 2v3.8h1.5a2.7 2.7 0 0 1 0 5.4H2V20a2 2 0 0 0 2 2h3.8v-1.5a2.7 2.7 0 0 1 5.4 0V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 0-5z"/></svg>\r\n';
+var plugins_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5a2.5 2.5 0 0 0-5 0V5H4a2 2 0 0 0-2 2v3.8h1.5a2.7 2.7 0 0 1 0 5.4H2V20a2 2 0 0 0 2 2h3.8v-1.5a2.7 2.7 0 0 1 5.4 0V22H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 0-5z"/></svg>\n';
 
 // src/icons/settings.svg
-var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.7 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.07.63-.07.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.12.22.37.29.61.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.49 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>\r\n';
+var settings_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.7 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.07.63-.07.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.12.22.37.29.61.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.49 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>\n';
 
 // src/icons/warn.svg
 var warn_default = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3.6 21.2 19.4H2.8Z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 9.6v4"/><circle cx="12" cy="16.5" r="1.15" fill="currentColor"/></svg>\n';

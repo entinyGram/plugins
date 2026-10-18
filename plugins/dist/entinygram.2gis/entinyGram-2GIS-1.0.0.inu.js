@@ -12,7 +12,7 @@
 // ==/InuPlugin==
 
 
-// ../../sdk/entiny/src/embed.ts
+// ../../../sdk/entiny/src/embed.ts
 var REGISTRY_KEY = "entiny.embed";
 var CHANGED_KEY = "__changed";
 function embedRegistry() {
@@ -77,7 +77,7 @@ function embedChanged() {
   notifyChanged(embedRegistry());
 }
 
-// ../../sdk/entiny/src/maps.ts
+// ../../../sdk/entiny/src/maps.ts
 var tiles = () => inu.jvm.cls("desu.inugram.helpers.maps.EntinyMapTiles");
 function setTileSource(source) {
   tiles().callStatic("set", source.name, source.url, source.attribution, source.minZoom ?? 0, source.maxZoom ?? 18, source.tileSize ?? 256);

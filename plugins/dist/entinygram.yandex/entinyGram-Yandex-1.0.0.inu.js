@@ -13,7 +13,7 @@
 // ==/InuPlugin==
 
 
-// ../../sdk/entiny/src/embed.ts
+// ../../../sdk/entiny/src/embed.ts
 var REGISTRY_KEY = "entiny.embed";
 var CHANGED_KEY = "__changed";
 function embedRegistry() {
@@ -221,24 +221,24 @@ try {
     before: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx: any) => {\r
-            if (!useMaps.get()) return\r
-            const scale = JMath.round(JMath.min(2.0, JMath.ceil(AndroidUtilities.density)))\r
-            const short = LocaleController.getInstance().getCurrentLocaleInfo().shortName\r
-            let lang = 'en_US'\r
-            for (const candidate of LANGS) {\r
-              const lowered: any = candidate.toLowerCase()\r
-              if (lowered.contains(short)) lang = candidate\r
-            }\r
-            const lat = ctx.args[1]\r
-            const lon = ctx.args[2]\r
-            const width = ctx.args[3] * scale\r
-            const height = ctx.args[4] * scale\r
-            if (ctx.args[5]) {\r
-              ctx.setReturnValue(JString.format(JLocale.US, WITH_MARKER, [lon, lat, ctx.args[6], width, height, scale, lon, lat, lang]))\r
-            } else {\r
-              ctx.setReturnValue(JString.format(JLocale.US, PLAIN, [lon, lat, ctx.args[6], width, height, scale, lang]))\r
-            }\r
+      (ctx: any) => {
+            if (!useMaps.get()) return
+            const scale = JMath.round(JMath.min(2.0, JMath.ceil(AndroidUtilities.density)))
+            const short = LocaleController.getInstance().getCurrentLocaleInfo().shortName
+            let lang = 'en_US'
+            for (const candidate of LANGS) {
+              const lowered: any = candidate.toLowerCase()
+              if (lowered.contains(short)) lang = candidate
+            }
+            const lat = ctx.args[1]
+            const lon = ctx.args[2]
+            const width = ctx.args[3] * scale
+            const height = ctx.args[4] * scale
+            if (ctx.args[5]) {
+              ctx.setReturnValue(JString.format(JLocale.US, WITH_MARKER, [lon, lat, ctx.args[6], width, height, scale, lon, lat, lang]))
+            } else {
+              ctx.setReturnValue(JString.format(JLocale.US, PLAIN, [lon, lat, ctx.args[6], width, height, scale, lang]))
+            }
           }`,
       captures: ["useMaps", "JMath", "AndroidUtilities", "LocaleController", "LANGS", "JString", "JLocale", "WITH_MARKER", "PLAIN"],
       slots: 1,

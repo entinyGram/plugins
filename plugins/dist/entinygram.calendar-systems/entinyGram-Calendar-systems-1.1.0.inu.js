@@ -13,7 +13,7 @@
 // ==/InuPlugin==
 
 
-// ../../sdk/entiny/src/embed.ts
+// ../../../sdk/entiny/src/embed.ts
 var REGISTRY_KEY = "entiny.embed";
 var CHANGED_KEY = "__changed";
 function embedRegistry() {
@@ -282,20 +282,20 @@ var hooked = hook("FastDateFormat.format(long)", () => inu.xposed.hookMethod(
     after: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx: any) => {\r
-            const calendar = selected.get()\r
-            if (calendar === '') return\r
-            const self = ctx.thisObject\r
-            const pattern = self.getPattern()\r
-            if (pattern.indexOf('M') < 0 && pattern.indexOf('y') < 0) return\r
-            const locale = self.getLocale()\r
-            const key = JThread.currentThread().getId() + '|' + pattern + '|' + calendar + '|' + locale.toString()\r
-            let format = formats.get(key)\r
-            if (format === null) {\r
-              format = new SimpleDateFormat(pattern, ULocale.forLocale(locale).setKeywordValue('calendar', calendar))\r
-              formats.put(key, format)\r
-            }\r
-            ctx.setReturnValue(format.format(new JDate(ctx.args[0])))\r
+      (ctx: any) => {
+            const calendar = selected.get()
+            if (calendar === '') return
+            const self = ctx.thisObject
+            const pattern = self.getPattern()
+            if (pattern.indexOf('M') < 0 && pattern.indexOf('y') < 0) return
+            const locale = self.getLocale()
+            const key = JThread.currentThread().getId() + '|' + pattern + '|' + calendar + '|' + locale.toString()
+            let format = formats.get(key)
+            if (format === null) {
+              format = new SimpleDateFormat(pattern, ULocale.forLocale(locale).setKeywordValue('calendar', calendar))
+              formats.put(key, format)
+            }
+            ctx.setReturnValue(format.format(new JDate(ctx.args[0])))
           }`,
       captures: ["selected", "JThread", "formats", "SimpleDateFormat", "ULocale", "JDate"],
       slots: 2,
@@ -359,20 +359,20 @@ hook("FastDateFormat.format(Date)", () => inu.xposed.hookMethod(
     after: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx: any) => {\r
-            const calendar = selected.get()\r
-            if (calendar === '') return\r
-            const self = ctx.thisObject\r
-            const pattern = self.getPattern()\r
-            if (pattern.indexOf('M') < 0 && pattern.indexOf('y') < 0) return\r
-            const locale = self.getLocale()\r
-            const key = JThread.currentThread().getId() + '|' + pattern + '|' + calendar + '|' + locale.toString()\r
-            let format = formats.get(key)\r
-            if (format === null) {\r
-              format = new SimpleDateFormat(pattern, ULocale.forLocale(locale).setKeywordValue('calendar', calendar))\r
-              formats.put(key, format)\r
-            }\r
-            ctx.setReturnValue(format.format(ctx.args[0]))\r
+      (ctx: any) => {
+            const calendar = selected.get()
+            if (calendar === '') return
+            const self = ctx.thisObject
+            const pattern = self.getPattern()
+            if (pattern.indexOf('M') < 0 && pattern.indexOf('y') < 0) return
+            const locale = self.getLocale()
+            const key = JThread.currentThread().getId() + '|' + pattern + '|' + calendar + '|' + locale.toString()
+            let format = formats.get(key)
+            if (format === null) {
+              format = new SimpleDateFormat(pattern, ULocale.forLocale(locale).setKeywordValue('calendar', calendar))
+              formats.put(key, format)
+            }
+            ctx.setReturnValue(format.format(ctx.args[0]))
           }`,
       captures: ["selected", "JThread", "formats", "SimpleDateFormat", "ULocale"],
       slots: 2,
@@ -434,15 +434,15 @@ hook("LocaleController.formatYearMonthDay", () => inu.xposed.hookMethod(
     before: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx: any) => {\r
-            const calendar = selected.get()\r
-            if (calendar === '') return\r
-            const locale = ULocale.forLocale(LocaleController.getInstance().getCurrentLocale()).setKeywordValue('calendar', calendar)\r
-            const date = new JDate(ctx.args[0] * 1000)\r
-            const year = new SimpleDateFormat('y', locale)\r
-            const sameYear = year.format(date) === year.format(new JDate())\r
-            const pattern = sameYear && !ctx.args[1] ? 'MMM d' : 'MMM d, y'\r
-            ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))\r
+      (ctx: any) => {
+            const calendar = selected.get()
+            if (calendar === '') return
+            const locale = ULocale.forLocale(LocaleController.getInstance().getCurrentLocale()).setKeywordValue('calendar', calendar)
+            const date = new JDate(ctx.args[0] * 1000)
+            const year = new SimpleDateFormat('y', locale)
+            const sameYear = year.format(date) === year.format(new JDate())
+            const pattern = sameYear && !ctx.args[1] ? 'MMM d' : 'MMM d, y'
+            ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))
           }`,
       captures: ["selected", "ULocale", "LocaleController", "JDate", "SimpleDateFormat"],
       slots: 1,
@@ -493,15 +493,15 @@ hook("LocaleController.formatYearMont", () => inu.xposed.hookMethod(
     before: inu.xposed.routine({
       v: 1,
       source: `
-      (ctx: any) => {\r
-            const calendar = selected.get()\r
-            if (calendar === '') return\r
-            const locale = ULocale.forLocale(LocaleController.getInstance().getCurrentLocale()).setKeywordValue('calendar', calendar)\r
-            const date = new JDate(ctx.args[0] * 1000)\r
-            const year = new SimpleDateFormat('y', locale)\r
-            const sameYear = year.format(date) === year.format(new JDate())\r
-            const pattern = sameYear && !ctx.args[1] ? 'MMMM' : 'MMMM y'\r
-            ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))\r
+      (ctx: any) => {
+            const calendar = selected.get()
+            if (calendar === '') return
+            const locale = ULocale.forLocale(LocaleController.getInstance().getCurrentLocale()).setKeywordValue('calendar', calendar)
+            const date = new JDate(ctx.args[0] * 1000)
+            const year = new SimpleDateFormat('y', locale)
+            const sameYear = year.format(date) === year.format(new JDate())
+            const pattern = sameYear && !ctx.args[1] ? 'MMMM' : 'MMMM y'
+            ctx.setReturnValue(new SimpleDateFormat(pattern, locale).format(date))
           }`,
       captures: ["selected", "ULocale", "LocaleController", "JDate", "SimpleDateFormat"],
       slots: 1,

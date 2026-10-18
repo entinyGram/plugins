@@ -2867,8 +2867,8 @@ function native() {
     strings: { params: ["java.util.ArrayList"], returns: "java.lang.String[]", body: inu.jvm.routine({
       v: 1,
       source: `
-      function (list: any) {\r
-            return list.toArray(new StringClass('').split(','))\r
+      function (list: any) {
+            return list.toArray(new StringClass('').split(','))
           }`,
       captures: ["StringClass"],
       slots: 0,
@@ -2885,10 +2885,10 @@ function native() {
     scale: { params: ["android.graphics.Matrix"], returns: "float", body: inu.jvm.routine({
       v: 1,
       source: `
-      function (matrix: any) {\r
-            const values = FloatBuffer.allocate(9).array()\r
-            matrix.getValues(values)\r
-            return values[0]\r
+      function (matrix: any) {
+            const values = FloatBuffer.allocate(9).array()
+            matrix.getValues(values)
+            return values[0]
           }`,
       captures: ["FloatBuffer"],
       slots: 0,
@@ -2906,16 +2906,16 @@ function native() {
     invert: { params: [], returns: "android.graphics.ColorMatrixColorFilter", body: inu.jvm.routine({
       v: 1,
       source: `
-      function () {\r
-            const values = FloatBuffer.allocate(20).array()\r
-            values[0] = -1\r
-            values[4] = 255\r
-            values[6] = -1\r
-            values[9] = 255\r
-            values[12] = -1\r
-            values[14] = 255\r
-            values[18] = 1\r
-            return new Filter(new ColorMatrix(values))\r
+      function () {
+            const values = FloatBuffer.allocate(20).array()
+            values[0] = -1
+            values[4] = 255
+            values[6] = -1
+            values[9] = 255
+            values[12] = -1
+            values[14] = 255
+            values[18] = 1
+            return new Filter(new ColorMatrix(values))
           }`,
       captures: ["FloatBuffer", "Filter", "ColorMatrix"],
       slots: 0,
