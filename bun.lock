@@ -56,6 +56,13 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
+    "plugins/features/no-vibration": {
+      "name": "@entiny-plugins/no-vibration",
+      "devDependencies": {
+        "@inugram/cli": "workspace:*",
+        "@inugram/plugin-types": "workspace:*",
+      },
+    },
     "plugins/features/text-animation": {
       "name": "@entiny-plugins/text-animation",
       "devDependencies": {
@@ -148,6 +155,8 @@
     "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/features/doc-viewer"],
 
     "@entiny-plugins/sdk": ["@entiny-plugins/sdk@workspace:plugins/core/sdk"],
+
+    "@entiny-plugins/no-vibration": ["@entiny-plugins/no-vibration@workspace:plugins/features/no-vibration"],
 
     "@entiny-plugins/text-animation": ["@entiny-plugins/text-animation@workspace:plugins/features/text-animation"],
 

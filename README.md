@@ -70,6 +70,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 | [**Doc Viewer**](plugins/features/doc-viewer/) | `entinygram.doc-viewer` | `1.1.0` | `SDK` | In-app viewer for PDF, DOCX, XLSX, text, code, images, archives and more. |
 | [**Call Avatar**](plugins/features/call-avatar/) | `entinygram.call-avatar` | `1.1` | `SDK` | Full-screen caller photo, display timing modes, translucent voice-call buttons, and uk/en/ru settings. |
 | [**Yandex**](plugins/features/yandex/) | `entinygram.yandex` | `1.0.0` | `SDK` | In-app translation via Yandex Cloud Translate v2 and Yandex static map previews. |
+| [**No Vibration**](plugins/features/no-vibration/) | `no-vibration` | `1.0.0` | *None* | Turns off haptics and vibration, including notification vibration. By [@akresik](https://t.me/akresik). |
 
 ---
 
@@ -176,7 +177,7 @@ The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) do
 ```text
 ├── plugins/
 │   ├── core/sdk/          # The entinygram.sdk plugin: settings embedding (not the @entiny/sdk library)
-│   └── features/          # Feature plugins (2gis, calendar-systems, call-avatar, doc-viewer, text-animation, yandex)
+│   └── features/          # Feature plugins (2gis, calendar-systems, call-avatar, doc-viewer, no-vibration, text-animation, yandex)
 ├── sdk/
 │   ├── entiny/            # @entiny/sdk: settings placement, slots, map utilities
 │   ├── cli/               # @inugram/cli tooling
