@@ -1,19 +1,14 @@
 {
   "name": "@entinygram/plugins",
   "version": "1.0.0",
-  "description": "Official plugins, SDK tooling, and community catalog for entinyGram",
+  "description": "Official plugins and SDK tooling for entinyGram",
   "type": "module",
   "private": true,
   "packageManager": "bun@1.3.13",
   "scripts": {
-    "build": "bun run build:plugins",
-    "build:plugins": "bun scripts/build-plugin-index.ts",
+    "build": "bun scripts/pack-release.ts",
     "build:sdk": "bun run --cwd sdk/cli build",
     "generate-slots": "bun scripts/generate-slots.ts",
-    "plugins-index": "bun scripts/build-plugin-index.ts",
-    "pack": "bun scripts/pack-release.ts release",
-    "pack:rebuild": "bun scripts/build-plugin-index.ts --pack=release",
-    "release": "bun scripts/publish-release.ts",
     "inu": "bun --conditions=development sdk/cli/src/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc -b"

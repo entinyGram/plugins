@@ -1,32 +1,38 @@
-// Copies the latest published bundle (or all versions with --all) from plugins/dist into <dir> as
-// entinyGram-<Name>-<version>.inu.js, checking each against its catalog hash. The names match the release links the
-// marketplace uses for the official plugins.
-// The published files are the source of truth (their hashes are in the catalog), so nothing is rebuilt here.
-import { createHash } from 'node:crypto'
-import { copyFileSync, mkdirSync, readFileSync, rmSync } from 'node:fs'
+// Builds every plugin and writes the bundles to release/ as entinyGram-<Name>-<version>.inu.js, ready to post to the plugins channel.
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { packedName } from './pack-name.ts'
 
 const root = join(import.meta.dir, '..')
-const outArg = process.argv.slice(2).find(arg => !arg.startsWith('--')) ?? 'release'
-const out = join(root, outArg)
-const all = process.argv.includes('--all')
-const distDir = join(root, 'plugins')
+const cli = join(root, 'sdk/cli/src/cli.ts')
+const out = join(root, 'release')
+const only = new Set(process.argv.slice(2))
+
+function header(source: string, key: string): string | undefined {
+  for (const line of source.split('\n')) {
+    const m = line.match(/^\/\/\s*@(\S+)\s+(.+)$/)
+    if (m && m[1] === key) return m[2].trim()
+  }
+}
 
 rmSync(out, { recursive: true, force: true })
 mkdirSync(out, { recursive: true })
-let count = 0
-const index = JSON.parse(readFileSync(join(distDir, 'index.json'), 'utf8')) as {
-  plugins: { id: string, name: string, versions: { version: string, file: string, sha256: string }[] }[]
-}
-for (const plugin of index.plugins) {
-  const versions = all ? plugin.versions : (plugin.versions[0] ? [plugin.versions[0]] : [])
-  for (const v of versions) {
-    const source = join(distDir, v.file)
-    const hash = createHash('sha256').update(readFileSync(source)).digest('hex')
-    if (hash !== v.sha256) throw new Error(`${plugin.id} ${v.version}: ${v.file} does not match the catalog hash`)
-    copyFileSync(source, join(out, packedName(plugin.name, v.version)))
-    count++
+
+for (const group of ['core', 'features']) {
+  const base = join(root, 'plugins', group)
+  for (const entry of readdirSync(base, { withFileTypes: true })) {
+    const dir = join(base, entry.name)
+    if (!entry.isDirectory() || !existsSync(join(dir, 'inu.config.ts'))) continue
+    if (only.size > 0 && !only.has(entry.name)) continue
+    const built = Bun.spawnSync(['bun', cli, 'build'], { cwd: dir, stdout: 'pipe', stderr: 'pipe' })
+    if (built.exitCode !== 0) throw new Error(`${entry.name}: build failed\n${built.stderr.toString()}`)
+    for (const file of readdirSync(join(dir, 'dist')).filter(name => name.endsWith('.inu.js'))) {
+      const source = readFileSync(join(dir, 'dist', file), 'utf8')
+      const name = header(source, 'name')
+      const version = header(source, 'version')
+      if (!name || !version) throw new Error(`${entry.name}/${file}: the plugin needs @name and @version`)
+      copyFileSync(join(dir, 'dist', file), join(out, packedName(name, version)))
+      console.log(`${entry.name}: ${packedName(name, version)}`)
+    }
   }
 }
-console.log(`${count} bundles -> ${out}`)

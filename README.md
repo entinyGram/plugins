@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-GPL--2.0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-entinyGram%20Android-purple.svg)](https://github.com/entaytion/entinyGram)
 
-The official plugin catalog, feature plugins, and developer SDK for **[entinyGram](https://github.com/entaytion/entinyGram)**, an advanced Android fork of [Inugram](https://github.com/teidesu/inugram).
+The official feature plugins and developer SDK for **[entinyGram](https://github.com/entaytion/entinyGram)**, an advanced Android fork of [Inugram](https://github.com/teidesu/inugram).
 
 ---
 
@@ -24,7 +24,7 @@ Instead of baking custom functionality directly into the Android application cod
 │        (Lightweight glue layer & install bridge)       │
 ├────────────────────────────────────────────────────────┤
 │               entinyGram SDK Plugin                    │
-│      (entinygram.sdk: Marketplace UI & Embed Engine)   │
+│      (entinygram.sdk: settings embed engine)       │
 ├────────────────────────────────────────────────────────┤
 │                  Feature Plugins                       │
 │  2GIS  │  Calendar Systems  │  Text Animation  │  ...  │
@@ -33,7 +33,7 @@ Instead of baking custom functionality directly into the Android application cod
 
 ### Why this architecture?
 1. **Upstream Maintainability**: Upstream Telegram and Inugram releases can be merged cleanly with minimal patchsets.
-2. **Instant Updates**: Plugins update independently via GitHub and the in-app Marketplace—no APK re-download or reinstall required.
+2. **Instant Updates**: Plugins update independently through the plugin repository built into the app—no APK re-download or reinstall required.
 3. **User Transparency & Choice**: Every plugin explicitly declares its required grants (`fetch`, `unsafe.jvm`, `unsafe.xposed`). Users decide what to run.
 4. **Clean Decoupling**: If a plugin fails or is disabled, the core Telegram client continues to function normally.
 
@@ -49,7 +49,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 ### How the app enforces dependencies:
 - **Installation Guard (`PluginManager.kt:329`)**:
-  When installing a plugin via file, marketplace, or ADB, the app checks `PluginDependencies.unmet(manifest)`. If `entinygram.sdk` is missing, disabled, or outdated, installation is **refused immediately** with an explanatory bulletin:
+  When installing a plugin via file, repository, or ADB, the app checks `PluginDependencies.unmet(manifest)`. If `entinygram.sdk` is missing, disabled, or outdated, installation is **refused immediately** with an explanatory bulletin:
   - *"Needs the plugin entinygram.sdk. Install it first"* (`InuPluginsErrorRequires`)
   - *"Needs entinygram.sdk 0.1.0-alpha or newer"* (`InuPluginsErrorRequiresVersion`)
 - **Runtime Lifecycle Guard**:
@@ -63,7 +63,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 | Plugin | Package ID | Version | Requires | Description |
 | :--- | :--- | :---: | :---: | :--- |
-| [**entinyGram SDK**](plugins/core/marketplace/) | `entinygram.sdk` | `0.1.2-beta` | *None* | In-app Marketplace UI and shared settings embedding engine. |
+| [**entinyGram SDK**](plugins/core/sdk/) | `entinygram.sdk` | `0.4.0` | *None* | Shared settings embedding engine for other plugins. |
 | [**Text Animation**](plugins/features/text-animation/) | `entinygram.text-animation` | `1.0.0` | `SDK` | Fluid typing feedback animations and particle burst effects on backspace/deletion. |
 | [**2GIS**](plugins/features/2gis/) | `entinygram.2gis` | `1.0.0` | `SDK` | High-resolution 2GIS raster map tiles and location preview images (requires API key). |
 | [**Calendar Systems**](plugins/features/calendar-systems/) | `entinygram.calendar-systems` | `1.1.0` | `SDK` | Alternative calendar formatting (Hijri, Persian, Indian, Hebrew, Buddhist, etc.) for dates. |
@@ -75,11 +75,10 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 
 ## Installing Plugins
 
-### 1. In-App Marketplace (Recommended)
-Open **`Settings → Plugins → Marketplace`**.
-- Browse available plugins with live descriptions, version history, and icons, plus community Telegram channels.
-- Tap **Install** or **Update**. The app downloads the script, validates its SHA-256 against the catalog, and prompts you to review the requested grants.
-- On a plugin page, an **About** card shows the description, author, source repository, plugin ID (tap to copy), requirements and the latest version.
+### 1. Plugin Repository (Recommended)
+Open **`Settings → Plugins → Repositories`**. The **@entinyGramPlugins** repository is built in and cannot be removed; any other Telegram channel can be added next to it.
+- Tap a plugin to install it, or **Update** when a newer post is available. The app reviews the requested grants with you before installing.
+- A plugin that needs `entinygram.sdk` installs it first from the same repository.
 
 ### 2. Loading from a File
 Transfer any `.inu.js` file to your Android device and open it via **`Settings → Plugins → Load from file`** or by tapping the file in a chat.
@@ -158,30 +157,25 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 
 ---
 
-## Publishing to the Catalog
+## Publishing
 
 1. Ensure the plugin resides in `plugins/features/<name>` with an `inu.config.ts`, `icon.svg` (24×24 single-color), and `README.md`.
-2. Build and update the catalog:
+2. Build the bundles:
    ```sh
-   bun run build:plugins
+   bun run build
    ```
-   This compiles all plugins into `plugins/dist/<id>/entinyGram-<Name>-<version>.inu.js`, computes their SHA-256 hashes, and refreshes [`plugins/index.json`](plugins/index.json) and [`index.json`](index.json).
-3. Commit and push your changes to GitHub. The in-app marketplace automatically detects published updates.
+   This builds every plugin (or only the ones named, `bun run build 2gis`) into `release/` as `entinyGram-<Name>-<version>.inu.js`.
+3. Post the files to the plugins channel. The in-app repository picks up new posts and offers them as updates.
 
-### Named bundles and the manual workflow
-
-`bun run pack` copies every published bundle as `<Name>-<version>.inu.js` into `release/`, checking each against the catalog hash (`bun run pack:rebuild` builds from source first) (for example `entinyGram-SDK-0.1.2-beta.inu.js`). The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does this on demand: pick one plugin or all of them, and optionally commit the refreshed catalog or publish the bundles as a GitHub release.
+The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does the same on demand and can also publish the bundles as a GitHub release.
 
 ---
 
 ## Repository Structure
 
 ```text
-├── index.json             # Root catalog read by the app (paths relative to root)
 ├── plugins/
-│   ├── index.json         # Catalog for the marketplace (paths relative to plugins/)
-│   ├── dist/              # Published immutable .inu.js release files
-│   ├── core/marketplace/  # The entinygram.sdk plugin: marketplace UI and settings embedding (not the @entiny/sdk library)
+│   ├── core/sdk/          # The entinygram.sdk plugin: settings embedding (not the @entiny/sdk library)
 │   └── features/          # Feature plugins (2gis, calendar-systems, call-avatar, doc-viewer, text-animation, yandex)
 ├── sdk/
 │   ├── entiny/            # @entiny/sdk: settings placement, slots, map utilities
@@ -189,7 +183,7 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
 │   ├── types/             # @inugram/plugin-types typings
 │   └── docs/              # Guides for engine APIs (grants, UI, JVM, Xposed)
 └── scripts/
-    ├── build-plugin-index.ts # Compiles official plugins and regenerates index.json
+    ├── pack-release.ts       # Builds every plugin into release/
     └── generate-slots.ts     # Extracts available settings slots from app strings
 ```
 

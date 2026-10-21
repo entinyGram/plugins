@@ -16,8 +16,8 @@
         "typescript": "^5.9.3",
       },
     },
-    "plugins/core/marketplace": {
-      "name": "@entiny-plugins/marketplace",
+    "plugins/core/sdk": {
+      "name": "@entiny-plugins/sdk",
       "devDependencies": {
         "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
@@ -147,7 +147,7 @@
 
     "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/features/doc-viewer"],
 
-    "@entiny-plugins/marketplace": ["@entiny-plugins/marketplace@workspace:plugins/core/marketplace"],
+    "@entiny-plugins/sdk": ["@entiny-plugins/sdk@workspace:plugins/core/sdk"],
 
     "@entiny-plugins/text-animation": ["@entiny-plugins/text-animation@workspace:plugins/features/text-animation"],
 

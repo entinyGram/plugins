@@ -1,3 +1,9 @@
+## 0.4.0
+
+- the marketplace is gone: plugins come from the app's own plugin repositories, and @entinyGramPlugins is built in
+- the SDK carries only the settings embed engine
+- fewer permissions: only unsafe.jvm and unsafe.xposed
+
 ## 0.3.0
 
 - home opens with a card for the developer's own plugins, "Plugins from the developer", instead of a plain entinyGram header

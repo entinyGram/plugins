@@ -1,33 +1,12 @@
 # entinyGram SDK Plugin
 
-The core foundation plugin providing the **in-app Marketplace**, **dynamic Settings Embedding Engine**, and **dependency anchor** for all entinyGram plugins.
+The core foundation plugin providing the **dynamic Settings Embedding Engine** and the **dependency anchor** for all entinyGram plugins. Plugins are installed from the app's own plugin repositories; this plugin does not carry a store.
 
-`entinygram.sdk` · version `0.3.0` · required by all entinyGram feature plugins
-
----
-
-## Overview
-
-The **entinyGram SDK plugin** is the central component that connects the entinyGram app with its plugin ecosystem:
-
-1. **In-App Marketplace**: A full-featured plugin store interface inside `Settings → Plugins → Marketplace`. Users can browse, search, install, update, and manage versions directly from GitHub.
-2. **Settings Embed Engine**: Dynamically injects plugin controls into Telegram settings screens (inline switches, buttons, and picker radio options) without modifying the Android application binary.
-3. **Dependency Anchor**: Serves as the required runtime (`entinygram.sdk`) for all entinyGram feature plugins.
+`entinygram.sdk` · version `0.4.0` · required by all entinyGram feature plugins
 
 ---
 
-## 1. The In-App Marketplace
-
-Accessible from `Settings → Plugins → Marketplace`.
-
-- **GitHub Catalog Integration**: Fetches `index.json` and SVG icons directly from the official repository (`main` branch, falling back to `dev`).
-- **Integrity Verification**: Verifies SHA-256 hashes of all downloaded `.inu.js` files against the catalog before initiating installation.
-- **Version Management**: Browse all published versions with release dates and changelog notes. Supports clean install, upgrade, downgrade, and reinstallation.
-- **Categorization**: Groups plugins into *Updates available*, *Installed*, and *Available*, with live search and filtering.
-
----
-
-## 2. Dynamic Settings Embedding Engine (`@entiny/sdk/embed`)
+## 1. Dynamic Settings Embedding Engine (`@entiny/sdk/embed`)
 
 Instead of requiring core client modifications to place plugin settings in native Telegram menus, the SDK plugin hooks the root settings fragment (`UniversalFragment`):
 
@@ -50,7 +29,7 @@ Instead of requiring core client modifications to place plugin settings in nativ
 
 ---
 
-## 3. Dependency Enforcement (`@requires entinygram.sdk`)
+## 2. Dependency Enforcement (`@requires entinygram.sdk`)
 
 All entinyGram feature plugins declare:
 ```js
@@ -67,8 +46,7 @@ The app's plugin loader (`PluginDependencies.kt` and `PluginManager.kt`) strictl
 
 | Grant | Purpose |
 | :--- | :--- |
-| `fetch(raw.githubusercontent.com)` | Fetch marketplace catalog (`index.json`), changelogs, and plugin icons. |
-| `unsafe.jvm` | Communicate with the app's internal install bridge and inspect installed plugin status. |
+| `unsafe.jvm` | Reach `UniversalFragment`, the settings cells and the radio picker. |
 | `unsafe.xposed` | Hook `UniversalFragment` and settings adapter routines for dynamic UI embedding. |
 
 ---
