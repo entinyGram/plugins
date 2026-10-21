@@ -7,6 +7,7 @@
     "check": "inu check"
   },
   "devDependencies": {
+    "@entiny/sdk": "workspace:*",
     "@inugram/cli": "workspace:*",
     "@inugram/plugin-types": "workspace:*"
   }

@@ -59,6 +59,7 @@
     "plugins/features/no-vibration": {
       "name": "@entiny-plugins/no-vibration",
       "devDependencies": {
+        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
