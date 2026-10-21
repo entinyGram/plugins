@@ -9,7 +9,7 @@ on:
         default: ''
         type: string
       release:
-        description: 'Also publish the bundles as a GitHub release'
+        description: 'Also put the bundles in the single "plugins" GitHub release (files are replaced, no new release is created)'
         required: false
         default: false
         type: boolean
@@ -53,8 +53,23 @@ jobs:
         if: ${{ inputs.release == true || inputs.release == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: plugins
         run: |
-          tag="plugins-$(date -u +%Y%m%d-%H%M)"
-          gh release create "$tag" release/*.inu.js \
-            --title "$tag" \
-            --notes "Plugin bundles built from ${GITHUB_SHA::7}"
+          notes="Plugin bundles, last built from ${GITHUB_SHA::7}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # a plugin with a new version replaces its old file instead of piling up next to it
+            for file in release/*.inu.js; do
+              keep=$(basename "$file")
+              prefix=$(echo "$keep" | sed -E 's/-[0-9]+\.[0-9][0-9A-Za-z.+-]*\.inu\.js$//')
+              for name in $(gh release view "$TAG" --json assets --jq '.assets[].name'); do
+                old=$(echo "$name" | sed -E 's/-[0-9]+\.[0-9][0-9A-Za-z.+-]*\.inu\.js$//')
+                if [ "$old" = "$prefix" ] && [ "$name" != "$keep" ]; then
+                  gh release delete-asset "$TAG" "$name" --yes
+                fi
+              done
+            done
+            gh release upload "$TAG" release/*.inu.js --clobber
+            gh release edit "$TAG" --notes "$notes"
+          else
+            gh release create "$TAG" release/*.inu.js --title "entinyGram plugins" --notes "$notes"
+          fi

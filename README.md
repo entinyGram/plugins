@@ -168,7 +168,7 @@ Available slot identifiers are cataloged in [`sdk/entiny/slots.json`](sdk/entiny
    This builds every plugin (or only the ones named, `bun run build 2gis`) into `release/` as `entinyGram-<Name>-<version>.inu.js`.
 3. Post the files to the plugins channel. The in-app repository picks up new posts and offers them as updates.
 
-The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does the same on demand and can also publish the bundles as a GitHub release.
+The **Build plugins** workflow (*Actions → Build plugins → Run workflow*) does the same on demand and can also put the bundles in the single `plugins` GitHub release: a plugin with a new version replaces its old file there, and no new release is created.
 
 ---
 
