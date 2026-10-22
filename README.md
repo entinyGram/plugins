@@ -71,6 +71,7 @@ All official feature plugins require the **entinyGram SDK plugin** (`entinygram.
 | [**Call Avatar**](plugins/features/call-avatar/) | `entinygram.call-avatar` | `1.1` | `SDK` | Full-screen caller photo, display timing modes, translucent voice-call buttons, and uk/en/ru settings. |
 | [**Yandex**](plugins/features/yandex/) | `entinygram.yandex` | `1.0.0` | `SDK` | In-app translation via Yandex Cloud Translate v2 and Yandex static map previews. |
 | [**No Vibration**](plugins/features/no-vibration/) | `entinygram.no-vibration` | `1.0.0` | `SDK` | Turns off haptics, vibration and notification vibration, each on its own switch. Based on a plugin by [@akresik](https://t.me/akresik). |
+| [**Registration Date**](plugins/features/reg-date/) | `entinygram.reg-date` | `1.0.0` | *None* | Estimated account registration date in the profile menu. |
 
 ---
 
