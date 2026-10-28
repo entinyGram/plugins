@@ -1,3 +1,7 @@
+## 0.4.1
+
+- fix plugins landing in safe mode (CRASHED): reading the settings strings no longer runs over the routine's execution budget
+
 ## 0.4.0
 
 - the marketplace is gone: plugins come from the app's own plugin repositories, and @entinyGramPlugins is built in

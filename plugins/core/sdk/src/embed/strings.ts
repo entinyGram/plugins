@@ -12,7 +12,8 @@ const StringBuilder: any = inu.jvm.cls('java.lang.StringBuilder')
 const ApplicationLoader: any = inu.jvm.cls('org.telegram.messenger.ApplicationLoader')
 const LocaleController: any = inu.jvm.cls('org.telegram.messenger.LocaleController')
 
-const CHUNK = 500
+const CHUNK = 32
+const MIN_CHUNK = 4
 
 // Class values cannot be reflected over from a plugin, so the strings are walked by resource id instead: the ids
 // of one resource type are consecutive, and the first id that has no entry ends the walk.
@@ -23,20 +24,15 @@ const Indexer: any = inu.jvm.defineClass({
       returns: 'java.lang.String',
       body: inu.jvm.routine(function (res: any, base: any, from: any, to: any) {
         const sb = new StringBuilder()
-        let misses = 0
+        let found = 0
         for (let i = from; i < to; i++) {
           const id = base + i
           let name = null
           try {
             name = res.getResourceEntryName(id)
-            misses = 0
+            found++
           } catch (e) {
-            // ids can have gaps; a long run of them means the type is over
-            misses++
-            if (misses >= 64) {
-              sb.append(END)
-              break
-            }
+            // ids can have gaps
             continue
           }
           if (name.startsWith('Inu') && !name.endsWith('Info')) {
@@ -47,6 +43,8 @@ const Indexer: any = inu.jvm.defineClass({
             }
           }
         }
+        // a chunk with no entry at all means the type is over
+        if (found === 0) sb.append(END)
         return sb.toString()
       }),
     },
@@ -84,8 +82,19 @@ function build(): Map<string, string[]> {
   const base = probe - (probe & 0xffff)
   const indexer = new Indexer()
   const byText = new Map<string, string[]>()
-  for (let from = 0; from < 0x10000; from += CHUNK) {
-    const part = String(indexer.call('build', resources, base, from, from + CHUNK))
+  let from = 0
+  let size = CHUNK
+  while (from < 0x10000) {
+    let part: string
+    try {
+      part = String(indexer.call('build', resources, base, from, from + size))
+    } catch (e) {
+      // the routine has a step budget; a chunk that runs over it is retried in smaller pieces
+      if (size <= MIN_CHUNK) throw e
+      size = Math.max(MIN_CHUNK, size >> 1)
+      continue
+    }
+    from += size
     const ended = part.includes(END)
     for (const row of part.replace(END, '').split(ROW_SEP)) {
       if (!row) continue

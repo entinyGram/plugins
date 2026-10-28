@@ -2,7 +2,7 @@
 
 The core foundation plugin providing the **dynamic Settings Embedding Engine** and the **dependency anchor** for all entinyGram plugins. Plugins are installed from the app's own plugin repositories; this plugin does not carry a store.
 
-`entinygram.sdk` · version `0.4.0` · required by all entinyGram feature plugins
+`entinygram.sdk` · version `0.4.1` · required by all entinyGram feature plugins
 
 ---
 
