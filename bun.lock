@@ -79,6 +79,14 @@
         "@inugram/plugin-types": "workspace:*",
       },
     },
+    "plugins/features/voice-changer": {
+      "name": "@entiny-plugins/voice-changer",
+      "devDependencies": {
+        "@entiny/sdk": "workspace:*",
+        "@inugram/cli": "workspace:*",
+        "@inugram/plugin-types": "workspace:*",
+      },
+    },
     "plugins/features/yandex": {
       "name": "@entiny-plugins/yandex",
       "devDependencies": {
@@ -169,6 +177,8 @@
     "@entiny-plugins/sdk": ["@entiny-plugins/sdk@workspace:plugins/core/sdk"],
 
     "@entiny-plugins/text-animation": ["@entiny-plugins/text-animation@workspace:plugins/features/text-animation"],
+
+    "@entiny-plugins/voice-changer": ["@entiny-plugins/voice-changer@workspace:plugins/features/voice-changer"],
 
     "@entiny-plugins/yandex": ["@entiny-plugins/yandex@workspace:plugins/features/yandex"],
 
