@@ -65,7 +65,7 @@ Select any of the following systems from `Settings → Behavior & Tools → Form
 2. **ICU Localization**:
    Utilizes Android's built-in `android.icu.util.ULocale` with calendar keyword extensions (`@calendar=<id>`), ensuring culturally accurate month and day names matching the user's current app language.
 3. **Settings Integration**:
-   Uses `@entiny/sdk` to insert the **Calendar** selection picker directly into `behavior.formatting`.
+   Uses `@entiny/sdk` to insert the **Calendar** selection picker directly into `chats-messages.formatting`.
 
 ---
 

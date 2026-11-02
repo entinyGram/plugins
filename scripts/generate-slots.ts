@@ -4,8 +4,10 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const rootDir = join(import.meta.dir, '..')
-const settingsDir = join(rootDir, 'src/fork/ui/settings')
-const stringsFile = join(rootDir, 'src/res/values/strings_inu.xml')
+// the app's sources: ../entinyGram, or ENTINY_APP_DIR
+const appDir = process.env.ENTINY_APP_DIR ?? join(rootDir, '../entinyGram')
+const settingsDir = join(appDir, 'src/fork/ui/settings')
+const stringsFile = join(appDir, 'src/res/values/strings_inu.xml')
 
 const kebab = (name: string) => name.replace(/(?<=[a-z0-9])(?=[A-Z])/g, '-').toLowerCase()
 
@@ -34,7 +36,7 @@ for (const file of walk(settingsDir)) {
   const source = readFileSync(file, 'utf8')
   // only screens built on SettingsPageActivity carry the slot hooks
   const decl = source.match(/class\s+(\w+Activity)\b[^{]*:\s*[^{]*SettingsPageActivity\b/)
-  if (!decl || /PluginSettingsActivity/.test(decl[1])) continue
+  if (!decl || /PluginSettingsActivity|SchemaPageActivity/.test(decl[1])) continue
   const pid = pageIdOf(decl[1])
 
   // 1. Sections from asHeader
@@ -72,6 +74,31 @@ for (const file of walk(settingsDir)) {
 
   pages.push({ id: pid, class: decl[1], sections, choices, items })
 }
+
+// Screens declared with `schema("<slug>", ...)` in Schemas.kt: the page id is the slug, sections are `section(R.string.X)`
+// and rows take the name of the first string they use, like the app's EmbedSlots does.
+const slotOf = (name: string): SlotInfo => ({ slot: kebab(name.replace(/^Inu/, '')), string: name, title: english.get(name) ?? name })
+const schemasSource = readFileSync(join(settingsDir, 'Schemas.kt'), 'utf8')
+const schemaStarts = [...schemasSource.matchAll(/\bschema\(\s*"([\w-]+)"/g)]
+schemaStarts.forEach((start, n) => {
+  const body = schemasSource.slice(start.index, schemaStarts[n + 1]?.index ?? schemasSource.length)
+  const sections: SlotInfo[] = []
+  const choices: SlotInfo[] = []
+  const items: SlotInfo[] = []
+  const seen = new Set<string>()
+  for (const m of body.matchAll(/\b(section|toggle|choice|link|group|custom|slider)\(\s*(?:[^()]*?,\s*)??(?:"([\w-]+)"\s*,\s*)?R\.string\.(Inu\w+)/gs)) {
+    const [, kind, slug, name] = m
+    if (seen.has(`${kind}:${name}`) || name.endsWith('Info')) continue
+    seen.add(`${kind}:${name}`)
+    if (kind === 'section') sections.push(slotOf(name))
+    else {
+      items.push(slotOf(name))
+      if (kind === 'choice') choices.push(slotOf(name))
+      if (slug) items.push({ slot: slug, string: name, title: english.get(name) ?? name })
+    }
+  }
+  pages.push({ id: start[1], class: 'Schema', sections, choices, items })
+})
 pages.sort((a, b) => a.id.localeCompare(b.id))
 
 const choiceSlots = pages.flatMap(p => p.choices.map(c => `${p.id}.${c.slot}`))

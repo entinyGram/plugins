@@ -9,6 +9,7 @@
     "build": "bun scripts/pack-release.ts",
     "build:sdk": "bun run --cwd sdk/cli build",
     "generate-slots": "bun scripts/generate-slots.ts",
+    "catalog": "bun scripts/generate-catalog.ts",
     "inu": "bun --conditions=development sdk/cli/src/cli.ts",
     "lint": "eslint .",
     "typecheck": "tsc -b"

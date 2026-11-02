@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- the settings slot follows the new settings structure; needs SDK 0.5.0
+
 ## 1.1.0
 - The plugin page shows a sample rendered with the pattern the profile "registration date" row uses, so profile dates can be checked without opening a profile
 - Registration, join and birthday dates in the profile follow the chosen calendar: they are formatted by the same app formatter the plugin rewrites

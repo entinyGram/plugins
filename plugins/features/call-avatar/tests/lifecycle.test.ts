@@ -22,6 +22,8 @@ test(`photo lifecycle and unload (${lang}, main thread: ${onMainThread})`, () =>
       if (name === 'equals') return this === args[0]
       if (name === 'set') this.fields.value = args[0]
       if (name === 'setColor') this.fields.color = args[0]
+      if (name === 'setCurrentAccount') this.fields.account = args[0]
+      if (name.startsWith('setImage(')) expect(this.fields.account).toBe(fragment.fields.currentAccount)
       if (name === 'getContext') return this
       if (name === 'getParent') return this.parent
       if (name === 'getLayoutParams') return this.fields.params
@@ -58,7 +60,7 @@ test(`photo lifecycle and unload (${lang}, main thread: ${onMainThread})`, () =>
   params.fields.topMargin = 135
   status.fields.params = params
   fragment.fields = {
-    callingUser: user, currentAccount: 0, currentUserIsVideo: false,
+    callingUser: user, currentAccount: 2, currentUserIsVideo: false,
     callingUserIsVideo: false, isFinished: false,
     callingUserPhotoViewMini: mini, voIpCoverView: cover,
     statusLayout: status, lastInsets: null, emojiExpanded: false,
@@ -128,6 +130,7 @@ test(`photo lifecycle and unload (${lang}, main thread: ${onMainThread})`, () =>
   expect(paintFor(new Handle())).toBe(nativePaint)
   expect(parent.children.length).toBe(3)
   expect(parent.children[1]).not.toBe(mini)
+  expect(parent.children[1].children[0].fields.account).toBe(2)
   expect(mini.fields.visibility).toBe(4)
   expect(params.fields.topMargin).toBe(72)
   status.fields.translationY = 147

@@ -126,7 +126,7 @@ function yandexChosen(): boolean {
 embed({
   id: 'entinygram.yandex',
   name: 'Yandex',
-  placements: { inline: [{ slot: 'translate-provider.end', rows: ['key'] }], choice: ['behavior.map-preview-provider'] },
+  placements: { inline: [{ slot: 'translate-provider.end', rows: ['key'] }], choice: ['chats-messages.map-preview-provider'] },
   rows: slot => slot === 'translate-provider.end' && yandexChosen()
     ? [{ id: 'key', type: 'button', text: t('key_title'), value: apiKey() === '' ? t('not_set') : '••••••••' }]
     : [],

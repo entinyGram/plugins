@@ -41,12 +41,16 @@ jobs:
           PLUGIN: ${{ inputs.plugin }}
         run: |
           bun scripts/pack-release.ts $PLUGIN
+          # a build of one plugin has no view of the others, so only a full build writes the catalog
+          if [ -z "$PLUGIN" ]; then bun scripts/generate-catalog.ts; fi
           ls -l release
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: entinygram-plugins
-          path: release/*.inu.js
+          path: |
+            release/*.inu.js
+            release/catalog.json
           if-no-files-found: error
 
       - name: Publish release
@@ -68,8 +72,12 @@ jobs:
                 fi
               done
             done
-            gh release upload "$TAG" release/*.inu.js --clobber
+            files=(release/*.inu.js)
+            [ -f release/catalog.json ] && files+=(release/catalog.json)
+            gh release upload "$TAG" "${files[@]}" --clobber
             gh release edit "$TAG" --notes "$notes"
           else
-            gh release create "$TAG" release/*.inu.js --title "entinyGram plugins" --notes "$notes"
+            files=(release/*.inu.js)
+            [ -f release/catalog.json ] && files+=(release/catalog.json)
+            gh release create "$TAG" "${files[@]}" --title "entinyGram plugins" --notes "$notes"
           fi

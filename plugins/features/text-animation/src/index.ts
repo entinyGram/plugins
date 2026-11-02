@@ -1189,7 +1189,7 @@ embed({
   name: 'Text animation',
   placements: {
     screen: ['category-chats'],
-    inline: [{ slot: 'category-chats.end', rows: ['enable'] }],
+    inline: [{ slot: 'chats-messages.end', rows: ['enable'] }],
   },
   rows: () => [{
     id: 'enable',

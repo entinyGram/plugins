@@ -2,6 +2,10 @@ import type { ChoiceSlot, EntinySlot } from './slots.js'
 
 export type { ChoiceSlot, EntinySlot } from './slots.js'
 export { CHOICE_SLOTS, SLOTS } from './slots.js'
+export type { TagId, TagInfo } from './tags.js'
+export { ALIASES, MAX_TAGS, TAGS, tagOf } from './tags.js'
+import { MAX_TAGS, TAGS } from './tags.js'
+import type { TagId } from './tags.js'
 
 export interface Manifest {
   id?: string
@@ -19,9 +23,9 @@ type Extra = NonNullable<Manifest['extra']>
 
 /** the plugin that carries the SDK: the app honours the directives below only from plugins that require it */
 export const SDK_ID = 'entinygram.sdk'
-export const SDK_VERSION = '0.4.1'
+export const SDK_VERSION = '0.5.0'
 /** the oldest SDK the feature plugins work with; kept apart from SDK_VERSION so an SDK release does not republish them */
-export const SDK_MIN_VERSION = '0.1.0-alpha'
+export const SDK_MIN_VERSION = '0.5.0'
 
 /**
  * Adds `extra` to a manifest together with `@requires entinygram.sdk`, so the plugin cannot be installed or run
@@ -103,4 +107,13 @@ export function withEntinyInline(manifest: Manifest, ...slots: Array<EntinySlot 
 /** shorthand for choice options in radio/modal pickers */
 export function withEntinyChoice(manifest: Manifest, ...choices: ChoicePlacement[]): Manifest {
   return withEntiny(manifest, { choice: choices })
+}
+
+/** files the plugin in the Market: the first tag is the main one, up to four in all */
+export function withTags(manifest: Manifest, ...tags: TagId[]): Manifest {
+  const known = new Set<string>(TAGS.map(tag => tag.id))
+  const unique = [...new Set(tags)]
+  if (unique.length === 0 || unique.length > MAX_TAGS) throw new Error(`a plugin takes 1 to ${MAX_TAGS} tags, got ${unique.length}`)
+  for (const tag of unique) if (!known.has(tag)) throw new Error(`unknown tag ${tag}`)
+  return { ...manifest, extra: { ...manifest.extra, 'entiny-tags': unique.join(' ') } }
 }

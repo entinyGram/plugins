@@ -88,7 +88,7 @@ All settings can be configured via `Settings → Chats` (at the bottom of the se
 ## Dependency on entinyGram SDK
 
 Text Animation requires the **entinyGram SDK** (`entinygram.sdk >=0.1.0-alpha`):
-- Uses `@entiny/sdk` to inject its settings entry directly into `Settings → Chats` (`category-chats.end`).
+- Uses `@entiny/sdk` to inject its settings entry directly into `Settings → Chats` (`chats-messages.end`).
 - If `entinygram.sdk` is missing or disabled, entinyGram blocks installation with an error and will not run the plugin until the SDK is present.
 
 ---

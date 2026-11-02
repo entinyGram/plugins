@@ -6,10 +6,9 @@
 
 import { embedKeys, embedRegistry } from '@entiny/sdk/embed'
 import type { EmbedChoice, EmbedPlacements, EmbedRow } from '@entiny/sdk/embed'
-import { kebab, slotsFor, warmUp } from './strings.js'
 
-const FIELD_SEP = '\u0001\u0001'
-const ROW_SEP = '\u0002\u0002'
+const FIELD_SEP = '\u0001'
+const ITEM_SEP = '\u0002'
 // at most this many rows of one plugin in one slot, so a plugin cannot bury a screen
 const MAX_ROWS = 4
 
@@ -20,34 +19,46 @@ const VIEW_TYPE_CUSTOM_SHADOW = -4
 const UItem: any = inu.jvm.cls('org.telegram.ui.Components.UItem')
 const UniversalFragment: any = inu.jvm.cls('org.telegram.ui.Components.UniversalFragment')
 const ArrayCls: any = inu.jvm.cls('java.lang.reflect.Array')
-const StringBuilder: any = inu.jvm.cls('java.lang.StringBuilder')
+const EmbedSlots: any = inu.jvm.cls('desu.inugram.helpers.plugins.EmbedSlots')
 const ButtonCell: any = inu.jvm.cls('desu.inugram.ui.settings.ButtonCellFactory').getStaticField('Companion')
 const CheckCell: any = inu.jvm.cls('desu.inugram.ui.settings.CheckCellFactory').getStaticField('Companion')
 const ICON_CUSTOMIZE: number = inu.jvm.cls('org.telegram.messenger.R$drawable').getStaticField('msg_customize')
 
-// the page name and, per item, its view type and text, in one pass through Java
-const Dumper: any = inu.jvm.defineClass({
-  methods: {
-    dump: {
-      params: ['java.lang.Object', 'java.util.ArrayList'],
-      returns: 'java.lang.String',
-      body: inu.jvm.routine(function (fragment: any, items: any) {
-        const sb = new StringBuilder()
-        // Object.toString is `package.Class@hash`; a Class value inside a routine is a class reference, not an object
-        sb.append(fragment.toString()).append(ROW_SEP)
-        for (const it of items) {
-          // a number is ambiguous for StringBuilder.append inside a routine; a string is not
-          sb.append('' + it.viewType).append(FIELD_SEP).append('' + it.id).append(FIELD_SEP)
-          const text = it.text
-          if (text !== null) sb.append(text.toString())
-          sb.append(ROW_SEP)
-        }
-        return sb.toString()
-      }),
-    },
-  },
-})
-const dumper: any = new Dumper()
+interface Entry {
+  type: number
+  id: number
+  /** the names the app gives this row, without the page */
+  names: string[]
+}
+
+interface Screen {
+  /** the page ids of the screen, the main one first, then the names older plugins know it by */
+  pages: string[]
+  entries: Entry[]
+}
+
+/** the app tells which page this is and which slots its rows have, so nothing is read back from texts */
+function describe(fragment: any, items: any): Screen {
+  const [pages, ...rest] = String(EmbedSlots.callStatic('describe', fragment, items)).split(ITEM_SEP)
+  const entries = rest.map((line) => {
+    const [type, id, names] = line.split(FIELD_SEP)
+    return { type: Number(type), id: Number(id), names: names ? names.split(',') : [] }
+  })
+  return { pages: pages.split(','), entries }
+}
+
+function pagesOf(fragment: any): string[] {
+  return String(EmbedSlots.callStatic('pages', fragment)).split(',')
+}
+
+/** `<page>.<name>` for every page the screen goes by */
+function slotsAt(pages: string[], names: string[]): string[] {
+  return pages.flatMap(page => names.map(name => `${page}.${name}`))
+}
+
+function onPage(pages: string[], slot: string): boolean {
+  return pages.some(page => slot.startsWith(`${page}.`))
+}
 
 interface Registration {
   id: string
@@ -82,11 +93,6 @@ function idOf(pluginId: string, rowId: string): number {
   let h = 5381
   for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0
   return 0x40000000 | (h & 0x3fffffff)
-}
-
-function pageIdOf(simpleName: string): string {
-  const name = simpleName.replace(/Activity$/, '').replace(/Settings$/, '')
-  return name === 'Inu' ? 'root' : kebab(name)
 }
 
 function registrations(): Registration[] {
@@ -134,16 +140,16 @@ function choicesAt(slot: string): ChoiceAt[] {
 // into other plugins (that ends its view of the call's arguments), so it reads what the last build found.
 const choiceCache = new Map<string, ChoiceAt[]>()
 
-function refreshChoices(page: string, regs: Registration[]): void {
+function refreshChoices(pages: string[], regs: Registration[]): void {
   const slots = new Set<string>()
-  for (const reg of regs) for (const slot of reg.placements.choice ?? []) if (slot.startsWith(`${page}.`)) slots.add(slot)
+  for (const reg of regs) for (const slot of reg.placements.choice ?? []) if (onPage(pages, slot)) slots.add(slot)
   for (const slot of slots) choiceCache.set(slot, choicesAt(slot))
 }
 
-function wantedSlots(regs: Registration[], page: string): Map<string, Insert[]> {
+function wantedSlots(regs: Registration[], pages: string[]): Map<string, Insert[]> {
   const wants = new Map<string, Insert[]>()
   const add = (slot: string, insert: Insert) => {
-    if (!slot.startsWith(`${page}.`)) return
+    if (!onPage(pages, slot)) return
     const list = wants.get(slot) ?? []
     list.push(insert)
     wants.set(slot, list)
@@ -190,7 +196,7 @@ interface Op {
   add: any[]
 }
 
-function plan(page: string, entries: Array<{ type: number, id: number, text: string }>, wants: Map<string, Insert[]>): Op[] {
+function plan(pages: string[], entries: Entry[], wants: Map<string, Insert[]>): Op[] {
   const ops: Op[] = []
   const get = (slot: string): Insert[] => wants.get(slot) ?? []
   const rowsOf = (inserts: Insert[]): any[] => {
@@ -202,11 +208,9 @@ function plan(page: string, entries: Array<{ type: number, id: number, text: str
       return true
     }).flatMap(build)
   }
-  const slotsAt = (text: string): string[] => (text ? slotsFor(text).map(s => `${page}.${s}`) : [])
-
   let section: string[] = []
   entries.forEach((entry, i) => {
-    const slots = slotsAt(entry.text)
+    const slots = slotsAt(pages, entry.names)
     const isHeader = entry.type === VIEW_TYPE_HEADER
     const isShadow = entry.type === VIEW_TYPE_SHADOW || entry.type === VIEW_TYPE_CUSTOM_SHADOW
 
@@ -239,7 +243,7 @@ function plan(page: string, entries: Array<{ type: number, id: number, text: str
     const end = rowsOf(section.flatMap(s => [...get(s), ...get(`${s}.end`)]))
     if (end.length) ops.push({ index: entries.length, remove: 0, add: end })
   }
-  const tail = rowsOf(get(`${page}.end`))
+  const tail = rowsOf(pages.flatMap(page => get(`${page}.end`)))
   if (tail.length) {
     ops.push({
       index: entries.length,
@@ -253,26 +257,21 @@ function plan(page: string, entries: Array<{ type: number, id: number, text: str
 function fill(fragment: any, items: any): void {
   const regs = registrations()
   if (regs.length === 0) return
-  const lines = String(dumper.call('dump', fragment, items)).split(ROW_SEP)
-  const page = pageIdOf(lines[0].split('@')[0].split('.').pop() ?? '')
-  refreshChoices(page, regs)
-  const wants = wantedSlots(regs, page)
-  if (wants.size === 0 && !regs.some(reg => (reg.placements.choice ?? []).some(slot => slot.startsWith(`${page}.`)))) return
-  const entries = lines.slice(1).filter(line => line !== '').map((line) => {
-    const [type, id, text] = line.split(FIELD_SEP)
-    return { type: Number(type), id: Number(id), text: text ?? '' }
-  })
+  const { pages, entries } = describe(fragment, items)
+  refreshChoices(pages, regs)
+  const wants = wantedSlots(regs, pages)
+  if (wants.size === 0 && !regs.some(reg => (reg.placements.choice ?? []).some(slot => onPage(pages, slot)))) return
   // the screen's own override and the base class both run this hook; the second one finds our rows already there
   if (entries.some(entry => owned.has(entry.id))) return
   // a row that opens a picker shows the plugin's option when that one is the chosen one
   entries.forEach((entry, i) => {
-    for (const slot of entry.text ? slotsFor(entry.text).map(s => `${page}.${s}`) : []) {
+    for (const slot of slotsAt(pages, entry.names)) {
       const active = (choiceCache.get(slot) ?? []).find(c => c.choice.checked)
       if (active) items.call('get(I)Ljava/lang/Object;', i).setField('textValue', active.choice.title)
     }
   })
   // from the end, so the earlier positions stay valid
-  const ops = plan(page, entries, wants).sort((a, b) => b.index - a.index)
+  const ops = plan(pages, entries, wants).sort((a, b) => b.index - a.index)
   for (const op of ops) {
     if (op.remove) items.call('remove(I)Ljava/lang/Object;', op.index)
     op.add.forEach((row, n) => items.call('add(ILjava/lang/Object;)V', op.index + n, row))
@@ -390,11 +389,9 @@ function pickerSlots(fragment: any, anchor: any): string[] {
   const position: number = getChildAdapterPosition.invoke(listView, anchor)
   if (position < 0) return []
   const item: any = listView.getField('adapter').call('getItem', position)
-  const text: any = item === null ? null : item.getField('text')
-  if (text === null) return []
-  const className = String(dumper.call('dump', fragment, emptyItems)).split(ROW_SEP)[0]
-  const page = pageIdOf(className.split('@')[0].split('.').pop() ?? '')
-  return slotsFor(String(text)).map(s => `${page}.${s}`)
+  if (item === null) return []
+  const names = String(EmbedSlots.callStatic('slotsOfId', fragment, item.getField('id')))
+  return names === '' ? [] : slotsAt(pagesOf(fragment), names.split(','))
 }
 
 // An argument the hook replaces has to be an object that outlives the hook: whatever is created inside it is
@@ -403,7 +400,6 @@ function pickerSlots(fragment: any, anchor: any): string[] {
 const JSystem: any = inu.jvm.cls('java.lang.System')
 const sharedItems: any = new JArrayList()
 const sharedPick: any = new Pick()
-const emptyItems: any = new JArrayList()
 
 function hookPickers(): void {
   const hook = (descriptor: string, slotIndex: number) => {
@@ -420,12 +416,11 @@ function hookPickers(): void {
         if (choiceCache.size === 0) return
         const fragment: any = ctx.args[0]
         if (!UniversalFragment.isInstance(fragment)) return
-        const className = String(dumper.call('dump', fragment, emptyItems)).split(ROW_SEP)[0]
-        const page = pageIdOf(className.split('@')[0].split('.').pop() ?? '')
-        if (page === 'plugin-settings') return
+        const pages = pagesOf(fragment)
+        if (pages.includes('plugin')) return
         let hasChoices = false
         for (const k of choiceCache.keys()) {
-          if (k.startsWith(`${page}.`)) { hasChoices = true; break }
+          if (onPage(pages, k)) { hasChoices = true; break }
         }
         if (!hasChoices) return
 
@@ -605,13 +600,6 @@ export function startEmbedEngine(): EmbedEngine {
   })
   const changed: any = new Changed()
   embedRegistry().call('put', embedKeys.changed, changed)
-  setTimeout(() => {
-    try {
-      warmUp()
-      refresh()
-    } catch (e) {
-      console.warn('embed: could not read the settings strings', e)
-    }
-  }, 0)
+  setTimeout(refresh, 0)
   return { hooked: true }
 }

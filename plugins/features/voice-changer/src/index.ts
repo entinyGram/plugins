@@ -151,7 +151,7 @@ const scopeTitles = (): string[] => SCOPES.map(id => t(id as StringKey))
 embed({
   id: 'entinygram.voice-changer',
   name: 'Voice Changer',
-  placements: { inline: [{ slot: 'behavior.calls-section.end', rows: ['preset', 'scope'] }] },
+  placements: { inline: [{ slot: 'profile-accounts.calls-section.end', rows: ['preset', 'scope'] }] },
   rows: () => [{
     id: 'preset',
     type: 'select',

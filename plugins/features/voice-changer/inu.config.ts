@@ -1,16 +1,16 @@
 import { defineConfig } from '@inugram/cli'
-import { withEntiny } from '@entiny/sdk'
+import { withEntiny, withTags } from '@entiny/sdk'
 
 export default defineConfig({
   plugins: {
     'voice-changer': {
       entry: 'src/index.ts',
-      manifest: withEntiny(
+      manifest: withTags(withEntiny(
         {
           id: 'entinygram.voice-changer',
           name: 'Voice Changer',
           author: 'entinyGram',
-          version: '0.1.0',
+          version: '0.1.1',
           description: {
             en: 'Changes your voice in voice messages, video messages and calls',
             uk: 'Змінює ваш голос у голосових, відеоповідомленнях і дзвінках',
@@ -19,8 +19,8 @@ export default defineConfig({
           icon: 'inu://mute',
           grants: ['unsafe.jvm', 'unsafe.xposed'],
         },
-        { inline: [{ slot: 'behavior.calls-section.end', rows: ['preset', 'scope'] }] },
-      ),
+        { inline: [{ slot: 'profile-accounts.calls-section.end', rows: ['preset', 'scope'] }] },
+      ), 'media', 'calls'),
     },
   },
 })

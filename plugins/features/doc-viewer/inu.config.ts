@@ -1,11 +1,11 @@
 import { defineConfig } from '@inugram/cli'
-import { withEntiny } from '@entiny/sdk'
+import { withEntiny, withTags } from '@entiny/sdk'
 
 export default defineConfig({
   plugins: {
     'doc-viewer': {
       entry: 'src/index.ts',
-      manifest: withEntiny(
+      manifest: withTags(withEntiny(
         {
           id: 'entinygram.doc-viewer',
           name: 'Doc Viewer',
@@ -18,7 +18,7 @@ export default defineConfig({
         {
           screen: ['category-chats'],
         },
-      ),
+      ), 'media', 'tools'),
     },
   },
 })

@@ -139,10 +139,10 @@ inu.registerSettings(page)
 embed({
   id: 'entinygram.2gis',
   name: '2GIS',
-  placements: { choice: ['behavior.map-provider', 'behavior.map-preview-provider'] },
+  placements: { choice: ['chats-messages.map-provider', 'chats-messages.map-preview-provider'] },
   rows: () => [],
   onEvent: () => {},
-  choices: slot => slot === 'behavior.map-provider'
+  choices: slot => slot === 'chats-messages.map-provider'
     ? [{ id: 'tiles', title: t('tiles_title'), subtitle: t('tiles_desc'), checked: tilesOn }]
     : [{ id: 'maps', title: t('maps_title'), subtitle: t('maps_choice_desc'), checked: useMaps.call('get') }],
   onChoice: (id, picked) => {

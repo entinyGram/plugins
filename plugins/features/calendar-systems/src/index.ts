@@ -162,7 +162,7 @@ function profilePattern(): string {
 embed({
   id: 'entinygram.calendar-systems',
   name: 'Calendar systems',
-  placements: { inline: [{ slot: 'behavior.formatting', rows: ['calendar'] }] },
+  placements: { inline: [{ slot: 'chats-messages.formatting', rows: ['calendar'] }] },
   rows: () => [{
     id: 'calendar',
     type: 'select',

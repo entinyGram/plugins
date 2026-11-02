@@ -60,7 +60,7 @@ A 2GIS API key is required for map tiles and preview requests:
 2. **Preview Hook via Java Routine**:
    The plugin hooks `AndroidUtilities.formapMapUrl` using `inu.xposed.routine(...)`. Routines execute directly in native Java on the caller thread without waking the QuickJS engine, ensuring immediate URL resolution with zero thread contention.
 3. **Settings Embedding**:
-   Uses `@entiny/sdk/embed` to insert radio choices into `behavior.map-provider` and `behavior.map-preview-provider`.
+   Uses `@entiny/sdk/embed` to insert radio choices into `chats-messages.map-provider` and `chats-messages.map-preview-provider`.
 
 ---
 

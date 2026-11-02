@@ -1,11 +1,11 @@
 import { defineConfig } from '@inugram/cli'
-import { withEntiny } from '@entiny/sdk'
+import { withEntiny, withTags } from '@entiny/sdk'
 
 export default defineConfig({
   plugins: {
     'call-avatar': {
       entry: 'src/index.ts',
-      manifest: withEntiny({
+      manifest: withTags(withEntiny({
         id: 'entinygram.call-avatar',
         name: 'Call avatar',
         author: 'entinyGram',
@@ -13,7 +13,7 @@ export default defineConfig({
         description: 'Full-screen caller photo instead of the circular avatar in voice calls',
         icon: 'inu://photo',
         grants: ['unsafe.jvm', 'unsafe.xposed'],
-      }, {}),
+      }, {}), 'calls', 'ui'),
     },
   },
 })

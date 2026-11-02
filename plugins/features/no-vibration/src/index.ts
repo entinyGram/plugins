@@ -57,7 +57,7 @@ for (const f of failed) console.log(`  skipped ${f}`)
 embed({
   id: 'entinygram.no-vibration',
   name: 'No Vibration',
-  placements: { inline: [{ slot: 'behavior.device-section.end', rows: KINDS }] },
+  placements: { inline: [{ slot: 'system.device-section.end', rows: KINDS }] },
   rows: () => KINDS.map(kind => ({
     id: kind,
     type: 'check' as const,

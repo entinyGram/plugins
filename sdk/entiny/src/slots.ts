@@ -3,44 +3,48 @@
 /** choice options in a radio/modal picker list: `<screen>.<button-name>` */
 export type ChoiceSlot =
   | 'appearance.predictive-back'
-  | 'behavior.profile-id-mode'
-  | 'behavior.download-directory'
-  | 'behavior.clock-format'
-  | 'behavior.map-provider'
-  | 'behavior.map-preview-provider'
-  | 'dialogs.show-on-tabs'
+  | 'camera-sound.attach-camera-mode'
+  | 'camera-sound.round-default-camera'
+  | 'camera-sound.round-audio-bitrate'
+  | 'camera-sound.round-audio-source'
+  | 'chats-messages.map-provider'
+  | 'chats-messages.map-preview-provider'
+  | 'chats-messages.text-spoiler-mode'
+  | 'chats-messages.media-spoiler-mode'
+  | 'chats-messages.blocked-messages-mode'
+  | 'chats-messages.clown-avatar-emoji'
+  | 'chats-messages.clock-format'
   | 'dialogs.folders-unread-counter'
-  | 'dialogs.title-text'
   | 'ghost-mode.ghost-presence-mode'
+  | 'home.recent-chats-style'
   | 'message-design.sticker-time-mode'
   | 'message-design.forward-header-mode'
-  | 'messages.clown-avatar-emoji'
-  | 'messages.media-spoiler-mode'
-  | 'messages.text-spoiler-mode'
-  | 'messages.blocked-messages-mode'
-  | 'recent-chats.recent-chats-style'
-  | 'recent-chats.recent-chats-limit'
+  | 'message-design.edited-message-date-mode'
+  | 'plugin-repo.plugin-repo-sort'
+  | 'profile-accounts.profile-id-mode'
   | 'regex-filter.regex-filter-mode'
 
 export const CHOICE_SLOTS: readonly ChoiceSlot[] = [
   'appearance.predictive-back',
-  'behavior.profile-id-mode',
-  'behavior.download-directory',
-  'behavior.clock-format',
-  'behavior.map-provider',
-  'behavior.map-preview-provider',
-  'dialogs.show-on-tabs',
+  'camera-sound.attach-camera-mode',
+  'camera-sound.round-default-camera',
+  'camera-sound.round-audio-bitrate',
+  'camera-sound.round-audio-source',
+  'chats-messages.map-provider',
+  'chats-messages.map-preview-provider',
+  'chats-messages.text-spoiler-mode',
+  'chats-messages.media-spoiler-mode',
+  'chats-messages.blocked-messages-mode',
+  'chats-messages.clown-avatar-emoji',
+  'chats-messages.clock-format',
   'dialogs.folders-unread-counter',
-  'dialogs.title-text',
   'ghost-mode.ghost-presence-mode',
+  'home.recent-chats-style',
   'message-design.sticker-time-mode',
   'message-design.forward-header-mode',
-  'messages.clown-avatar-emoji',
-  'messages.media-spoiler-mode',
-  'messages.text-spoiler-mode',
-  'messages.blocked-messages-mode',
-  'recent-chats.recent-chats-style',
-  'recent-chats.recent-chats-limit',
+  'message-design.edited-message-date-mode',
+  'plugin-repo.plugin-repo-sort',
+  'profile-accounts.profile-id-mode',
   'regex-filter.regex-filter-mode',
 ]
 
@@ -53,12 +57,14 @@ export type EntinySlot =
   | 'additional.logs'
   | 'additional.logs.start'
   | 'additional.logs.end'
-  | 'additional.push-header'
-  | 'additional.push-header.start'
-  | 'additional.push-header.end'
-  | 'additional.data-backup'
-  | 'additional.data-backup.start'
-  | 'additional.data-backup.end'
+  | 'additional.about-channel'
+  | 'additional.about-channel.before'
+  | 'additional.about-channel.after'
+  | 'additional.about-channel.replace'
+  | 'additional.about-git-hub'
+  | 'additional.about-git-hub.before'
+  | 'additional.about-git-hub.after'
+  | 'additional.about-git-hub.replace'
   | 'additional.donate-row'
   | 'additional.donate-row.before'
   | 'additional.donate-row.after'
@@ -75,46 +81,14 @@ export type EntinySlot =
   | 'additional.updates-include-beta.before'
   | 'additional.updates-include-beta.after'
   | 'additional.updates-include-beta.replace'
-  | 'additional.force-no-vibration'
-  | 'additional.force-no-vibration.before'
-  | 'additional.force-no-vibration.after'
-  | 'additional.force-no-vibration.replace'
   | 'additional.logs-enabled'
   | 'additional.logs-enabled.before'
   | 'additional.logs-enabled.after'
   | 'additional.logs-enabled.replace'
-  | 'additional.unified-push'
-  | 'additional.unified-push.before'
-  | 'additional.unified-push.after'
-  | 'additional.unified-push.replace'
-  | 'additional.background-service'
-  | 'additional.background-service.before'
-  | 'additional.background-service.after'
-  | 'additional.background-service.replace'
-  | 'additional.background-service-hide-notification'
-  | 'additional.background-service-hide-notification.before'
-  | 'additional.background-service-hide-notification.after'
-  | 'additional.background-service-hide-notification.replace'
-  | 'additional.unified-push-distributor'
-  | 'additional.unified-push-distributor.before'
-  | 'additional.unified-push-distributor.after'
-  | 'additional.unified-push-distributor.replace'
-  | 'additional.unified-push-gateway'
-  | 'additional.unified-push-gateway.before'
-  | 'additional.unified-push-gateway.after'
-  | 'additional.unified-push-gateway.replace'
-  | 'additional.cloud-sync'
-  | 'additional.cloud-sync.before'
-  | 'additional.cloud-sync.after'
-  | 'additional.cloud-sync.replace'
-  | 'additional.cache-management'
-  | 'additional.cache-management.before'
-  | 'additional.cache-management.after'
-  | 'additional.cache-management.replace'
-  | 'additional.datacenter-status'
-  | 'additional.datacenter-status.before'
-  | 'additional.datacenter-status.after'
-  | 'additional.datacenter-status.replace'
+  | 'additional.logs-redact'
+  | 'additional.logs-redact.before'
+  | 'additional.logs-redact.after'
+  | 'additional.logs-redact.replace'
   | 'additional.end'
   | 'ai.ai-features'
   | 'ai.ai-features.start'
@@ -298,6 +272,9 @@ export type EntinySlot =
   | 'annoyances.annoyances-chats'
   | 'annoyances.annoyances-chats.start'
   | 'annoyances.annoyances-chats.end'
+  | 'annoyances.customize-messages'
+  | 'annoyances.customize-messages.start'
+  | 'annoyances.customize-messages.end'
   | 'annoyances.annoyances-stories'
   | 'annoyances.annoyances-stories.start'
   | 'annoyances.annoyances-stories.end'
@@ -307,6 +284,9 @@ export type EntinySlot =
   | 'annoyances.annoyances-gifts'
   | 'annoyances.annoyances-gifts.start'
   | 'annoyances.annoyances-gifts.end'
+  | 'annoyances.annoyances-premium'
+  | 'annoyances.annoyances-premium.start'
+  | 'annoyances.annoyances-premium.end'
   | 'annoyances.annoyances-interface'
   | 'annoyances.annoyances-interface.start'
   | 'annoyances.annoyances-interface.end'
@@ -319,10 +299,26 @@ export type EntinySlot =
   | 'annoyances.annoyances-hints'
   | 'annoyances.annoyances-hints.start'
   | 'annoyances.annoyances-hints.end'
+  | 'annoyances.hide-bottom-bar'
+  | 'annoyances.hide-bottom-bar.before'
+  | 'annoyances.hide-bottom-bar.after'
+  | 'annoyances.hide-bottom-bar.replace'
+  | 'annoyances.hide-bottom-bar'
+  | 'annoyances.hide-bottom-bar.before'
+  | 'annoyances.hide-bottom-bar.after'
+  | 'annoyances.hide-bottom-bar.replace'
   | 'annoyances.hide-join-bar'
   | 'annoyances.hide-join-bar.before'
   | 'annoyances.hide-join-bar.after'
   | 'annoyances.hide-join-bar.replace'
+  | 'annoyances.hide-bot-slash'
+  | 'annoyances.hide-bot-slash.before'
+  | 'annoyances.hide-bot-slash.after'
+  | 'annoyances.hide-bot-slash.replace'
+  | 'annoyances.hide-bot-slash'
+  | 'annoyances.hide-bot-slash.before'
+  | 'annoyances.hide-bot-slash.after'
+  | 'annoyances.hide-bot-slash.replace'
   | 'annoyances.hide-bot-web-view'
   | 'annoyances.hide-bot-web-view.before'
   | 'annoyances.hide-bot-web-view.after'
@@ -339,6 +335,18 @@ export type EntinySlot =
   | 'annoyances.hide-reaction-entry.before'
   | 'annoyances.hide-reaction-entry.after'
   | 'annoyances.hide-reaction-entry.replace'
+  | 'annoyances.hide-reply-background'
+  | 'annoyances.hide-reply-background.before'
+  | 'annoyances.hide-reply-background.after'
+  | 'annoyances.hide-reply-background.replace'
+  | 'annoyances.disable-reply-custom-colors'
+  | 'annoyances.disable-reply-custom-colors.before'
+  | 'annoyances.disable-reply-custom-colors.after'
+  | 'annoyances.disable-reply-custom-colors.replace'
+  | 'annoyances.hide-reply-background-emoji'
+  | 'annoyances.hide-reply-background-emoji.before'
+  | 'annoyances.hide-reply-background-emoji.after'
+  | 'annoyances.hide-reply-background-emoji.replace'
   | 'annoyances.hide-stories'
   | 'annoyances.hide-stories.before'
   | 'annoyances.hide-stories.after'
@@ -355,14 +363,6 @@ export type EntinySlot =
   | 'annoyances.hide-profile-menu-archived-stories.before'
   | 'annoyances.hide-profile-menu-archived-stories.after'
   | 'annoyances.hide-profile-menu-archived-stories.replace'
-  | 'annoyances.hide-premium-badge'
-  | 'annoyances.hide-premium-badge.before'
-  | 'annoyances.hide-premium-badge.after'
-  | 'annoyances.hide-premium-badge.replace'
-  | 'annoyances.hide-collectible-status'
-  | 'annoyances.hide-collectible-status.before'
-  | 'annoyances.hide-collectible-status.after'
-  | 'annoyances.hide-collectible-status.replace'
   | 'annoyances.hide-stars-rating'
   | 'annoyances.hide-stars-rating.before'
   | 'annoyances.hide-stars-rating.after'
@@ -391,6 +391,18 @@ export type EntinySlot =
   | 'annoyances.disable-profile-music-autoplay.before'
   | 'annoyances.disable-profile-music-autoplay.after'
   | 'annoyances.disable-profile-music-autoplay.replace'
+  | 'annoyances.disable-next-audio-preload'
+  | 'annoyances.disable-next-audio-preload.before'
+  | 'annoyances.disable-next-audio-preload.after'
+  | 'annoyances.disable-next-audio-preload.replace'
+  | 'annoyances.disable-next-music-autoplay'
+  | 'annoyances.disable-next-music-autoplay.before'
+  | 'annoyances.disable-next-music-autoplay.after'
+  | 'annoyances.disable-next-music-autoplay.replace'
+  | 'annoyances.disable-next-voice-autoplay'
+  | 'annoyances.disable-next-voice-autoplay.before'
+  | 'annoyances.disable-next-voice-autoplay.after'
+  | 'annoyances.disable-next-voice-autoplay.replace'
   | 'annoyances.hide-profile-gifts-tab'
   | 'annoyances.hide-profile-gifts-tab.before'
   | 'annoyances.hide-profile-gifts-tab.after'
@@ -415,14 +427,18 @@ export type EntinySlot =
   | 'annoyances.hide-gift-auctions-hint.before'
   | 'annoyances.hide-gift-auctions-hint.after'
   | 'annoyances.hide-gift-auctions-hint.replace'
-  | 'annoyances.hide-paid-reaction-upsell'
-  | 'annoyances.hide-paid-reaction-upsell.before'
-  | 'annoyances.hide-paid-reaction-upsell.after'
-  | 'annoyances.hide-paid-reaction-upsell.replace'
   | 'annoyances.hide-giveaways'
   | 'annoyances.hide-giveaways.before'
   | 'annoyances.hide-giveaways.after'
   | 'annoyances.hide-giveaways.replace'
+  | 'annoyances.hide-premium-badge'
+  | 'annoyances.hide-premium-badge.before'
+  | 'annoyances.hide-premium-badge.after'
+  | 'annoyances.hide-premium-badge.replace'
+  | 'annoyances.hide-collectible-status'
+  | 'annoyances.hide-collectible-status.before'
+  | 'annoyances.hide-collectible-status.after'
+  | 'annoyances.hide-collectible-status.replace'
   | 'annoyances.hide-attach-premium-badges'
   | 'annoyances.hide-attach-premium-badges.before'
   | 'annoyances.hide-attach-premium-badges.after'
@@ -435,6 +451,10 @@ export type EntinySlot =
   | 'annoyances.hide-caption-limit-upsell.before'
   | 'annoyances.hide-caption-limit-upsell.after'
   | 'annoyances.hide-caption-limit-upsell.replace'
+  | 'annoyances.hide-paid-reaction-upsell'
+  | 'annoyances.hide-paid-reaction-upsell.before'
+  | 'annoyances.hide-paid-reaction-upsell.after'
+  | 'annoyances.hide-paid-reaction-upsell.replace'
   | 'annoyances.hide-trending-stickers'
   | 'annoyances.hide-trending-stickers.before'
   | 'annoyances.hide-trending-stickers.after'
@@ -467,6 +487,22 @@ export type EntinySlot =
   | 'annoyances.hide-psa-promo-chat.before'
   | 'annoyances.hide-psa-promo-chat.after'
   | 'annoyances.hide-psa-promo-chat.replace'
+  | 'annoyances.hide-ai-features'
+  | 'annoyances.hide-ai-features.before'
+  | 'annoyances.hide-ai-features.after'
+  | 'annoyances.hide-ai-features.replace'
+  | 'annoyances.hide-ai-features'
+  | 'annoyances.hide-ai-features.before'
+  | 'annoyances.hide-ai-features.after'
+  | 'annoyances.hide-ai-features.replace'
+  | 'annoyances.hide-suggestions'
+  | 'annoyances.hide-suggestions.before'
+  | 'annoyances.hide-suggestions.after'
+  | 'annoyances.hide-suggestions.replace'
+  | 'annoyances.hide-suggestions'
+  | 'annoyances.hide-suggestions.before'
+  | 'annoyances.hide-suggestions.after'
+  | 'annoyances.hide-suggestions.replace'
   | 'annoyances.hide-cache-hint'
   | 'annoyances.hide-cache-hint.before'
   | 'annoyances.hide-cache-hint.after'
@@ -487,38 +523,35 @@ export type EntinySlot =
   | 'annoyances.clear-hints.before'
   | 'annoyances.clear-hints.after'
   | 'annoyances.clear-hints.replace'
+  | 'annoyances.clear-hints'
+  | 'annoyances.clear-hints.before'
+  | 'annoyances.clear-hints.after'
+  | 'annoyances.clear-hints.replace'
   | 'annoyances.end'
-  | 'anti-censorship.anti-censorship-transport'
-  | 'anti-censorship.anti-censorship-transport.start'
-  | 'anti-censorship.anti-censorship-transport.end'
-  | 'anti-censorship.anti-censorship-privacy'
-  | 'anti-censorship.anti-censorship-privacy.start'
-  | 'anti-censorship.anti-censorship-privacy.end'
-  | 'anti-censorship.ws-tunnel'
-  | 'anti-censorship.ws-tunnel.before'
-  | 'anti-censorship.ws-tunnel.after'
-  | 'anti-censorship.ws-tunnel.replace'
-  | 'anti-censorship.leak-guard'
-  | 'anti-censorship.leak-guard.before'
-  | 'anti-censorship.leak-guard.after'
-  | 'anti-censorship.leak-guard.replace'
-  | 'anti-censorship.end'
   | 'anti-deletion.save-deleted-messages'
-  | 'anti-deletion.save-deleted-messages.before'
-  | 'anti-deletion.save-deleted-messages.after'
-  | 'anti-deletion.save-deleted-messages.replace'
-  | 'anti-deletion.prompt-keep-local-on-delete'
-  | 'anti-deletion.prompt-keep-local-on-delete.before'
-  | 'anti-deletion.prompt-keep-local-on-delete.after'
-  | 'anti-deletion.prompt-keep-local-on-delete.replace'
+  | 'anti-deletion.save-deleted-messages.start'
+  | 'anti-deletion.save-deleted-messages.end'
+  | 'anti-deletion.edit-history'
+  | 'anti-deletion.edit-history.start'
+  | 'anti-deletion.edit-history.end'
+  | 'anti-deletion.archive-attachments'
+  | 'anti-deletion.archive-attachments.start'
+  | 'anti-deletion.archive-attachments.end'
+  | 'anti-deletion.one-time-header'
+  | 'anti-deletion.one-time-header.start'
+  | 'anti-deletion.one-time-header.end'
   | 'anti-deletion.deleted-messages-transparent'
   | 'anti-deletion.deleted-messages-transparent.before'
   | 'anti-deletion.deleted-messages-transparent.after'
   | 'anti-deletion.deleted-messages-transparent.replace'
-  | 'anti-deletion.deleted-mark'
-  | 'anti-deletion.deleted-mark.before'
-  | 'anti-deletion.deleted-mark.after'
-  | 'anti-deletion.deleted-mark.replace'
+  | 'anti-deletion.archive-scope'
+  | 'anti-deletion.archive-scope.before'
+  | 'anti-deletion.archive-scope.after'
+  | 'anti-deletion.archive-scope.replace'
+  | 'anti-deletion.save-deleted-own'
+  | 'anti-deletion.save-deleted-own.before'
+  | 'anti-deletion.save-deleted-own.after'
+  | 'anti-deletion.save-deleted-own.replace'
   | 'anti-deletion.save-edited-messages'
   | 'anti-deletion.save-edited-messages.before'
   | 'anti-deletion.save-edited-messages.after'
@@ -527,6 +560,18 @@ export type EntinySlot =
   | 'anti-deletion.edit-history-diff.before'
   | 'anti-deletion.edit-history-diff.after'
   | 'anti-deletion.edit-history-diff.replace'
+  | 'anti-deletion.archive-attachments-save'
+  | 'anti-deletion.archive-attachments-save.before'
+  | 'anti-deletion.archive-attachments-save.after'
+  | 'anti-deletion.archive-attachments-save.replace'
+  | 'anti-deletion.archive-media-public'
+  | 'anti-deletion.archive-media-public.before'
+  | 'anti-deletion.archive-media-public.after'
+  | 'anti-deletion.archive-media-public.replace'
+  | 'anti-deletion.one-time-peek'
+  | 'anti-deletion.one-time-peek.before'
+  | 'anti-deletion.one-time-peek.after'
+  | 'anti-deletion.one-time-peek.replace'
   | 'anti-deletion.deleted-message-search'
   | 'anti-deletion.deleted-message-search.before'
   | 'anti-deletion.deleted-message-search.after'
@@ -539,9 +584,9 @@ export type EntinySlot =
   | 'appearance.typography-and-icons'
   | 'appearance.typography-and-icons.start'
   | 'appearance.typography-and-icons.end'
-  | 'appearance.interface-elements'
-  | 'appearance.interface-elements.start'
-  | 'appearance.interface-elements.end'
+  | 'appearance.design-style'
+  | 'appearance.design-style.start'
+  | 'appearance.design-style.end'
   | 'appearance.motion'
   | 'appearance.motion.start'
   | 'appearance.motion.end'
@@ -560,50 +605,18 @@ export type EntinySlot =
   | 'appearance.ios-settings.before'
   | 'appearance.ios-settings.after'
   | 'appearance.ios-settings.replace'
-  | 'appearance.message-design'
-  | 'appearance.message-design.before'
-  | 'appearance.message-design.after'
-  | 'appearance.message-design.replace'
-  | 'appearance.side-menu'
-  | 'appearance.side-menu.before'
-  | 'appearance.side-menu.after'
-  | 'appearance.side-menu.replace'
-  | 'appearance.menus'
-  | 'appearance.menus.before'
-  | 'appearance.menus.after'
-  | 'appearance.menus.replace'
-  | 'appearance.monet-theme'
-  | 'appearance.monet-theme.before'
-  | 'appearance.monet-theme.after'
-  | 'appearance.monet-theme.replace'
+  | 'appearance.material3'
+  | 'appearance.material3.before'
+  | 'appearance.material3.after'
+  | 'appearance.material3.replace'
   | 'appearance.unified-corner-radius'
   | 'appearance.unified-corner-radius.before'
   | 'appearance.unified-corner-radius.after'
   | 'appearance.unified-corner-radius.replace'
-  | 'appearance.non-island-folders-bar'
-  | 'appearance.non-island-folders-bar.before'
-  | 'appearance.non-island-folders-bar.after'
-  | 'appearance.non-island-folders-bar.replace'
-  | 'appearance.non-island-shared-media-tabs'
-  | 'appearance.non-island-shared-media-tabs.before'
-  | 'appearance.non-island-shared-media-tabs.after'
-  | 'appearance.non-island-shared-media-tabs.replace'
-  | 'appearance.non-island-global-search'
-  | 'appearance.non-island-global-search.before'
-  | 'appearance.non-island-global-search.after'
-  | 'appearance.non-island-global-search.replace'
-  | 'appearance.non-island-chat-elements'
-  | 'appearance.non-island-chat-elements.before'
-  | 'appearance.non-island-chat-elements.after'
-  | 'appearance.non-island-chat-elements.replace'
-  | 'appearance.hide-fade-view'
-  | 'appearance.hide-fade-view.before'
-  | 'appearance.hide-fade-view.after'
-  | 'appearance.hide-fade-view.replace'
-  | 'appearance.disable-profile-avatar-blur'
-  | 'appearance.disable-profile-avatar-blur.before'
-  | 'appearance.disable-profile-avatar-blur.after'
-  | 'appearance.disable-profile-avatar-blur.replace'
+  | 'appearance.hide-dividers'
+  | 'appearance.hide-dividers.before'
+  | 'appearance.hide-dividers.after'
+  | 'appearance.hide-dividers.replace'
   | 'appearance.disable-scrim-blur'
   | 'appearance.disable-scrim-blur.before'
   | 'appearance.disable-scrim-blur.after'
@@ -616,6 +629,10 @@ export type EntinySlot =
   | 'appearance.simple-attach-popup-animation.before'
   | 'appearance.simple-attach-popup-animation.after'
   | 'appearance.simple-attach-popup-animation.replace'
+  | 'appearance.optimized-attachment-menu'
+  | 'appearance.optimized-attachment-menu.before'
+  | 'appearance.optimized-attachment-menu.after'
+  | 'appearance.optimized-attachment-menu.replace'
   | 'appearance.predictive-back'
   | 'appearance.predictive-back.before'
   | 'appearance.predictive-back.after'
@@ -633,6 +650,22 @@ export type EntinySlot =
   | 'appearance.disable-bg-parallax.after'
   | 'appearance.disable-bg-parallax.replace'
   | 'appearance.end'
+  | 'archive-scope.archive-scope-mode'
+  | 'archive-scope.archive-scope-mode.start'
+  | 'archive-scope.archive-scope-mode.end'
+  | 'archive-scope.archive-scope-add'
+  | 'archive-scope.archive-scope-add.before'
+  | 'archive-scope.archive-scope-add.after'
+  | 'archive-scope.archive-scope-add.replace'
+  | 'archive-scope.archive-scope-secret'
+  | 'archive-scope.archive-scope-secret.before'
+  | 'archive-scope.archive-scope-secret.after'
+  | 'archive-scope.archive-scope-secret.replace'
+  | 'archive-scope.archive-scope-bots-in-groups'
+  | 'archive-scope.archive-scope-bots-in-groups.before'
+  | 'archive-scope.archive-scope-bots-in-groups.after'
+  | 'archive-scope.archive-scope-bots-in-groups.replace'
+  | 'archive-scope.end'
   | 'backup.cloud-sync-now'
   | 'backup.cloud-sync-now.before'
   | 'backup.cloud-sync-now.after'
@@ -658,186 +691,6 @@ export type EntinySlot =
   | 'backup.backup-reset.after'
   | 'backup.backup-reset.replace'
   | 'backup.end'
-  | 'behavior.user-profile'
-  | 'behavior.user-profile.start'
-  | 'behavior.user-profile.end'
-  | 'behavior.accounts-section'
-  | 'behavior.accounts-section.start'
-  | 'behavior.accounts-section.end'
-  | 'behavior.calls-section'
-  | 'behavior.calls-section.start'
-  | 'behavior.calls-section.end'
-  | 'behavior.formatting'
-  | 'behavior.formatting.start'
-  | 'behavior.formatting.end'
-  | 'behavior.chat-actions'
-  | 'behavior.chat-actions.start'
-  | 'behavior.chat-actions.end'
-  | 'behavior.media-section'
-  | 'behavior.media-section.start'
-  | 'behavior.media-section.end'
-  | 'behavior.links-and-browser'
-  | 'behavior.links-and-browser.start'
-  | 'behavior.links-and-browser.end'
-  | 'behavior.maps-header'
-  | 'behavior.maps-header.start'
-  | 'behavior.maps-header.end'
-  | 'behavior.device-section'
-  | 'behavior.device-section.start'
-  | 'behavior.device-section.end'
-  | 'behavior.profile-photo-gradient-fade'
-  | 'behavior.profile-photo-gradient-fade.before'
-  | 'behavior.profile-photo-gradient-fade.after'
-  | 'behavior.profile-photo-gradient-fade.replace'
-  | 'behavior.reduce-profile-motion'
-  | 'behavior.reduce-profile-motion.before'
-  | 'behavior.reduce-profile-motion.after'
-  | 'behavior.reduce-profile-motion.replace'
-  | 'behavior.disable-profile-scroll-snap'
-  | 'behavior.disable-profile-scroll-snap.before'
-  | 'behavior.disable-profile-scroll-snap.after'
-  | 'behavior.disable-profile-scroll-snap.replace'
-  | 'behavior.profile-prefer-media-tab'
-  | 'behavior.profile-prefer-media-tab.before'
-  | 'behavior.profile-prefer-media-tab.after'
-  | 'behavior.profile-prefer-media-tab.replace'
-  | 'behavior.profile-id-mode'
-  | 'behavior.profile-id-mode.before'
-  | 'behavior.profile-id-mode.after'
-  | 'behavior.profile-id-mode.replace'
-  | 'behavior.show-profile-reg-date'
-  | 'behavior.show-profile-reg-date.before'
-  | 'behavior.show-profile-reg-date.after'
-  | 'behavior.show-profile-reg-date.replace'
-  | 'behavior.disable-chat-title-phone'
-  | 'behavior.disable-chat-title-phone.before'
-  | 'behavior.disable-chat-title-phone.after'
-  | 'behavior.disable-chat-title-phone.replace'
-  | 'behavior.open-by-user-id'
-  | 'behavior.open-by-user-id.before'
-  | 'behavior.open-by-user-id.after'
-  | 'behavior.open-by-user-id.replace'
-  | 'behavior.settings-show-accounts'
-  | 'behavior.settings-show-accounts.before'
-  | 'behavior.settings-show-accounts.after'
-  | 'behavior.settings-show-accounts.replace'
-  | 'behavior.account-switch-shortcut'
-  | 'behavior.account-switch-shortcut.before'
-  | 'behavior.account-switch-shortcut.after'
-  | 'behavior.account-switch-shortcut.replace'
-  | 'behavior.call-confirmation'
-  | 'behavior.call-confirmation.before'
-  | 'behavior.call-confirmation.after'
-  | 'behavior.call-confirmation.replace'
-  | 'behavior.hd-bluetooth-call-audio'
-  | 'behavior.hd-bluetooth-call-audio.before'
-  | 'behavior.hd-bluetooth-call-audio.after'
-  | 'behavior.hd-bluetooth-call-audio.replace'
-  | 'behavior.call-rotation'
-  | 'behavior.call-rotation.before'
-  | 'behavior.call-rotation.after'
-  | 'behavior.call-rotation.replace'
-  | 'behavior.clock-format'
-  | 'behavior.clock-format.before'
-  | 'behavior.clock-format.after'
-  | 'behavior.clock-format.replace'
-  | 'behavior.show-seconds'
-  | 'behavior.show-seconds.before'
-  | 'behavior.show-seconds.after'
-  | 'behavior.show-seconds.replace'
-  | 'behavior.disable-rounding'
-  | 'behavior.disable-rounding.before'
-  | 'behavior.disable-rounding.after'
-  | 'behavior.disable-rounding.replace'
-  | 'behavior.chat-export'
-  | 'behavior.chat-export.before'
-  | 'behavior.chat-export.after'
-  | 'behavior.chat-export.replace'
-  | 'behavior.gif-seekbar'
-  | 'behavior.gif-seekbar.before'
-  | 'behavior.gif-seekbar.after'
-  | 'behavior.gif-seekbar.replace'
-  | 'behavior.send-mp4-document-as-video'
-  | 'behavior.send-mp4-document-as-video.before'
-  | 'behavior.send-mp4-document-as-video.after'
-  | 'behavior.send-mp4-document-as-video.replace'
-  | 'behavior.disable-motion-photos'
-  | 'behavior.disable-motion-photos.before'
-  | 'behavior.disable-motion-photos.after'
-  | 'behavior.disable-motion-photos.replace'
-  | 'behavior.disable-intro-sticker'
-  | 'behavior.disable-intro-sticker.before'
-  | 'behavior.disable-intro-sticker.after'
-  | 'behavior.disable-intro-sticker.replace'
-  | 'behavior.disable-volume-play-video'
-  | 'behavior.disable-volume-play-video.before'
-  | 'behavior.disable-volume-play-video.after'
-  | 'behavior.disable-volume-play-video.replace'
-  | 'behavior.disable-quick-share'
-  | 'behavior.disable-quick-share.before'
-  | 'behavior.disable-quick-share.after'
-  | 'behavior.disable-quick-share.replace'
-  | 'behavior.memory-trim'
-  | 'behavior.memory-trim.before'
-  | 'behavior.memory-trim.after'
-  | 'behavior.memory-trim.replace'
-  | 'behavior.save-selected-files'
-  | 'behavior.save-selected-files.before'
-  | 'behavior.save-selected-files.after'
-  | 'behavior.save-selected-files.replace'
-  | 'behavior.confirm-internal-links'
-  | 'behavior.confirm-internal-links.before'
-  | 'behavior.confirm-internal-links.after'
-  | 'behavior.confirm-internal-links.replace'
-  | 'behavior.disable-browser-swipe-collapse'
-  | 'behavior.disable-browser-swipe-collapse.before'
-  | 'behavior.disable-browser-swipe-collapse.after'
-  | 'behavior.disable-browser-swipe-collapse.replace'
-  | 'behavior.web-preview-replacements'
-  | 'behavior.web-preview-replacements.before'
-  | 'behavior.web-preview-replacements.after'
-  | 'behavior.web-preview-replacements.replace'
-  | 'behavior.auto-disable-proxy-on-vpn'
-  | 'behavior.auto-disable-proxy-on-vpn.before'
-  | 'behavior.auto-disable-proxy-on-vpn.after'
-  | 'behavior.auto-disable-proxy-on-vpn.replace'
-  | 'behavior.keep-downloads-in-background'
-  | 'behavior.keep-downloads-in-background.before'
-  | 'behavior.keep-downloads-in-background.after'
-  | 'behavior.keep-downloads-in-background.replace'
-  | 'behavior.block-sleep-while-downloading'
-  | 'behavior.block-sleep-while-downloading.before'
-  | 'behavior.block-sleep-while-downloading.after'
-  | 'behavior.block-sleep-while-downloading.replace'
-  | 'behavior.faster-downloads'
-  | 'behavior.faster-downloads.before'
-  | 'behavior.faster-downloads.after'
-  | 'behavior.faster-downloads.replace'
-  | 'behavior.faster-uploads'
-  | 'behavior.faster-uploads.before'
-  | 'behavior.faster-uploads.after'
-  | 'behavior.faster-uploads.replace'
-  | 'behavior.download-directory'
-  | 'behavior.download-directory.before'
-  | 'behavior.download-directory.after'
-  | 'behavior.download-directory.replace'
-  | 'behavior.map-provider'
-  | 'behavior.map-provider.before'
-  | 'behavior.map-provider.after'
-  | 'behavior.map-provider.replace'
-  | 'behavior.map-preview-provider'
-  | 'behavior.map-preview-provider.before'
-  | 'behavior.map-preview-provider.after'
-  | 'behavior.map-preview-provider.replace'
-  | 'behavior.performance-class'
-  | 'behavior.performance-class.before'
-  | 'behavior.performance-class.after'
-  | 'behavior.performance-class.replace'
-  | 'behavior.text-classifier-mode'
-  | 'behavior.text-classifier-mode.before'
-  | 'behavior.text-classifier-mode.after'
-  | 'behavior.text-classifier-mode.replace'
-  | 'behavior.end'
   | 'cache-management.cache-ttl'
   | 'cache-management.cache-ttl.before'
   | 'cache-management.cache-ttl.after'
@@ -846,11 +699,85 @@ export type EntinySlot =
   | 'cache-management.presence-logs-ttl.before'
   | 'cache-management.presence-logs-ttl.after'
   | 'cache-management.presence-logs-ttl.replace'
-  | 'cache-management.clear-deleted-cache'
-  | 'cache-management.clear-deleted-cache.before'
-  | 'cache-management.clear-deleted-cache.after'
-  | 'cache-management.clear-deleted-cache.replace'
   | 'cache-management.end'
+  | 'camera-sound.round-videos'
+  | 'camera-sound.round-videos.start'
+  | 'camera-sound.round-videos.end'
+  | 'camera-sound.attach-camera'
+  | 'camera-sound.attach-camera.start'
+  | 'camera-sound.attach-camera.end'
+  | 'camera-sound.voice-messages'
+  | 'camera-sound.voice-messages.start'
+  | 'camera-sound.voice-messages.end'
+  | 'camera-sound.round-default-camera'
+  | 'camera-sound.round-default-camera.before'
+  | 'camera-sound.round-default-camera.after'
+  | 'camera-sound.round-default-camera.replace'
+  | 'camera-sound.round-recorder-zoom-slider'
+  | 'camera-sound.round-recorder-zoom-slider.before'
+  | 'camera-sound.round-recorder-zoom-slider.after'
+  | 'camera-sound.round-recorder-zoom-slider.replace'
+  | 'camera-sound.round-recorder-zoom-buttons'
+  | 'camera-sound.round-recorder-zoom-buttons.before'
+  | 'camera-sound.round-recorder-zoom-buttons.after'
+  | 'camera-sound.round-recorder-zoom-buttons.replace'
+  | 'camera-sound.round-recorder-keep-zoom'
+  | 'camera-sound.round-recorder-keep-zoom.before'
+  | 'camera-sound.round-recorder-keep-zoom.after'
+  | 'camera-sound.round-recorder-keep-zoom.replace'
+  | 'camera-sound.round-recorder-exponential-zoom'
+  | 'camera-sound.round-recorder-exponential-zoom.before'
+  | 'camera-sound.round-recorder-exponential-zoom.after'
+  | 'camera-sound.round-recorder-exponential-zoom.replace'
+  | 'camera-sound.round-recorder-dual-camera'
+  | 'camera-sound.round-recorder-dual-camera.before'
+  | 'camera-sound.round-recorder-dual-camera.after'
+  | 'camera-sound.round-recorder-dual-camera.replace'
+  | 'camera-sound.round-recorder60-fps'
+  | 'camera-sound.round-recorder60-fps.before'
+  | 'camera-sound.round-recorder60-fps.after'
+  | 'camera-sound.round-recorder60-fps.replace'
+  | 'camera-sound.round-recorder-lock-exposure'
+  | 'camera-sound.round-recorder-lock-exposure.before'
+  | 'camera-sound.round-recorder-lock-exposure.after'
+  | 'camera-sound.round-recorder-lock-exposure.replace'
+  | 'camera-sound.round-recorder-exposure-button'
+  | 'camera-sound.round-recorder-exposure-button.before'
+  | 'camera-sound.round-recorder-exposure-button.after'
+  | 'camera-sound.round-recorder-exposure-button.replace'
+  | 'camera-sound.round-recorder-exposure-levels'
+  | 'camera-sound.round-recorder-exposure-levels.before'
+  | 'camera-sound.round-recorder-exposure-levels.after'
+  | 'camera-sound.round-recorder-exposure-levels.replace'
+  | 'camera-sound.attach-camera-mode'
+  | 'camera-sound.attach-camera-mode.before'
+  | 'camera-sound.attach-camera-mode.after'
+  | 'camera-sound.attach-camera-mode.replace'
+  | 'camera-sound.attach-camera-square'
+  | 'camera-sound.attach-camera-square.before'
+  | 'camera-sound.attach-camera-square.after'
+  | 'camera-sound.attach-camera-square.replace'
+  | 'camera-sound.keep-screen-on-recording'
+  | 'camera-sound.keep-screen-on-recording.before'
+  | 'camera-sound.keep-screen-on-recording.after'
+  | 'camera-sound.keep-screen-on-recording.replace'
+  | 'camera-sound.chat-voice-in-attach'
+  | 'camera-sound.chat-voice-in-attach.before'
+  | 'camera-sound.chat-voice-in-attach.after'
+  | 'camera-sound.chat-voice-in-attach.replace'
+  | 'camera-sound.confirm-send-voice'
+  | 'camera-sound.confirm-send-voice.before'
+  | 'camera-sound.confirm-send-voice.after'
+  | 'camera-sound.confirm-send-voice.replace'
+  | 'camera-sound.round-audio-bitrate'
+  | 'camera-sound.round-audio-bitrate.before'
+  | 'camera-sound.round-audio-bitrate.after'
+  | 'camera-sound.round-audio-bitrate.replace'
+  | 'camera-sound.round-audio-source'
+  | 'camera-sound.round-audio-source.before'
+  | 'camera-sound.round-audio-source.after'
+  | 'camera-sound.round-audio-source.replace'
+  | 'camera-sound.end'
   | 'chat-header.center-title-chats'
   | 'chat-header.center-title-chats.before'
   | 'chat-header.center-title-chats.after'
@@ -867,6 +794,10 @@ export type EntinySlot =
   | 'chat-header.ios-chat-header-avatar-slot.before'
   | 'chat-header.ios-chat-header-avatar-slot.after'
   | 'chat-header.ios-chat-header-avatar-slot.replace'
+  | 'chat-header.ios-chat-header-avatar-swap'
+  | 'chat-header.ios-chat-header-avatar-swap.before'
+  | 'chat-header.ios-chat-header-avatar-swap.after'
+  | 'chat-header.ios-chat-header-avatar-swap.replace'
   | 'chat-header.ios-chat-header-avatar-static'
   | 'chat-header.ios-chat-header-avatar-static.before'
   | 'chat-header.ios-chat-header-avatar-static.after'
@@ -883,11 +814,390 @@ export type EntinySlot =
   | 'chat-header.chat-title-marquee.before'
   | 'chat-header.chat-title-marquee.after'
   | 'chat-header.chat-title-marquee.replace'
+  | 'chat-header.unread-badge-on-back-button'
+  | 'chat-header.unread-badge-on-back-button.before'
+  | 'chat-header.unread-badge-on-back-button.after'
+  | 'chat-header.unread-badge-on-back-button.replace'
+  | 'chat-header.unread-badge-on-back-button-ios'
+  | 'chat-header.unread-badge-on-back-button-ios.before'
+  | 'chat-header.unread-badge-on-back-button-ios.after'
+  | 'chat-header.unread-badge-on-back-button-ios.replace'
   | 'chat-header.center-title-main'
   | 'chat-header.center-title-main.before'
   | 'chat-header.center-title-main.after'
   | 'chat-header.center-title-main.replace'
   | 'chat-header.end'
+  | 'chats-messages.message-input'
+  | 'chats-messages.message-input.start'
+  | 'chats-messages.message-input.end'
+  | 'chats-messages.chat-navigation'
+  | 'chats-messages.chat-navigation.start'
+  | 'chats-messages.chat-navigation.end'
+  | 'chats-messages.mentions-and-search'
+  | 'chats-messages.mentions-and-search.start'
+  | 'chats-messages.mentions-and-search.end'
+  | 'chats-messages.stickers'
+  | 'chats-messages.stickers.start'
+  | 'chats-messages.stickers.end'
+  | 'chats-messages.chat-decor'
+  | 'chats-messages.chat-decor.start'
+  | 'chats-messages.chat-decor.end'
+  | 'chats-messages.links-and-browser'
+  | 'chats-messages.links-and-browser.start'
+  | 'chats-messages.links-and-browser.end'
+  | 'chats-messages.maps-header'
+  | 'chats-messages.maps-header.start'
+  | 'chats-messages.maps-header.end'
+  | 'chats-messages.reactions'
+  | 'chats-messages.reactions.start'
+  | 'chats-messages.reactions.end'
+  | 'chats-messages.confirmations-section'
+  | 'chats-messages.confirmations-section.start'
+  | 'chats-messages.confirmations-section.end'
+  | 'chats-messages.spoilers'
+  | 'chats-messages.spoilers.start'
+  | 'chats-messages.spoilers.end'
+  | 'chats-messages.blocked-messages-section'
+  | 'chats-messages.blocked-messages-section.start'
+  | 'chats-messages.blocked-messages-section.end'
+  | 'chats-messages.clown-avatars-section'
+  | 'chats-messages.clown-avatars-section.start'
+  | 'chats-messages.clown-avatars-section.end'
+  | 'chats-messages.forward-and-replies'
+  | 'chats-messages.forward-and-replies.start'
+  | 'chats-messages.forward-and-replies.end'
+  | 'chats-messages.double-tap-actions'
+  | 'chats-messages.double-tap-actions.start'
+  | 'chats-messages.double-tap-actions.end'
+  | 'chats-messages.side-button-action'
+  | 'chats-messages.side-button-action.start'
+  | 'chats-messages.side-button-action.end'
+  | 'chats-messages.chat-actions'
+  | 'chats-messages.chat-actions.start'
+  | 'chats-messages.chat-actions.end'
+  | 'chats-messages.formatting'
+  | 'chats-messages.formatting.start'
+  | 'chats-messages.formatting.end'
+  | 'chats-messages.media-section'
+  | 'chats-messages.media-section.start'
+  | 'chats-messages.media-section.end'
+  | 'chats-messages.ai-compose'
+  | 'chats-messages.ai-compose.before'
+  | 'chats-messages.ai-compose.after'
+  | 'chats-messages.ai-compose.replace'
+  | 'chats-messages.translator'
+  | 'chats-messages.translator.before'
+  | 'chats-messages.translator.after'
+  | 'chats-messages.translator.replace'
+  | 'chats-messages.message-design'
+  | 'chats-messages.message-design.before'
+  | 'chats-messages.message-design.after'
+  | 'chats-messages.message-design.replace'
+  | 'chats-messages.camera-sound'
+  | 'chats-messages.camera-sound.before'
+  | 'chats-messages.camera-sound.after'
+  | 'chats-messages.camera-sound.replace'
+  | 'chats-messages.formatting-popup'
+  | 'chats-messages.formatting-popup.before'
+  | 'chats-messages.formatting-popup.after'
+  | 'chats-messages.formatting-popup.replace'
+  | 'chats-messages.formatting-popup'
+  | 'chats-messages.formatting-popup.before'
+  | 'chats-messages.formatting-popup.after'
+  | 'chats-messages.formatting-popup.replace'
+  | 'chats-messages.chat-input-max-lines'
+  | 'chats-messages.chat-input-max-lines.before'
+  | 'chats-messages.chat-input-max-lines.after'
+  | 'chats-messages.chat-input-max-lines.replace'
+  | 'chats-messages.hide-keyboard-on-scroll'
+  | 'chats-messages.hide-keyboard-on-scroll.before'
+  | 'chats-messages.hide-keyboard-on-scroll.after'
+  | 'chats-messages.hide-keyboard-on-scroll.replace'
+  | 'chats-messages.keep-keyboard-while-typing'
+  | 'chats-messages.keep-keyboard-while-typing.before'
+  | 'chats-messages.keep-keyboard-while-typing.after'
+  | 'chats-messages.keep-keyboard-while-typing.replace'
+  | 'chats-messages.disable-bot-draft-top'
+  | 'chats-messages.disable-bot-draft-top.before'
+  | 'chats-messages.disable-bot-draft-top.after'
+  | 'chats-messages.disable-bot-draft-top.replace'
+  | 'chats-messages.disable-pull-to-next'
+  | 'chats-messages.disable-pull-to-next.before'
+  | 'chats-messages.disable-pull-to-next.after'
+  | 'chats-messages.disable-pull-to-next.replace'
+  | 'chats-messages.chat-always-show-down'
+  | 'chats-messages.chat-always-show-down.before'
+  | 'chats-messages.chat-always-show-down.after'
+  | 'chats-messages.chat-always-show-down.replace'
+  | 'chats-messages.chat-two-finger-select'
+  | 'chats-messages.chat-two-finger-select.before'
+  | 'chats-messages.chat-two-finger-select.after'
+  | 'chats-messages.chat-two-finger-select.replace'
+  | 'chats-messages.selection-bottom-no-quote'
+  | 'chats-messages.selection-bottom-no-quote.before'
+  | 'chats-messages.selection-bottom-no-quote.after'
+  | 'chats-messages.selection-bottom-no-quote.replace'
+  | 'chats-messages.mention-separator'
+  | 'chats-messages.mention-separator.before'
+  | 'chats-messages.mention-separator.after'
+  | 'chats-messages.mention-separator.replace'
+  | 'chats-messages.mention-separator'
+  | 'chats-messages.mention-separator.before'
+  | 'chats-messages.mention-separator.after'
+  | 'chats-messages.mention-separator.replace'
+  | 'chats-messages.mention-separator-bots'
+  | 'chats-messages.mention-separator-bots.before'
+  | 'chats-messages.mention-separator-bots.after'
+  | 'chats-messages.mention-separator-bots.replace'
+  | 'chats-messages.search-from-global'
+  | 'chats-messages.search-from-global.before'
+  | 'chats-messages.search-from-global.after'
+  | 'chats-messages.search-from-global.replace'
+  | 'chats-messages.send-to-discuss-without-join'
+  | 'chats-messages.send-to-discuss-without-join.before'
+  | 'chats-messages.send-to-discuss-without-join.after'
+  | 'chats-messages.send-to-discuss-without-join.replace'
+  | 'chats-messages.show-all-recent-stickers'
+  | 'chats-messages.show-all-recent-stickers.before'
+  | 'chats-messages.show-all-recent-stickers.after'
+  | 'chats-messages.show-all-recent-stickers.replace'
+  | 'chats-messages.suggest-custom-emoji-after'
+  | 'chats-messages.suggest-custom-emoji-after.before'
+  | 'chats-messages.suggest-custom-emoji-after.after'
+  | 'chats-messages.suggest-custom-emoji-after.replace'
+  | 'chats-messages.sort-albums-by-size'
+  | 'chats-messages.sort-albums-by-size.before'
+  | 'chats-messages.sort-albums-by-size.after'
+  | 'chats-messages.sort-albums-by-size.replace'
+  | 'chats-messages.chat-snowflakes'
+  | 'chats-messages.chat-snowflakes.before'
+  | 'chats-messages.chat-snowflakes.after'
+  | 'chats-messages.chat-snowflakes.replace'
+  | 'chats-messages.action-bar-snowflakes'
+  | 'chats-messages.action-bar-snowflakes.before'
+  | 'chats-messages.action-bar-snowflakes.after'
+  | 'chats-messages.action-bar-snowflakes.replace'
+  | 'chats-messages.confirm-internal-links'
+  | 'chats-messages.confirm-internal-links.before'
+  | 'chats-messages.confirm-internal-links.after'
+  | 'chats-messages.confirm-internal-links.replace'
+  | 'chats-messages.skip-link-confirm'
+  | 'chats-messages.skip-link-confirm.before'
+  | 'chats-messages.skip-link-confirm.after'
+  | 'chats-messages.skip-link-confirm.replace'
+  | 'chats-messages.disable-browser-swipe-collapse'
+  | 'chats-messages.disable-browser-swipe-collapse.before'
+  | 'chats-messages.disable-browser-swipe-collapse.after'
+  | 'chats-messages.disable-browser-swipe-collapse.replace'
+  | 'chats-messages.web-preview-replacements'
+  | 'chats-messages.web-preview-replacements.before'
+  | 'chats-messages.web-preview-replacements.after'
+  | 'chats-messages.web-preview-replacements.replace'
+  | 'chats-messages.map-provider'
+  | 'chats-messages.map-provider.before'
+  | 'chats-messages.map-provider.after'
+  | 'chats-messages.map-provider.replace'
+  | 'chats-messages.map-preview-provider'
+  | 'chats-messages.map-preview-provider.before'
+  | 'chats-messages.map-preview-provider.after'
+  | 'chats-messages.map-preview-provider.replace'
+  | 'chats-messages.pinned-reactions'
+  | 'chats-messages.pinned-reactions.before'
+  | 'chats-messages.pinned-reactions.after'
+  | 'chats-messages.pinned-reactions.replace'
+  | 'chats-messages.instant-mark-reactions-read'
+  | 'chats-messages.instant-mark-reactions-read.before'
+  | 'chats-messages.instant-mark-reactions-read.after'
+  | 'chats-messages.instant-mark-reactions-read.replace'
+  | 'chats-messages.hide-reactions-display'
+  | 'chats-messages.hide-reactions-display.before'
+  | 'chats-messages.hide-reactions-display.after'
+  | 'chats-messages.hide-reactions-display.replace'
+  | 'chats-messages.hide-reactions-set'
+  | 'chats-messages.hide-reactions-set.before'
+  | 'chats-messages.hide-reactions-set.after'
+  | 'chats-messages.hide-reactions-set.replace'
+  | 'chats-messages.hide-reactions-badges'
+  | 'chats-messages.hide-reactions-badges.before'
+  | 'chats-messages.hide-reactions-badges.after'
+  | 'chats-messages.hide-reactions-badges.replace'
+  | 'chats-messages.confirm-reaction-non-member'
+  | 'chats-messages.confirm-reaction-non-member.before'
+  | 'chats-messages.confirm-reaction-non-member.after'
+  | 'chats-messages.confirm-reaction-non-member.replace'
+  | 'chats-messages.confirm-before-sending'
+  | 'chats-messages.confirm-before-sending.before'
+  | 'chats-messages.confirm-before-sending.after'
+  | 'chats-messages.confirm-before-sending.replace'
+  | 'chats-messages.confirm-before-sending'
+  | 'chats-messages.confirm-before-sending.before'
+  | 'chats-messages.confirm-before-sending.after'
+  | 'chats-messages.confirm-before-sending.replace'
+  | 'chats-messages.show-spoilers-directly'
+  | 'chats-messages.show-spoilers-directly.before'
+  | 'chats-messages.show-spoilers-directly.after'
+  | 'chats-messages.show-spoilers-directly.replace'
+  | 'chats-messages.text-spoiler-mode'
+  | 'chats-messages.text-spoiler-mode.before'
+  | 'chats-messages.text-spoiler-mode.after'
+  | 'chats-messages.text-spoiler-mode.replace'
+  | 'chats-messages.spoiler-extend-to-line-end'
+  | 'chats-messages.spoiler-extend-to-line-end.before'
+  | 'chats-messages.spoiler-extend-to-line-end.after'
+  | 'chats-messages.spoiler-extend-to-line-end.replace'
+  | 'chats-messages.media-spoiler-mode'
+  | 'chats-messages.media-spoiler-mode.before'
+  | 'chats-messages.media-spoiler-mode.after'
+  | 'chats-messages.media-spoiler-mode.replace'
+  | 'chats-messages.link-preview-spoiler'
+  | 'chats-messages.link-preview-spoiler.before'
+  | 'chats-messages.link-preview-spoiler.after'
+  | 'chats-messages.link-preview-spoiler.replace'
+  | 'chats-messages.blocked-messages-mode'
+  | 'chats-messages.blocked-messages-mode.before'
+  | 'chats-messages.blocked-messages-mode.after'
+  | 'chats-messages.blocked-messages-mode.replace'
+  | 'chats-messages.blocked-messages-extra'
+  | 'chats-messages.blocked-messages-extra.before'
+  | 'chats-messages.blocked-messages-extra.after'
+  | 'chats-messages.blocked-messages-extra.replace'
+  | 'chats-messages.blocked-messages-extra'
+  | 'chats-messages.blocked-messages-extra.before'
+  | 'chats-messages.blocked-messages-extra.after'
+  | 'chats-messages.blocked-messages-extra.replace'
+  | 'chats-messages.blocked-messages-hide-replies'
+  | 'chats-messages.blocked-messages-hide-replies.before'
+  | 'chats-messages.blocked-messages-hide-replies.after'
+  | 'chats-messages.blocked-messages-hide-replies.replace'
+  | 'chats-messages.clown-avatar-blocked'
+  | 'chats-messages.clown-avatar-blocked.before'
+  | 'chats-messages.clown-avatar-blocked.after'
+  | 'chats-messages.clown-avatar-blocked.replace'
+  | 'chats-messages.clown-avatar-blocked-me'
+  | 'chats-messages.clown-avatar-blocked-me.before'
+  | 'chats-messages.clown-avatar-blocked-me.after'
+  | 'chats-messages.clown-avatar-blocked-me.replace'
+  | 'chats-messages.clown-avatar-emoji'
+  | 'chats-messages.clown-avatar-emoji.before'
+  | 'chats-messages.clown-avatar-emoji.after'
+  | 'chats-messages.clown-avatar-emoji.replace'
+  | 'chats-messages.chat-remember-all-replies'
+  | 'chats-messages.chat-remember-all-replies.before'
+  | 'chats-messages.chat-remember-all-replies.after'
+  | 'chats-messages.chat-remember-all-replies.replace'
+  | 'chats-messages.forward-pro'
+  | 'chats-messages.forward-pro.before'
+  | 'chats-messages.forward-pro.after'
+  | 'chats-messages.forward-pro.replace'
+  | 'chats-messages.forward-pro-replace'
+  | 'chats-messages.forward-pro-replace.before'
+  | 'chats-messages.forward-pro-replace.after'
+  | 'chats-messages.forward-pro-replace.replace'
+  | 'chats-messages.incoming-messages'
+  | 'chats-messages.incoming-messages.before'
+  | 'chats-messages.incoming-messages.after'
+  | 'chats-messages.incoming-messages.replace'
+  | 'chats-messages.double-tap-incoming'
+  | 'chats-messages.double-tap-incoming.before'
+  | 'chats-messages.double-tap-incoming.after'
+  | 'chats-messages.double-tap-incoming.replace'
+  | 'chats-messages.outgoing-messages'
+  | 'chats-messages.outgoing-messages.before'
+  | 'chats-messages.outgoing-messages.after'
+  | 'chats-messages.outgoing-messages.replace'
+  | 'chats-messages.double-tap-outgoing'
+  | 'chats-messages.double-tap-outgoing.before'
+  | 'chats-messages.double-tap-outgoing.after'
+  | 'chats-messages.double-tap-outgoing.replace'
+  | 'chats-messages.channel-messages'
+  | 'chats-messages.channel-messages.before'
+  | 'chats-messages.channel-messages.after'
+  | 'chats-messages.channel-messages.replace'
+  | 'chats-messages.double-tap-channel'
+  | 'chats-messages.double-tap-channel.before'
+  | 'chats-messages.double-tap-channel.after'
+  | 'chats-messages.double-tap-channel.replace'
+  | 'chats-messages.delay'
+  | 'chats-messages.delay.before'
+  | 'chats-messages.delay.after'
+  | 'chats-messages.delay.replace'
+  | 'chats-messages.side-button-action'
+  | 'chats-messages.side-button-action.before'
+  | 'chats-messages.side-button-action.after'
+  | 'chats-messages.side-button-action.replace'
+  | 'chats-messages.side-button-action'
+  | 'chats-messages.side-button-action.before'
+  | 'chats-messages.side-button-action.after'
+  | 'chats-messages.side-button-action.replace'
+  | 'chats-messages.delete-for-both'
+  | 'chats-messages.delete-for-both.before'
+  | 'chats-messages.delete-for-both.after'
+  | 'chats-messages.delete-for-both.replace'
+  | 'chats-messages.delete-for-both'
+  | 'chats-messages.delete-for-both.before'
+  | 'chats-messages.delete-for-both.after'
+  | 'chats-messages.delete-for-both.replace'
+  | 'chats-messages.chat-export'
+  | 'chats-messages.chat-export.before'
+  | 'chats-messages.chat-export.after'
+  | 'chats-messages.chat-export.replace'
+  | 'chats-messages.notify-bell-in-menu'
+  | 'chats-messages.notify-bell-in-menu.before'
+  | 'chats-messages.notify-bell-in-menu.after'
+  | 'chats-messages.notify-bell-in-menu.replace'
+  | 'chats-messages.clock-format'
+  | 'chats-messages.clock-format.before'
+  | 'chats-messages.clock-format.after'
+  | 'chats-messages.clock-format.replace'
+  | 'chats-messages.show-seconds'
+  | 'chats-messages.show-seconds.before'
+  | 'chats-messages.show-seconds.after'
+  | 'chats-messages.show-seconds.replace'
+  | 'chats-messages.disable-rounding'
+  | 'chats-messages.disable-rounding.before'
+  | 'chats-messages.disable-rounding.after'
+  | 'chats-messages.disable-rounding.replace'
+  | 'chats-messages.keep-chats-in-stack'
+  | 'chats-messages.keep-chats-in-stack.before'
+  | 'chats-messages.keep-chats-in-stack.after'
+  | 'chats-messages.keep-chats-in-stack.replace'
+  | 'chats-messages.gif-seekbar'
+  | 'chats-messages.gif-seekbar.before'
+  | 'chats-messages.gif-seekbar.after'
+  | 'chats-messages.gif-seekbar.replace'
+  | 'chats-messages.send-mp4-document-as-video'
+  | 'chats-messages.send-mp4-document-as-video.before'
+  | 'chats-messages.send-mp4-document-as-video.after'
+  | 'chats-messages.send-mp4-document-as-video.replace'
+  | 'chats-messages.disable-motion-photos'
+  | 'chats-messages.disable-motion-photos.before'
+  | 'chats-messages.disable-motion-photos.after'
+  | 'chats-messages.disable-motion-photos.replace'
+  | 'chats-messages.disable-intro-sticker'
+  | 'chats-messages.disable-intro-sticker.before'
+  | 'chats-messages.disable-intro-sticker.after'
+  | 'chats-messages.disable-intro-sticker.replace'
+  | 'chats-messages.disable-volume-play-video'
+  | 'chats-messages.disable-volume-play-video.before'
+  | 'chats-messages.disable-volume-play-video.after'
+  | 'chats-messages.disable-volume-play-video.replace'
+  | 'chats-messages.disable-quick-share'
+  | 'chats-messages.disable-quick-share.before'
+  | 'chats-messages.disable-quick-share.after'
+  | 'chats-messages.disable-quick-share.replace'
+  | 'chats-messages.memory-trim'
+  | 'chats-messages.memory-trim.before'
+  | 'chats-messages.memory-trim.after'
+  | 'chats-messages.memory-trim.replace'
+  | 'chats-messages.save-selected-files'
+  | 'chats-messages.save-selected-files.before'
+  | 'chats-messages.save-selected-files.after'
+  | 'chats-messages.save-selected-files.replace'
+  | 'chats-messages.hdr-images'
+  | 'chats-messages.hdr-images.before'
+  | 'chats-messages.hdr-images.after'
+  | 'chats-messages.hdr-images.replace'
+  | 'chats-messages.end'
   | 'currency-picker.end'
   | 'datacenter-status.datacenter-status'
   | 'datacenter-status.datacenter-status.start'
@@ -910,26 +1220,22 @@ export type EntinySlot =
   | 'dialogs.dialogs-fab'
   | 'dialogs.dialogs-fab.start'
   | 'dialogs.dialogs-fab.end'
-  | 'dialogs.pill-stack'
-  | 'dialogs.pill-stack.before'
-  | 'dialogs.pill-stack.after'
-  | 'dialogs.pill-stack.replace'
-  | 'dialogs.recent-chats'
-  | 'dialogs.recent-chats.before'
-  | 'dialogs.recent-chats.after'
-  | 'dialogs.recent-chats.replace'
-  | 'dialogs.feed'
-  | 'dialogs.feed.before'
-  | 'dialogs.feed.after'
-  | 'dialogs.feed.replace'
-  | 'dialogs.feed-manage-channels'
-  | 'dialogs.feed-manage-channels.before'
-  | 'dialogs.feed-manage-channels.after'
-  | 'dialogs.feed-manage-channels.replace'
+  | 'dialogs.folders'
+  | 'dialogs.folders.before'
+  | 'dialogs.folders.after'
+  | 'dialogs.folders.replace'
+  | 'dialogs.folders-preview'
+  | 'dialogs.folders-preview.before'
+  | 'dialogs.folders-preview.after'
+  | 'dialogs.folders-preview.replace'
   | 'dialogs.show-on-tabs'
   | 'dialogs.show-on-tabs.before'
   | 'dialogs.show-on-tabs.after'
   | 'dialogs.show-on-tabs.replace'
+  | 'dialogs.folders-display-mode'
+  | 'dialogs.folders-display-mode.before'
+  | 'dialogs.folders-display-mode.after'
+  | 'dialogs.folders-display-mode.replace'
   | 'dialogs.tab-indicator-stroke'
   | 'dialogs.tab-indicator-stroke.before'
   | 'dialogs.tab-indicator-stroke.after'
@@ -946,6 +1252,10 @@ export type EntinySlot =
   | 'dialogs.remember-selected-folder.before'
   | 'dialogs.remember-selected-folder.after'
   | 'dialogs.remember-selected-folder.replace'
+  | 'dialogs.folders-infinite-swipe'
+  | 'dialogs.folders-infinite-swipe.before'
+  | 'dialogs.folders-infinite-swipe.after'
+  | 'dialogs.folders-infinite-swipe.replace'
   | 'dialogs.folders-at-bottom'
   | 'dialogs.folders-at-bottom.before'
   | 'dialogs.folders-at-bottom.after'
@@ -954,10 +1264,22 @@ export type EntinySlot =
   | 'dialogs.hide-archive.before'
   | 'dialogs.hide-archive.after'
   | 'dialogs.hide-archive.replace'
+  | 'dialogs.unread-chats-first'
+  | 'dialogs.unread-chats-first.before'
+  | 'dialogs.unread-chats-first.after'
+  | 'dialogs.unread-chats-first.replace'
+  | 'dialogs.unread-chats-first-pinned'
+  | 'dialogs.unread-chats-first-pinned.before'
+  | 'dialogs.unread-chats-first-pinned.after'
+  | 'dialogs.unread-chats-first-pinned.replace'
   | 'dialogs.title-text'
   | 'dialogs.title-text.before'
   | 'dialogs.title-text.after'
   | 'dialogs.title-text.replace'
+  | 'dialogs.dialogs-title-text'
+  | 'dialogs.dialogs-title-text.before'
+  | 'dialogs.dialogs-title-text.after'
+  | 'dialogs.dialogs-title-text.replace'
   | 'dialogs.title-text-override-archive'
   | 'dialogs.title-text-override-archive.before'
   | 'dialogs.title-text-override-archive.after'
@@ -966,6 +1288,10 @@ export type EntinySlot =
   | 'dialogs.old-mention-indicator.before'
   | 'dialogs.old-mention-indicator.after'
   | 'dialogs.old-mention-indicator.replace'
+  | 'dialogs.pull-down-action'
+  | 'dialogs.pull-down-action.before'
+  | 'dialogs.pull-down-action.after'
+  | 'dialogs.pull-down-action.replace'
   | 'dialogs.pull-down-action'
   | 'dialogs.pull-down-action.before'
   | 'dialogs.pull-down-action.after'
@@ -990,6 +1316,10 @@ export type EntinySlot =
   | 'dialogs.community-display-mode.before'
   | 'dialogs.community-display-mode.after'
   | 'dialogs.community-display-mode.replace'
+  | 'dialogs.community-display-mode'
+  | 'dialogs.community-display-mode.before'
+  | 'dialogs.community-display-mode.after'
+  | 'dialogs.community-display-mode.replace'
   | 'dialogs.dialog-avatar-opens-profile'
   | 'dialogs.dialog-avatar-opens-profile.before'
   | 'dialogs.dialog-avatar-opens-profile.after'
@@ -998,6 +1328,18 @@ export type EntinySlot =
   | 'dialogs.always-show-downloads.before'
   | 'dialogs.always-show-downloads.after'
   | 'dialogs.always-show-downloads.replace'
+  | 'dialogs.always-show-downloads'
+  | 'dialogs.always-show-downloads.before'
+  | 'dialogs.always-show-downloads.after'
+  | 'dialogs.always-show-downloads.replace'
+  | 'dialogs.hide-downloads-button'
+  | 'dialogs.hide-downloads-button.before'
+  | 'dialogs.hide-downloads-button.after'
+  | 'dialogs.hide-downloads-button.replace'
+  | 'dialogs.hide-dialog-preview'
+  | 'dialogs.hide-dialog-preview.before'
+  | 'dialogs.hide-dialog-preview.after'
+  | 'dialogs.hide-dialog-preview.replace'
   | 'dialogs.bottom-tabs-hide'
   | 'dialogs.bottom-tabs-hide.before'
   | 'dialogs.bottom-tabs-hide.after'
@@ -1006,30 +1348,66 @@ export type EntinySlot =
   | 'dialogs.compact-mode.before'
   | 'dialogs.compact-mode.after'
   | 'dialogs.compact-mode.replace'
+  | 'dialogs.bottom-tabs-lift'
+  | 'dialogs.bottom-tabs-lift.before'
+  | 'dialogs.bottom-tabs-lift.after'
+  | 'dialogs.bottom-tabs-lift.replace'
   | 'dialogs.show-tab-titles'
   | 'dialogs.show-tab-titles.before'
   | 'dialogs.show-tab-titles.after'
   | 'dialogs.show-tab-titles.replace'
+  | 'dialogs.bottom-tabs'
+  | 'dialogs.bottom-tabs.before'
+  | 'dialogs.bottom-tabs.after'
+  | 'dialogs.bottom-tabs.replace'
+  | 'dialogs.bottom-tabs-preview'
+  | 'dialogs.bottom-tabs-preview.before'
+  | 'dialogs.bottom-tabs-preview.after'
+  | 'dialogs.bottom-tabs-preview.replace'
   | 'dialogs.bottom-tabs-separate-search'
   | 'dialogs.bottom-tabs-separate-search.before'
   | 'dialogs.bottom-tabs-separate-search.after'
   | 'dialogs.bottom-tabs-separate-search.replace'
-  | 'dialogs.bottom-tabs-hide-top-search'
-  | 'dialogs.bottom-tabs-hide-top-search.before'
-  | 'dialogs.bottom-tabs-hide-top-search.after'
-  | 'dialogs.bottom-tabs-hide-top-search.replace'
+  | 'dialogs.bottom-tabs-hide-on-scroll'
+  | 'dialogs.bottom-tabs-hide-on-scroll.before'
+  | 'dialogs.bottom-tabs-hide-on-scroll.after'
+  | 'dialogs.bottom-tabs-hide-on-scroll.replace'
+  | 'dialogs.start-tab'
+  | 'dialogs.start-tab.before'
+  | 'dialogs.start-tab.after'
+  | 'dialogs.start-tab.replace'
+  | 'dialogs.start-tab'
+  | 'dialogs.start-tab.before'
+  | 'dialogs.start-tab.after'
+  | 'dialogs.start-tab.replace'
   | 'dialogs.main-tabs-customize-reset'
   | 'dialogs.main-tabs-customize-reset.before'
   | 'dialogs.main-tabs-customize-reset.after'
   | 'dialogs.main-tabs-customize-reset.replace'
+  | 'dialogs.bottom-tabs-reset'
+  | 'dialogs.bottom-tabs-reset.before'
+  | 'dialogs.bottom-tabs-reset.after'
+  | 'dialogs.bottom-tabs-reset.replace'
+  | 'dialogs.bottom-tabs-hide-top-search'
+  | 'dialogs.bottom-tabs-hide-top-search.before'
+  | 'dialogs.bottom-tabs-hide-top-search.after'
+  | 'dialogs.bottom-tabs-hide-top-search.replace'
   | 'dialogs.dialogs-fab-main-action'
   | 'dialogs.dialogs-fab-main-action.before'
   | 'dialogs.dialogs-fab-main-action.after'
   | 'dialogs.dialogs-fab-main-action.replace'
+  | 'dialogs.fab-main-action'
+  | 'dialogs.fab-main-action.before'
+  | 'dialogs.fab-main-action.after'
+  | 'dialogs.fab-main-action.replace'
   | 'dialogs.dialogs-fab-secondary-action'
   | 'dialogs.dialogs-fab-secondary-action.before'
   | 'dialogs.dialogs-fab-secondary-action.after'
   | 'dialogs.dialogs-fab-secondary-action.replace'
+  | 'dialogs.fab-secondary-action'
+  | 'dialogs.fab-secondary-action.before'
+  | 'dialogs.fab-secondary-action.after'
+  | 'dialogs.fab-secondary-action.replace'
   | 'dialogs.dialogs-fab-hide-on-scroll'
   | 'dialogs.dialogs-fab-hide-on-scroll.before'
   | 'dialogs.dialogs-fab-hide-on-scroll.after'
@@ -1042,50 +1420,11 @@ export type EntinySlot =
   | 'dialogs.dialogs-fab-left-side.before'
   | 'dialogs.dialogs-fab-left-side.after'
   | 'dialogs.dialogs-fab-left-side.replace'
+  | 'dialogs.dialogs-fab-raise'
+  | 'dialogs.dialogs-fab-raise.before'
+  | 'dialogs.dialogs-fab-raise.after'
+  | 'dialogs.dialogs-fab-raise.replace'
   | 'dialogs.end'
-  | 'drawer.side-menu'
-  | 'drawer.side-menu.start'
-  | 'drawer.side-menu.end'
-  | 'drawer.navigation-drawer'
-  | 'drawer.navigation-drawer.before'
-  | 'drawer.navigation-drawer.after'
-  | 'drawer.navigation-drawer.replace'
-  | 'drawer.drawer-back-gesture'
-  | 'drawer.drawer-back-gesture.before'
-  | 'drawer.drawer-back-gesture.after'
-  | 'drawer.drawer-back-gesture.replace'
-  | 'drawer.drawer-m3-sections'
-  | 'drawer.drawer-m3-sections.before'
-  | 'drawer.drawer-m3-sections.after'
-  | 'drawer.drawer-m3-sections.replace'
-  | 'drawer.show-drawer-accounts'
-  | 'drawer.show-drawer-accounts.before'
-  | 'drawer.show-drawer-accounts.after'
-  | 'drawer.show-drawer-accounts.replace'
-  | 'drawer.bottom-tabs-hide'
-  | 'drawer.bottom-tabs-hide.before'
-  | 'drawer.bottom-tabs-hide.after'
-  | 'drawer.bottom-tabs-hide.replace'
-  | 'drawer.drawer-menu-order'
-  | 'drawer.drawer-menu-order.before'
-  | 'drawer.drawer-menu-order.after'
-  | 'drawer.drawer-menu-order.replace'
-  | 'drawer.end'
-  | 'drawer-menu-order.drawer-menu-items'
-  | 'drawer-menu-order.drawer-menu-items.start'
-  | 'drawer-menu-order.drawer-menu-items.end'
-  | 'drawer-menu-order.drawer-menu-hidden'
-  | 'drawer-menu-order.drawer-menu-hidden.start'
-  | 'drawer-menu-order.drawer-menu-hidden.end'
-  | 'drawer-menu-order.drawer-menu-add-divider'
-  | 'drawer-menu-order.drawer-menu-add-divider.before'
-  | 'drawer-menu-order.drawer-menu-add-divider.after'
-  | 'drawer-menu-order.drawer-menu-add-divider.replace'
-  | 'drawer-menu-order.drawer-menu-reset'
-  | 'drawer-menu-order.drawer-menu-reset.before'
-  | 'drawer-menu-order.drawer-menu-reset.after'
-  | 'drawer-menu-order.drawer-menu-reset.replace'
-  | 'drawer-menu-order.end'
   | 'feed-excluded-channels.feed-shown-channels'
   | 'feed-excluded-channels.feed-shown-channels.start'
   | 'feed-excluded-channels.feed-shown-channels.end'
@@ -1124,6 +1463,10 @@ export type EntinySlot =
   | 'fonts.font-include-system.before'
   | 'fonts.font-include-system.after'
   | 'fonts.font-include-system.replace'
+  | 'fonts.font-synthetic-bold'
+  | 'fonts.font-synthetic-bold.before'
+  | 'fonts.font-synthetic-bold.after'
+  | 'fonts.font-synthetic-bold.replace'
   | 'fonts.font-add'
   | 'fonts.font-add.before'
   | 'fonts.font-add.after'
@@ -1154,10 +1497,6 @@ export type EntinySlot =
   | 'ghost-mode.ghost-presence-mode.before'
   | 'ghost-mode.ghost-presence-mode.after'
   | 'ghost-mode.ghost-presence-mode.replace'
-  | 'ghost-mode.ghost-auto-offline'
-  | 'ghost-mode.ghost-auto-offline.before'
-  | 'ghost-mode.ghost-auto-offline.after'
-  | 'ghost-mode.ghost-auto-offline.replace'
   | 'ghost-mode.ghost-hide-app-bar-icon'
   | 'ghost-mode.ghost-hide-app-bar-icon.before'
   | 'ghost-mode.ghost-hide-app-bar-icon.after'
@@ -1178,17 +1517,151 @@ export type EntinySlot =
   | 'ghost-mode.ghost-mark-read-locally.before'
   | 'ghost-mode.ghost-mark-read-locally.after'
   | 'ghost-mode.ghost-mark-read-locally.replace'
+  | 'ghost-mode.ghost-hide-seen-mentions'
+  | 'ghost-mode.ghost-hide-seen-mentions.before'
+  | 'ghost-mode.ghost-hide-seen-mentions.after'
+  | 'ghost-mode.ghost-hide-seen-mentions.replace'
   | 'ghost-mode.end'
-  | 'icon-packs.icon-replacement'
-  | 'icon-packs.icon-replacement.start'
-  | 'icon-packs.icon-replacement.end'
-  | 'icon-packs.notification-icon'
-  | 'icon-packs.notification-icon.start'
-  | 'icon-packs.notification-icon.end'
+  | 'home.recent-chats'
+  | 'home.recent-chats.start'
+  | 'home.recent-chats.end'
+  | 'home.online-dots-section'
+  | 'home.online-dots-section.start'
+  | 'home.online-dots-section.end'
+  | 'home.mutual-contact-section'
+  | 'home.mutual-contact-section.start'
+  | 'home.mutual-contact-section.end'
+  | 'home.side-menu'
+  | 'home.side-menu.start'
+  | 'home.side-menu.end'
+  | 'home.menus'
+  | 'home.menus.start'
+  | 'home.menus.end'
+  | 'home.chat-list'
+  | 'home.chat-list.before'
+  | 'home.chat-list.after'
+  | 'home.chat-list.replace'
+  | 'home.pill-stack'
+  | 'home.pill-stack.before'
+  | 'home.pill-stack.after'
+  | 'home.pill-stack.replace'
+  | 'home.bookmarks'
+  | 'home.bookmarks.before'
+  | 'home.bookmarks.after'
+  | 'home.bookmarks.replace'
+  | 'home.feed'
+  | 'home.feed.before'
+  | 'home.feed.after'
+  | 'home.feed.replace'
+  | 'home.recent-chats'
+  | 'home.recent-chats.before'
+  | 'home.recent-chats.after'
+  | 'home.recent-chats.replace'
+  | 'home.recent-chats-style'
+  | 'home.recent-chats-style.before'
+  | 'home.recent-chats-style.after'
+  | 'home.recent-chats-style.replace'
+  | 'home.recent-chats-limit'
+  | 'home.recent-chats-limit.before'
+  | 'home.recent-chats-limit.after'
+  | 'home.recent-chats-limit.replace'
+  | 'home.recent-chats-limit'
+  | 'home.recent-chats-limit.before'
+  | 'home.recent-chats-limit.after'
+  | 'home.recent-chats-limit.replace'
+  | 'home.hide-recent-chats-shortcuts'
+  | 'home.hide-recent-chats-shortcuts.before'
+  | 'home.hide-recent-chats-shortcuts.after'
+  | 'home.hide-recent-chats-shortcuts.replace'
+  | 'home.clear-recent-chats'
+  | 'home.clear-recent-chats.before'
+  | 'home.clear-recent-chats.after'
+  | 'home.clear-recent-chats.replace'
+  | 'home.clear-recent-chats'
+  | 'home.clear-recent-chats.before'
+  | 'home.clear-recent-chats.after'
+  | 'home.clear-recent-chats.replace'
+  | 'home.show-online-indicator'
+  | 'home.show-online-indicator.before'
+  | 'home.show-online-indicator.after'
+  | 'home.show-online-indicator.replace'
+  | 'home.online-dots'
+  | 'home.online-dots.before'
+  | 'home.online-dots.after'
+  | 'home.online-dots.replace'
+  | 'home.chat-online-dots'
+  | 'home.chat-online-dots.before'
+  | 'home.chat-online-dots.after'
+  | 'home.chat-online-dots.replace'
+  | 'home.show-mutual-contact-icon'
+  | 'home.show-mutual-contact-icon.before'
+  | 'home.show-mutual-contact-icon.after'
+  | 'home.show-mutual-contact-icon.replace'
+  | 'home.show-mutual-contact-in-chats'
+  | 'home.show-mutual-contact-in-chats.before'
+  | 'home.show-mutual-contact-in-chats.after'
+  | 'home.show-mutual-contact-in-chats.replace'
+  | 'home.mutual-contact-icon-left'
+  | 'home.mutual-contact-icon-left.before'
+  | 'home.mutual-contact-icon-left.after'
+  | 'home.mutual-contact-icon-left.replace'
+  | 'home.navigation-drawer'
+  | 'home.navigation-drawer.before'
+  | 'home.navigation-drawer.after'
+  | 'home.navigation-drawer.replace'
+  | 'home.drawer-back-gesture'
+  | 'home.drawer-back-gesture.before'
+  | 'home.drawer-back-gesture.after'
+  | 'home.drawer-back-gesture.replace'
+  | 'home.drawer-keep-options-menu'
+  | 'home.drawer-keep-options-menu.before'
+  | 'home.drawer-keep-options-menu.after'
+  | 'home.drawer-keep-options-menu.replace'
+  | 'home.drawer-m3-sections'
+  | 'home.drawer-m3-sections.before'
+  | 'home.drawer-m3-sections.after'
+  | 'home.drawer-m3-sections.replace'
+  | 'home.show-drawer-accounts'
+  | 'home.show-drawer-accounts.before'
+  | 'home.show-drawer-accounts.after'
+  | 'home.show-drawer-accounts.replace'
+  | 'home.drawer-show-badge'
+  | 'home.drawer-show-badge.before'
+  | 'home.drawer-show-badge.after'
+  | 'home.drawer-show-badge.replace'
+  | 'home.side-menu'
+  | 'home.side-menu.before'
+  | 'home.side-menu.after'
+  | 'home.side-menu.replace'
+  | 'home.dialogs-menu-order'
+  | 'home.dialogs-menu-order.before'
+  | 'home.dialogs-menu-order.after'
+  | 'home.dialogs-menu-order.replace'
+  | 'home.chat-menu-order'
+  | 'home.chat-menu-order.before'
+  | 'home.chat-menu-order.after'
+  | 'home.chat-menu-order.replace'
+  | 'home.message-menu-order'
+  | 'home.message-menu-order.before'
+  | 'home.message-menu-order.after'
+  | 'home.message-menu-order.replace'
+  | 'home.profile-settings-rows-order'
+  | 'home.profile-settings-rows-order.before'
+  | 'home.profile-settings-rows-order.after'
+  | 'home.profile-settings-rows-order.replace'
+  | 'home.profile-info-rows-order'
+  | 'home.profile-info-rows-order.before'
+  | 'home.profile-info-rows-order.after'
+  | 'home.profile-info-rows-order.replace'
+  | 'home.end'
+  | 'icon-packs.icon-packs-installed'
+  | 'icon-packs.icon-packs-installed.start'
+  | 'icon-packs.icon-packs-installed.end'
+  | 'icon-packs.icon-pack-load-from-file'
+  | 'icon-packs.icon-pack-load-from-file.before'
+  | 'icon-packs.icon-pack-load-from-file.after'
+  | 'icon-packs.icon-pack-load-from-file.replace'
   | 'icon-packs.end'
-  | 'ios-style.ios-style'
-  | 'ios-style.ios-style.start'
-  | 'ios-style.ios-style.end'
   | 'ios-style.message-input'
   | 'ios-style.message-input.start'
   | 'ios-style.message-input.end'
@@ -1199,10 +1672,6 @@ export type EntinySlot =
   | 'ios-style.chat-header-settings.before'
   | 'ios-style.chat-header-settings.after'
   | 'ios-style.chat-header-settings.replace'
-  | 'ios-style.ios-bottom-bar'
-  | 'ios-style.ios-bottom-bar.before'
-  | 'ios-style.ios-bottom-bar.after'
-  | 'ios-style.ios-bottom-bar.replace'
   | 'ios-style.ios-chats-tab-first-folder'
   | 'ios-style.ios-chats-tab-first-folder.before'
   | 'ios-style.ios-chats-tab-first-folder.after'
@@ -1211,18 +1680,14 @@ export type EntinySlot =
   | 'ios-style.action-button-style.before'
   | 'ios-style.action-button-style.after'
   | 'ios-style.action-button-style.replace'
-  | 'ios-style.ios-button-placement'
-  | 'ios-style.ios-button-placement.before'
-  | 'ios-style.ios-button-placement.after'
-  | 'ios-style.ios-button-placement.replace'
-  | 'ios-style.ios-input-appearance'
-  | 'ios-style.ios-input-appearance.before'
-  | 'ios-style.ios-input-appearance.after'
-  | 'ios-style.ios-input-appearance.replace'
   | 'ios-style.compact-input-size'
   | 'ios-style.compact-input-size.before'
   | 'ios-style.compact-input-size.after'
   | 'ios-style.compact-input-size.replace'
+  | 'ios-style.commands-near-stickers'
+  | 'ios-style.commands-near-stickers.before'
+  | 'ios-style.commands-near-stickers.after'
+  | 'ios-style.commands-near-stickers.replace'
   | 'ios-style.disable-glass-glare'
   | 'ios-style.disable-glass-glare.before'
   | 'ios-style.disable-glass-glare.after'
@@ -1235,6 +1700,14 @@ export type EntinySlot =
   | 'local-names.local-names.before'
   | 'local-names.local-names.after'
   | 'local-names.local-names.replace'
+  | 'local-names.local-message-edit'
+  | 'local-names.local-message-edit.before'
+  | 'local-names.local-message-edit.after'
+  | 'local-names.local-message-edit.replace'
+  | 'local-names.local-edits-clear'
+  | 'local-names.local-edits-clear.before'
+  | 'local-names.local-edits-clear.after'
+  | 'local-names.local-edits-clear.replace'
   | 'local-names.local-names-add'
   | 'local-names.local-names-add.before'
   | 'local-names.local-names-add.after'
@@ -1252,24 +1725,27 @@ export type EntinySlot =
   | 'local-names.local-names-clear.after'
   | 'local-names.local-names-clear.replace'
   | 'local-names.end'
-  | 'marketplace.marketplace'
-  | 'marketplace.marketplace.start'
-  | 'marketplace.marketplace.end'
-  | 'marketplace.marketplace-versions'
-  | 'marketplace.marketplace-versions.start'
-  | 'marketplace.marketplace-versions.end'
-  | 'marketplace.end'
+  | 'material3.monet-theme'
+  | 'material3.monet-theme.before'
+  | 'material3.monet-theme.after'
+  | 'material3.monet-theme.replace'
+  | 'material3.monet-style'
+  | 'material3.monet-style.before'
+  | 'material3.monet-style.after'
+  | 'material3.monet-style.replace'
+  | 'material3.material3-headers-in-card'
+  | 'material3.material3-headers-in-card.before'
+  | 'material3.material3-headers-in-card.after'
+  | 'material3.material3-headers-in-card.replace'
+  | 'material3.forum-sections-cards'
+  | 'material3.forum-sections-cards.before'
+  | 'material3.forum-sections-cards.after'
+  | 'material3.forum-sections-cards.replace'
+  | 'material3.end'
   | 'menu-order.plugin-actions'
   | 'menu-order.plugin-actions.start'
   | 'menu-order.plugin-actions.end'
   | 'menu-order.end'
-  | 'menus.menus'
-  | 'menus.menus.start'
-  | 'menus.menus.end'
-  | 'menus.user-profile'
-  | 'menus.user-profile.start'
-  | 'menus.user-profile.end'
-  | 'menus.end'
   | 'message-design.stickers'
   | 'message-design.stickers.start'
   | 'message-design.stickers.end'
@@ -1305,6 +1781,10 @@ export type EntinySlot =
   | 'message-design.compact-edited.before'
   | 'message-design.compact-edited.after'
   | 'message-design.compact-edited.replace'
+  | 'message-design.edited-message-date-mode'
+  | 'message-design.edited-message-date-mode.before'
+  | 'message-design.edited-message-date-mode.after'
+  | 'message-design.edited-message-date-mode.replace'
   | 'message-design.show-forward-time'
   | 'message-design.show-forward-time.before'
   | 'message-design.show-forward-time.after'
@@ -1334,101 +1814,6 @@ export type EntinySlot =
   | 'message-design.chat-views-bottom.after'
   | 'message-design.chat-views-bottom.replace'
   | 'message-design.end'
-  | 'messages.reactions'
-  | 'messages.reactions.start'
-  | 'messages.reactions.end'
-  | 'messages.confirmations-section'
-  | 'messages.confirmations-section.start'
-  | 'messages.confirmations-section.end'
-  | 'messages.spoilers'
-  | 'messages.spoilers.start'
-  | 'messages.spoilers.end'
-  | 'messages.blocked-messages-section'
-  | 'messages.blocked-messages-section.start'
-  | 'messages.blocked-messages-section.end'
-  | 'messages.clown-avatars-section'
-  | 'messages.clown-avatars-section.start'
-  | 'messages.clown-avatars-section.end'
-  | 'messages.category-behavior'
-  | 'messages.category-behavior.start'
-  | 'messages.category-behavior.end'
-  | 'messages.double-tap-actions'
-  | 'messages.double-tap-actions.start'
-  | 'messages.double-tap-actions.end'
-  | 'messages.pinned-reactions'
-  | 'messages.pinned-reactions.before'
-  | 'messages.pinned-reactions.after'
-  | 'messages.pinned-reactions.replace'
-  | 'messages.instant-mark-reactions-read'
-  | 'messages.instant-mark-reactions-read.before'
-  | 'messages.instant-mark-reactions-read.after'
-  | 'messages.instant-mark-reactions-read.replace'
-  | 'messages.confirm-reaction-non-member'
-  | 'messages.confirm-reaction-non-member.before'
-  | 'messages.confirm-reaction-non-member.after'
-  | 'messages.confirm-reaction-non-member.replace'
-  | 'messages.show-spoilers-directly'
-  | 'messages.show-spoilers-directly.before'
-  | 'messages.show-spoilers-directly.after'
-  | 'messages.show-spoilers-directly.replace'
-  | 'messages.text-spoiler-mode'
-  | 'messages.text-spoiler-mode.before'
-  | 'messages.text-spoiler-mode.after'
-  | 'messages.text-spoiler-mode.replace'
-  | 'messages.spoiler-extend-to-line-end'
-  | 'messages.spoiler-extend-to-line-end.before'
-  | 'messages.spoiler-extend-to-line-end.after'
-  | 'messages.spoiler-extend-to-line-end.replace'
-  | 'messages.media-spoiler-mode'
-  | 'messages.media-spoiler-mode.before'
-  | 'messages.media-spoiler-mode.after'
-  | 'messages.media-spoiler-mode.replace'
-  | 'messages.link-preview-spoiler'
-  | 'messages.link-preview-spoiler.before'
-  | 'messages.link-preview-spoiler.after'
-  | 'messages.link-preview-spoiler.replace'
-  | 'messages.blocked-messages-mode'
-  | 'messages.blocked-messages-mode.before'
-  | 'messages.blocked-messages-mode.after'
-  | 'messages.blocked-messages-mode.replace'
-  | 'messages.blocked-messages-extra'
-  | 'messages.blocked-messages-extra.before'
-  | 'messages.blocked-messages-extra.after'
-  | 'messages.blocked-messages-extra.replace'
-  | 'messages.clown-avatar-blocked'
-  | 'messages.clown-avatar-blocked.before'
-  | 'messages.clown-avatar-blocked.after'
-  | 'messages.clown-avatar-blocked.replace'
-  | 'messages.clown-avatar-blocked-me'
-  | 'messages.clown-avatar-blocked-me.before'
-  | 'messages.clown-avatar-blocked-me.after'
-  | 'messages.clown-avatar-blocked-me.replace'
-  | 'messages.clown-avatar-emoji'
-  | 'messages.clown-avatar-emoji.before'
-  | 'messages.clown-avatar-emoji.after'
-  | 'messages.clown-avatar-emoji.replace'
-  | 'messages.chat-remember-all-replies'
-  | 'messages.chat-remember-all-replies.before'
-  | 'messages.chat-remember-all-replies.after'
-  | 'messages.chat-remember-all-replies.replace'
-  | 'messages.forward-pro'
-  | 'messages.forward-pro.before'
-  | 'messages.forward-pro.after'
-  | 'messages.forward-pro.replace'
-  | 'messages.incoming-messages'
-  | 'messages.incoming-messages.before'
-  | 'messages.incoming-messages.after'
-  | 'messages.incoming-messages.replace'
-  | 'messages.outgoing-messages'
-  | 'messages.outgoing-messages.before'
-  | 'messages.outgoing-messages.after'
-  | 'messages.outgoing-messages.replace'
-  | 'messages.channel-messages'
-  | 'messages.channel-messages.before'
-  | 'messages.channel-messages.after'
-  | 'messages.channel-messages.replace'
-  | 'messages.end'
-  | 'niche.end'
   | 'paranoia.paranoia-whitelist'
   | 'paranoia.paranoia-whitelist.before'
   | 'paranoia.paranoia-whitelist.after'
@@ -1449,6 +1834,14 @@ export type EntinySlot =
   | 'paranoia.paranoia-hide-my-stories.before'
   | 'paranoia.paranoia-hide-my-stories.after'
   | 'paranoia.paranoia-hide-my-stories.replace'
+  | 'paranoia.paranoia-hide-stars'
+  | 'paranoia.paranoia-hide-stars.before'
+  | 'paranoia.paranoia-hide-stars.after'
+  | 'paranoia.paranoia-hide-stars.replace'
+  | 'paranoia.paranoia-hide-gram'
+  | 'paranoia.paranoia-hide-gram.before'
+  | 'paranoia.paranoia-hide-gram.after'
+  | 'paranoia.paranoia-hide-gram.replace'
   | 'paranoia.paranoia-disable-notifications'
   | 'paranoia.paranoia-disable-notifications.before'
   | 'paranoia.paranoia-disable-notifications.after'
@@ -1500,10 +1893,6 @@ export type EntinySlot =
   | 'pill-stack.pill-stack-hidden-pills'
   | 'pill-stack.pill-stack-hidden-pills.start'
   | 'pill-stack.pill-stack-hidden-pills.end'
-  | 'pill-stack.pill-stack'
-  | 'pill-stack.pill-stack.before'
-  | 'pill-stack.pill-stack.after'
-  | 'pill-stack.pill-stack.replace'
   | 'pill-stack.pill-stack-infinite-scrolling'
   | 'pill-stack.pill-stack-infinite-scrolling.before'
   | 'pill-stack.pill-stack-infinite-scrolling.after'
@@ -1548,6 +1937,14 @@ export type EntinySlot =
   | 'plugin-info.plugins-permissions'
   | 'plugin-info.plugins-permissions.start'
   | 'plugin-info.plugins-permissions.end'
+  | 'plugin-info.plugins-memory-usage'
+  | 'plugin-info.plugins-memory-usage.before'
+  | 'plugin-info.plugins-memory-usage.after'
+  | 'plugin-info.plugins-memory-usage.replace'
+  | 'plugin-info.plugin-assets'
+  | 'plugin-info.plugin-assets.before'
+  | 'plugin-info.plugin-assets.after'
+  | 'plugin-info.plugin-assets.replace'
   | 'plugin-info.plugins-view-source'
   | 'plugin-info.plugins-view-source.before'
   | 'plugin-info.plugins-view-source.after'
@@ -1561,6 +1958,59 @@ export type EntinySlot =
   | 'plugin-info.plugins-remove.after'
   | 'plugin-info.plugins-remove.replace'
   | 'plugin-info.end'
+  | 'plugin-repo.plugin-repo-sort'
+  | 'plugin-repo.plugin-repo-sort.before'
+  | 'plugin-repo.plugin-repo-sort.after'
+  | 'plugin-repo.plugin-repo-sort.replace'
+  | 'plugin-repo.plugin-repo-retry'
+  | 'plugin-repo.plugin-repo-retry.before'
+  | 'plugin-repo.plugin-repo-retry.after'
+  | 'plugin-repo.plugin-repo-retry.replace'
+  | 'plugin-repo.end'
+  | 'plugin-repo-plugin.plugin-repo-description'
+  | 'plugin-repo-plugin.plugin-repo-description.before'
+  | 'plugin-repo-plugin.plugin-repo-description.after'
+  | 'plugin-repo-plugin.plugin-repo-description.replace'
+  | 'plugin-repo-plugin.plugin-repo-author'
+  | 'plugin-repo-plugin.plugin-repo-author.before'
+  | 'plugin-repo-plugin.plugin-repo-author.after'
+  | 'plugin-repo-plugin.plugin-repo-author.replace'
+  | 'plugin-repo-plugin.plugin-repo-source'
+  | 'plugin-repo-plugin.plugin-repo-source.before'
+  | 'plugin-repo-plugin.plugin-repo-source.after'
+  | 'plugin-repo-plugin.plugin-repo-source.replace'
+  | 'plugin-repo-plugin.plugin-repo-id'
+  | 'plugin-repo-plugin.plugin-repo-id.before'
+  | 'plugin-repo-plugin.plugin-repo-id.after'
+  | 'plugin-repo-plugin.plugin-repo-id.replace'
+  | 'plugin-repo-plugin.plugin-repo-dependencies'
+  | 'plugin-repo-plugin.plugin-repo-dependencies.before'
+  | 'plugin-repo-plugin.plugin-repo-dependencies.after'
+  | 'plugin-repo-plugin.plugin-repo-dependencies.replace'
+  | 'plugin-repo-plugin.plugin-repo-install'
+  | 'plugin-repo-plugin.plugin-repo-install.before'
+  | 'plugin-repo-plugin.plugin-repo-install.after'
+  | 'plugin-repo-plugin.plugin-repo-install.replace'
+  | 'plugin-repo-plugin.plugin-repo-update'
+  | 'plugin-repo-plugin.plugin-repo-update.before'
+  | 'plugin-repo-plugin.plugin-repo-update.after'
+  | 'plugin-repo-plugin.plugin-repo-update.replace'
+  | 'plugin-repo-plugin.plugins-installed'
+  | 'plugin-repo-plugin.plugins-installed.before'
+  | 'plugin-repo-plugin.plugins-installed.after'
+  | 'plugin-repo-plugin.plugins-installed.replace'
+  | 'plugin-repo-plugin.end'
+  | 'plugin-repos.plugin-repos-updates'
+  | 'plugin-repos.plugin-repos-updates.start'
+  | 'plugin-repos.plugin-repos-updates.end'
+  | 'plugin-repos.plugin-repos'
+  | 'plugin-repos.plugin-repos.start'
+  | 'plugin-repos.plugin-repos.end'
+  | 'plugin-repos.plugin-repos-add'
+  | 'plugin-repos.plugin-repos-add.before'
+  | 'plugin-repos.plugin-repos-add.after'
+  | 'plugin-repos.plugin-repos-add.replace'
+  | 'plugin-repos.end'
   | 'plugins.plugins-installed'
   | 'plugins.plugins-installed.start'
   | 'plugins.plugins-installed.end'
@@ -1568,10 +2018,10 @@ export type EntinySlot =
   | 'plugins.plugins-enable-engine.before'
   | 'plugins.plugins-enable-engine.after'
   | 'plugins.plugins-enable-engine.replace'
-  | 'plugins.marketplace'
-  | 'plugins.marketplace.before'
-  | 'plugins.marketplace.after'
-  | 'plugins.marketplace.replace'
+  | 'plugins.plugin-repos'
+  | 'plugins.plugin-repos.before'
+  | 'plugins.plugin-repos.after'
+  | 'plugins.plugin-repos.replace'
   | 'plugins.plugins-load-from-disk'
   | 'plugins.plugins-load-from-disk.before'
   | 'plugins.plugins-load-from-disk.after'
@@ -1593,65 +2043,275 @@ export type EntinySlot =
   | 'presence-watch-list.presence-watch-add.after'
   | 'presence-watch-list.presence-watch-add.replace'
   | 'presence-watch-list.end'
-  | 'privacy-security.strip-tracking-params'
-  | 'privacy-security.strip-tracking-params.start'
-  | 'privacy-security.strip-tracking-params.end'
-  | 'privacy-security.biometric-confirm'
-  | 'privacy-security.biometric-confirm.start'
-  | 'privacy-security.biometric-confirm.end'
-  | 'privacy-security.per-account-passcode'
-  | 'privacy-security.per-account-passcode.before'
-  | 'privacy-security.per-account-passcode.after'
-  | 'privacy-security.per-account-passcode.replace'
-  | 'privacy-security.paranoia-mode'
-  | 'privacy-security.paranoia-mode.before'
-  | 'privacy-security.paranoia-mode.after'
-  | 'privacy-security.paranoia-mode.replace'
-  | 'privacy-security.anti-censorship'
-  | 'privacy-security.anti-censorship.before'
-  | 'privacy-security.anti-censorship.after'
-  | 'privacy-security.anti-censorship.replace'
-  | 'privacy-security.hide-my-phone-number'
-  | 'privacy-security.hide-my-phone-number.before'
-  | 'privacy-security.hide-my-phone-number.after'
-  | 'privacy-security.hide-my-phone-number.replace'
-  | 'privacy-security.disable-draft-upload'
-  | 'privacy-security.disable-draft-upload.before'
-  | 'privacy-security.disable-draft-upload.after'
-  | 'privacy-security.disable-draft-upload.replace'
-  | 'privacy-security.disable-sensitive'
-  | 'privacy-security.disable-sensitive.before'
-  | 'privacy-security.disable-sensitive.after'
-  | 'privacy-security.disable-sensitive.replace'
-  | 'privacy-security.strip-tracking-params-on-open'
-  | 'privacy-security.strip-tracking-params-on-open.before'
-  | 'privacy-security.strip-tracking-params-on-open.after'
-  | 'privacy-security.strip-tracking-params-on-open.replace'
-  | 'privacy-security.strip-tracking-params-on-paste'
-  | 'privacy-security.strip-tracking-params-on-paste.before'
-  | 'privacy-security.strip-tracking-params-on-paste.after'
-  | 'privacy-security.strip-tracking-params-on-paste.replace'
-  | 'privacy-security.biometric-confirm-delete-chat'
-  | 'privacy-security.biometric-confirm-delete-chat.before'
-  | 'privacy-security.biometric-confirm-delete-chat.after'
-  | 'privacy-security.biometric-confirm-delete-chat.replace'
-  | 'privacy-security.biometric-confirm-logout'
-  | 'privacy-security.biometric-confirm-logout.before'
-  | 'privacy-security.biometric-confirm-logout.after'
-  | 'privacy-security.biometric-confirm-logout.replace'
-  | 'privacy-security.biometric-allow-device-credential'
-  | 'privacy-security.biometric-allow-device-credential.before'
-  | 'privacy-security.biometric-allow-device-credential.after'
-  | 'privacy-security.biometric-allow-device-credential.replace'
-  | 'privacy-security.biometric-lock-archive'
-  | 'privacy-security.biometric-lock-archive.before'
-  | 'privacy-security.biometric-lock-archive.after'
-  | 'privacy-security.biometric-lock-archive.replace'
-  | 'privacy-security.biometric-lock-archive-every-time'
-  | 'privacy-security.biometric-lock-archive-every-time.before'
-  | 'privacy-security.biometric-lock-archive-every-time.after'
-  | 'privacy-security.biometric-lock-archive-every-time.replace'
-  | 'privacy-security.end'
+  | 'privacy-freedom.strip-tracking-params'
+  | 'privacy-freedom.strip-tracking-params.start'
+  | 'privacy-freedom.strip-tracking-params.end'
+  | 'privacy-freedom.biometric-confirm'
+  | 'privacy-freedom.biometric-confirm.start'
+  | 'privacy-freedom.biometric-confirm.end'
+  | 'privacy-freedom.stalker-saved'
+  | 'privacy-freedom.stalker-saved.start'
+  | 'privacy-freedom.stalker-saved.end'
+  | 'privacy-freedom.stalker-presence'
+  | 'privacy-freedom.stalker-presence.start'
+  | 'privacy-freedom.stalker-presence.end'
+  | 'privacy-freedom.stalker-tools'
+  | 'privacy-freedom.stalker-tools.start'
+  | 'privacy-freedom.stalker-tools.end'
+  | 'privacy-freedom.premium-unlock'
+  | 'privacy-freedom.premium-unlock.start'
+  | 'privacy-freedom.premium-unlock.end'
+  | 'privacy-freedom.content-protection-bypass'
+  | 'privacy-freedom.content-protection-bypass.start'
+  | 'privacy-freedom.content-protection-bypass.end'
+  | 'privacy-freedom.unlimited-limits'
+  | 'privacy-freedom.unlimited-limits.start'
+  | 'privacy-freedom.unlimited-limits.end'
+  | 'privacy-freedom.anti-censorship-transport'
+  | 'privacy-freedom.anti-censorship-transport.start'
+  | 'privacy-freedom.anti-censorship-transport.end'
+  | 'privacy-freedom.anti-censorship-privacy'
+  | 'privacy-freedom.anti-censorship-privacy.start'
+  | 'privacy-freedom.anti-censorship-privacy.end'
+  | 'privacy-freedom.ghost-mode'
+  | 'privacy-freedom.ghost-mode.before'
+  | 'privacy-freedom.ghost-mode.after'
+  | 'privacy-freedom.ghost-mode.replace'
+  | 'privacy-freedom.anti-deletion'
+  | 'privacy-freedom.anti-deletion.before'
+  | 'privacy-freedom.anti-deletion.after'
+  | 'privacy-freedom.anti-deletion.replace'
+  | 'privacy-freedom.regex-filter'
+  | 'privacy-freedom.regex-filter.before'
+  | 'privacy-freedom.regex-filter.after'
+  | 'privacy-freedom.regex-filter.replace'
+  | 'privacy-freedom.device-spoof'
+  | 'privacy-freedom.device-spoof.before'
+  | 'privacy-freedom.device-spoof.after'
+  | 'privacy-freedom.device-spoof.replace'
+  | 'privacy-freedom.per-account-passcode'
+  | 'privacy-freedom.per-account-passcode.before'
+  | 'privacy-freedom.per-account-passcode.after'
+  | 'privacy-freedom.per-account-passcode.replace'
+  | 'privacy-freedom.paranoia-mode'
+  | 'privacy-freedom.paranoia-mode.before'
+  | 'privacy-freedom.paranoia-mode.after'
+  | 'privacy-freedom.paranoia-mode.replace'
+  | 'privacy-freedom.hide-my-phone-number'
+  | 'privacy-freedom.hide-my-phone-number.before'
+  | 'privacy-freedom.hide-my-phone-number.after'
+  | 'privacy-freedom.hide-my-phone-number.replace'
+  | 'privacy-freedom.disable-draft-upload'
+  | 'privacy-freedom.disable-draft-upload.before'
+  | 'privacy-freedom.disable-draft-upload.after'
+  | 'privacy-freedom.disable-draft-upload.replace'
+  | 'privacy-freedom.disable-sensitive'
+  | 'privacy-freedom.disable-sensitive.before'
+  | 'privacy-freedom.disable-sensitive.after'
+  | 'privacy-freedom.disable-sensitive.replace'
+  | 'privacy-freedom.strip-tracking-params-on-open'
+  | 'privacy-freedom.strip-tracking-params-on-open.before'
+  | 'privacy-freedom.strip-tracking-params-on-open.after'
+  | 'privacy-freedom.strip-tracking-params-on-open.replace'
+  | 'privacy-freedom.strip-tracking-params-on-paste'
+  | 'privacy-freedom.strip-tracking-params-on-paste.before'
+  | 'privacy-freedom.strip-tracking-params-on-paste.after'
+  | 'privacy-freedom.strip-tracking-params-on-paste.replace'
+  | 'privacy-freedom.resolve-trackable-redirects'
+  | 'privacy-freedom.resolve-trackable-redirects.before'
+  | 'privacy-freedom.resolve-trackable-redirects.after'
+  | 'privacy-freedom.resolve-trackable-redirects.replace'
+  | 'privacy-freedom.strip-tracking-params-source-row'
+  | 'privacy-freedom.strip-tracking-params-source-row.before'
+  | 'privacy-freedom.strip-tracking-params-source-row.after'
+  | 'privacy-freedom.strip-tracking-params-source-row.replace'
+  | 'privacy-freedom.strip-tracking-params-source'
+  | 'privacy-freedom.strip-tracking-params-source.before'
+  | 'privacy-freedom.strip-tracking-params-source.after'
+  | 'privacy-freedom.strip-tracking-params-source.replace'
+  | 'privacy-freedom.biometric-confirm-delete-chat'
+  | 'privacy-freedom.biometric-confirm-delete-chat.before'
+  | 'privacy-freedom.biometric-confirm-delete-chat.after'
+  | 'privacy-freedom.biometric-confirm-delete-chat.replace'
+  | 'privacy-freedom.biometric-confirm-logout'
+  | 'privacy-freedom.biometric-confirm-logout.before'
+  | 'privacy-freedom.biometric-confirm-logout.after'
+  | 'privacy-freedom.biometric-confirm-logout.replace'
+  | 'privacy-freedom.biometric-allow-device-credential'
+  | 'privacy-freedom.biometric-allow-device-credential.before'
+  | 'privacy-freedom.biometric-allow-device-credential.after'
+  | 'privacy-freedom.biometric-allow-device-credential.replace'
+  | 'privacy-freedom.biometric-lock-archive'
+  | 'privacy-freedom.biometric-lock-archive.before'
+  | 'privacy-freedom.biometric-lock-archive.after'
+  | 'privacy-freedom.biometric-lock-archive.replace'
+  | 'privacy-freedom.biometric-lock-archive-every-time'
+  | 'privacy-freedom.biometric-lock-archive-every-time.before'
+  | 'privacy-freedom.biometric-lock-archive-every-time.after'
+  | 'privacy-freedom.biometric-lock-archive-every-time.replace'
+  | 'privacy-freedom.biometric-explicit-confirmation'
+  | 'privacy-freedom.biometric-explicit-confirmation.before'
+  | 'privacy-freedom.biometric-explicit-confirmation.after'
+  | 'privacy-freedom.biometric-explicit-confirmation.replace'
+  | 'privacy-freedom.biometric-require-confirmation'
+  | 'privacy-freedom.biometric-require-confirmation.before'
+  | 'privacy-freedom.biometric-require-confirmation.after'
+  | 'privacy-freedom.biometric-require-confirmation.replace'
+  | 'privacy-freedom.save-read-time'
+  | 'privacy-freedom.save-read-time.before'
+  | 'privacy-freedom.save-read-time.after'
+  | 'privacy-freedom.save-read-time.replace'
+  | 'privacy-freedom.save-last-seen'
+  | 'privacy-freedom.save-last-seen.before'
+  | 'privacy-freedom.save-last-seen.after'
+  | 'privacy-freedom.save-last-seen.replace'
+  | 'privacy-freedom.presence-watch-list'
+  | 'privacy-freedom.presence-watch-list.before'
+  | 'privacy-freedom.presence-watch-list.after'
+  | 'privacy-freedom.presence-watch-list.replace'
+  | 'privacy-freedom.presence-logger-notify'
+  | 'privacy-freedom.presence-logger-notify.before'
+  | 'privacy-freedom.presence-logger-notify.after'
+  | 'privacy-freedom.presence-logger-notify.replace'
+  | 'privacy-freedom.force-relay-calls'
+  | 'privacy-freedom.force-relay-calls.before'
+  | 'privacy-freedom.force-relay-calls.after'
+  | 'privacy-freedom.force-relay-calls.replace'
+  | 'privacy-freedom.typing-spoof'
+  | 'privacy-freedom.typing-spoof.before'
+  | 'privacy-freedom.typing-spoof.after'
+  | 'privacy-freedom.typing-spoof.replace'
+  | 'privacy-freedom.local-premium'
+  | 'privacy-freedom.local-premium.before'
+  | 'privacy-freedom.local-premium.after'
+  | 'privacy-freedom.local-premium.replace'
+  | 'privacy-freedom.local-custom-emoji'
+  | 'privacy-freedom.local-custom-emoji.before'
+  | 'privacy-freedom.local-custom-emoji.after'
+  | 'privacy-freedom.local-custom-emoji.replace'
+  | 'privacy-freedom.local-names'
+  | 'privacy-freedom.local-names.before'
+  | 'privacy-freedom.local-names.after'
+  | 'privacy-freedom.local-names.replace'
+  | 'privacy-freedom.save-any-story'
+  | 'privacy-freedom.save-any-story.before'
+  | 'privacy-freedom.save-any-story.after'
+  | 'privacy-freedom.save-any-story.replace'
+  | 'privacy-freedom.auto-save-stories'
+  | 'privacy-freedom.auto-save-stories.before'
+  | 'privacy-freedom.auto-save-stories.after'
+  | 'privacy-freedom.auto-save-stories.replace'
+  | 'privacy-freedom.allow-forward-restricted'
+  | 'privacy-freedom.allow-forward-restricted.before'
+  | 'privacy-freedom.allow-forward-restricted.after'
+  | 'privacy-freedom.allow-forward-restricted.replace'
+  | 'privacy-freedom.disable-flag-secure'
+  | 'privacy-freedom.disable-flag-secure.before'
+  | 'privacy-freedom.disable-flag-secure.after'
+  | 'privacy-freedom.disable-flag-secure.replace'
+  | 'privacy-freedom.suppress-screenshot-notification'
+  | 'privacy-freedom.suppress-screenshot-notification.before'
+  | 'privacy-freedom.suppress-screenshot-notification.after'
+  | 'privacy-freedom.suppress-screenshot-notification.replace'
+  | 'privacy-freedom.unlimited-pinned-chats'
+  | 'privacy-freedom.unlimited-pinned-chats.before'
+  | 'privacy-freedom.unlimited-pinned-chats.after'
+  | 'privacy-freedom.unlimited-pinned-chats.replace'
+  | 'privacy-freedom.unlimited-pinned-chats-count'
+  | 'privacy-freedom.unlimited-pinned-chats-count.before'
+  | 'privacy-freedom.unlimited-pinned-chats-count.after'
+  | 'privacy-freedom.unlimited-pinned-chats-count.replace'
+  | 'privacy-freedom.unlimited-favorite-stickers'
+  | 'privacy-freedom.unlimited-favorite-stickers.before'
+  | 'privacy-freedom.unlimited-favorite-stickers.after'
+  | 'privacy-freedom.unlimited-favorite-stickers.replace'
+  | 'privacy-freedom.unlimited-folder-chats'
+  | 'privacy-freedom.unlimited-folder-chats.before'
+  | 'privacy-freedom.unlimited-folder-chats.after'
+  | 'privacy-freedom.unlimited-folder-chats.replace'
+  | 'privacy-freedom.local-folders'
+  | 'privacy-freedom.local-folders.before'
+  | 'privacy-freedom.local-folders.after'
+  | 'privacy-freedom.local-folders.replace'
+  | 'privacy-freedom.ws-tunnel'
+  | 'privacy-freedom.ws-tunnel.before'
+  | 'privacy-freedom.ws-tunnel.after'
+  | 'privacy-freedom.ws-tunnel.replace'
+  | 'privacy-freedom.leak-guard'
+  | 'privacy-freedom.leak-guard.before'
+  | 'privacy-freedom.leak-guard.after'
+  | 'privacy-freedom.leak-guard.replace'
+  | 'privacy-freedom.end'
+  | 'profile-accounts.user-profile'
+  | 'profile-accounts.user-profile.start'
+  | 'profile-accounts.user-profile.end'
+  | 'profile-accounts.accounts-section'
+  | 'profile-accounts.accounts-section.start'
+  | 'profile-accounts.accounts-section.end'
+  | 'profile-accounts.calls-section'
+  | 'profile-accounts.calls-section.start'
+  | 'profile-accounts.calls-section.end'
+  | 'profile-accounts.profile-photo-gradient-fade'
+  | 'profile-accounts.profile-photo-gradient-fade.before'
+  | 'profile-accounts.profile-photo-gradient-fade.after'
+  | 'profile-accounts.profile-photo-gradient-fade.replace'
+  | 'profile-accounts.reduce-profile-motion'
+  | 'profile-accounts.reduce-profile-motion.before'
+  | 'profile-accounts.reduce-profile-motion.after'
+  | 'profile-accounts.reduce-profile-motion.replace'
+  | 'profile-accounts.disable-profile-scroll-snap'
+  | 'profile-accounts.disable-profile-scroll-snap.before'
+  | 'profile-accounts.disable-profile-scroll-snap.after'
+  | 'profile-accounts.disable-profile-scroll-snap.replace'
+  | 'profile-accounts.profile-prefer-media-tab'
+  | 'profile-accounts.profile-prefer-media-tab.before'
+  | 'profile-accounts.profile-prefer-media-tab.after'
+  | 'profile-accounts.profile-prefer-media-tab.replace'
+  | 'profile-accounts.show-profile-gift-button'
+  | 'profile-accounts.show-profile-gift-button.before'
+  | 'profile-accounts.show-profile-gift-button.after'
+  | 'profile-accounts.show-profile-gift-button.replace'
+  | 'profile-accounts.profile-id-mode'
+  | 'profile-accounts.profile-id-mode.before'
+  | 'profile-accounts.profile-id-mode.after'
+  | 'profile-accounts.profile-id-mode.replace'
+  | 'profile-accounts.show-profile-reg-date'
+  | 'profile-accounts.show-profile-reg-date.before'
+  | 'profile-accounts.show-profile-reg-date.after'
+  | 'profile-accounts.show-profile-reg-date.replace'
+  | 'profile-accounts.disable-chat-title-phone'
+  | 'profile-accounts.disable-chat-title-phone.before'
+  | 'profile-accounts.disable-chat-title-phone.after'
+  | 'profile-accounts.disable-chat-title-phone.replace'
+  | 'profile-accounts.open-by-user-id'
+  | 'profile-accounts.open-by-user-id.before'
+  | 'profile-accounts.open-by-user-id.after'
+  | 'profile-accounts.open-by-user-id.replace'
+  | 'profile-accounts.settings-show-accounts'
+  | 'profile-accounts.settings-show-accounts.before'
+  | 'profile-accounts.settings-show-accounts.after'
+  | 'profile-accounts.settings-show-accounts.replace'
+  | 'profile-accounts.account-switch-shortcut'
+  | 'profile-accounts.account-switch-shortcut.before'
+  | 'profile-accounts.account-switch-shortcut.after'
+  | 'profile-accounts.account-switch-shortcut.replace'
+  | 'profile-accounts.call-confirmation'
+  | 'profile-accounts.call-confirmation.before'
+  | 'profile-accounts.call-confirmation.after'
+  | 'profile-accounts.call-confirmation.replace'
+  | 'profile-accounts.hd-bluetooth-call-audio'
+  | 'profile-accounts.hd-bluetooth-call-audio.before'
+  | 'profile-accounts.hd-bluetooth-call-audio.after'
+  | 'profile-accounts.hd-bluetooth-call-audio.replace'
+  | 'profile-accounts.call-rotation'
+  | 'profile-accounts.call-rotation.before'
+  | 'profile-accounts.call-rotation.after'
+  | 'profile-accounts.call-rotation.replace'
+  | 'profile-accounts.disable-call-proximity'
+  | 'profile-accounts.disable-call-proximity.before'
+  | 'profile-accounts.disable-call-proximity.after'
+  | 'profile-accounts.disable-call-proximity.replace'
+  | 'profile-accounts.end'
   | 'rate-pair-edit.pill-stack-rate-target'
   | 'rate-pair-edit.pill-stack-rate-target.before'
   | 'rate-pair-edit.pill-stack-rate-target.after'
@@ -1661,23 +2321,6 @@ export type EntinySlot =
   | 'rate-pair-edit.pill-stack-rate-preview.after'
   | 'rate-pair-edit.pill-stack-rate-preview.replace'
   | 'rate-pair-edit.end'
-  | 'recent-chats.recent-chats-style'
-  | 'recent-chats.recent-chats-style.before'
-  | 'recent-chats.recent-chats-style.after'
-  | 'recent-chats.recent-chats-style.replace'
-  | 'recent-chats.recent-chats-limit'
-  | 'recent-chats.recent-chats-limit.before'
-  | 'recent-chats.recent-chats-limit.after'
-  | 'recent-chats.recent-chats-limit.replace'
-  | 'recent-chats.hide-recent-chats-shortcuts'
-  | 'recent-chats.hide-recent-chats-shortcuts.before'
-  | 'recent-chats.hide-recent-chats-shortcuts.after'
-  | 'recent-chats.hide-recent-chats-shortcuts.replace'
-  | 'recent-chats.clear-recent-chats'
-  | 'recent-chats.clear-recent-chats.before'
-  | 'recent-chats.clear-recent-chats.after'
-  | 'recent-chats.clear-recent-chats.replace'
-  | 'recent-chats.end'
   | 'regex-chat-filter.regex-chat-filters-own'
   | 'regex-chat-filter.regex-chat-filters-own.start'
   | 'regex-chat-filter.regex-chat-filters-own.end'
@@ -1707,6 +2350,10 @@ export type EntinySlot =
   | 'regex-filter.hide-proxy-sponsor-chat.before'
   | 'regex-filter.hide-proxy-sponsor-chat.after'
   | 'regex-filter.hide-proxy-sponsor-chat.replace'
+  | 'regex-filter.hide-business-bot-banner'
+  | 'regex-filter.hide-business-bot-banner.before'
+  | 'regex-filter.hide-business-bot-banner.after'
+  | 'regex-filter.hide-business-bot-banner.replace'
   | 'regex-filter.regex-filter-enabled'
   | 'regex-filter.regex-filter-enabled.before'
   | 'regex-filter.regex-filter-enabled.after'
@@ -1753,207 +2400,212 @@ export type EntinySlot =
   | 'regex-filter-edit.regex-reversed.after'
   | 'regex-filter-edit.regex-reversed.replace'
   | 'regex-filter-edit.end'
-  | 'root.root-interface'
-  | 'root.root-interface.start'
-  | 'root.root-interface.end'
-  | 'root.root-privacy'
-  | 'root.root-privacy.start'
-  | 'root.root-privacy.end'
-  | 'root.root-system'
-  | 'root.root-system.start'
-  | 'root.root-system.end'
   | 'root.category-appearance'
   | 'root.category-appearance.before'
   | 'root.category-appearance.after'
   | 'root.category-appearance.replace'
-  | 'root.category-chats'
-  | 'root.category-chats.before'
-  | 'root.category-chats.after'
-  | 'root.category-chats.replace'
-  | 'root.messages'
-  | 'root.messages.before'
-  | 'root.messages.after'
-  | 'root.messages.replace'
+  | 'root.home-and-chat-list'
+  | 'root.home-and-chat-list.before'
+  | 'root.home-and-chat-list.after'
+  | 'root.home-and-chat-list.replace'
+  | 'root.chats-and-messages'
+  | 'root.chats-and-messages.before'
+  | 'root.chats-and-messages.after'
+  | 'root.chats-and-messages.replace'
+  | 'root.profile-and-accounts'
+  | 'root.profile-and-accounts.before'
+  | 'root.profile-and-accounts.after'
+  | 'root.profile-and-accounts.replace'
+  | 'root.privacy-and-freedom'
+  | 'root.privacy-and-freedom.before'
+  | 'root.privacy-and-freedom.after'
+  | 'root.privacy-and-freedom.replace'
   | 'root.annoyances'
   | 'root.annoyances.before'
   | 'root.annoyances.after'
   | 'root.annoyances.replace'
-  | 'root.ai-compose'
-  | 'root.ai-compose.before'
-  | 'root.ai-compose.after'
-  | 'root.ai-compose.replace'
-  | 'root.translator'
-  | 'root.translator.before'
-  | 'root.translator.after'
-  | 'root.translator.replace'
-  | 'root.category-behavior'
-  | 'root.category-behavior.before'
-  | 'root.category-behavior.after'
-  | 'root.category-behavior.replace'
-  | 'root.category-privacy'
-  | 'root.category-privacy.before'
-  | 'root.category-privacy.after'
-  | 'root.category-privacy.replace'
-  | 'root.tos'
-  | 'root.tos.before'
-  | 'root.tos.after'
-  | 'root.tos.replace'
+  | 'root.root-system'
+  | 'root.root-system.before'
+  | 'root.root-system.after'
+  | 'root.root-system.replace'
   | 'root.plugins'
   | 'root.plugins.before'
   | 'root.plugins.after'
   | 'root.plugins.replace'
-  | 'root.category-backup'
-  | 'root.category-backup.before'
-  | 'root.category-backup.after'
-  | 'root.category-backup.replace'
-  | 'root.niche-settings'
-  | 'root.niche-settings.before'
-  | 'root.niche-settings.after'
-  | 'root.niche-settings.replace'
-  | 'root.about-channel'
-  | 'root.about-channel.before'
-  | 'root.about-channel.after'
-  | 'root.about-channel.replace'
-  | 'root.about-git-hub'
-  | 'root.about-git-hub.before'
-  | 'root.about-git-hub.after'
-  | 'root.about-git-hub.replace'
+  | 'root.about'
+  | 'root.about.before'
+  | 'root.about.after'
+  | 'root.about.replace'
   | 'root.end'
-  | 'stalker-pack.stalker-pack'
-  | 'stalker-pack.stalker-pack.start'
-  | 'stalker-pack.stalker-pack.end'
-  | 'stalker-pack.presence-logger-notify'
-  | 'stalker-pack.presence-logger-notify.before'
-  | 'stalker-pack.presence-logger-notify.after'
-  | 'stalker-pack.presence-logger-notify.replace'
-  | 'stalker-pack.force-relay-calls'
-  | 'stalker-pack.force-relay-calls.before'
-  | 'stalker-pack.force-relay-calls.after'
-  | 'stalker-pack.force-relay-calls.replace'
-  | 'stalker-pack.presence-watch-list'
-  | 'stalker-pack.presence-watch-list.before'
-  | 'stalker-pack.presence-watch-list.after'
-  | 'stalker-pack.presence-watch-list.replace'
-  | 'stalker-pack.typing-spoof'
-  | 'stalker-pack.typing-spoof.before'
-  | 'stalker-pack.typing-spoof.after'
-  | 'stalker-pack.typing-spoof.replace'
-  | 'stalker-pack.end'
-  | 'tos.premium-unlock'
-  | 'tos.premium-unlock.start'
-  | 'tos.premium-unlock.end'
-  | 'tos.content-protection-bypass'
-  | 'tos.content-protection-bypass.start'
-  | 'tos.content-protection-bypass.end'
-  | 'tos.unlimited-limits'
-  | 'tos.unlimited-limits.start'
-  | 'tos.unlimited-limits.end'
-  | 'tos.ghost-mode'
-  | 'tos.ghost-mode.before'
-  | 'tos.ghost-mode.after'
-  | 'tos.ghost-mode.replace'
-  | 'tos.anti-deletion'
-  | 'tos.anti-deletion.before'
-  | 'tos.anti-deletion.after'
-  | 'tos.anti-deletion.replace'
-  | 'tos.stalker-pack'
-  | 'tos.stalker-pack.before'
-  | 'tos.stalker-pack.after'
-  | 'tos.stalker-pack.replace'
-  | 'tos.regex-filter'
-  | 'tos.regex-filter.before'
-  | 'tos.regex-filter.after'
-  | 'tos.regex-filter.replace'
-  | 'tos.device-spoof'
-  | 'tos.device-spoof.before'
-  | 'tos.device-spoof.after'
-  | 'tos.device-spoof.replace'
-  | 'tos.local-premium'
-  | 'tos.local-premium.before'
-  | 'tos.local-premium.after'
-  | 'tos.local-premium.replace'
-  | 'tos.local-custom-emoji'
-  | 'tos.local-custom-emoji.before'
-  | 'tos.local-custom-emoji.after'
-  | 'tos.local-custom-emoji.replace'
-  | 'tos.local-names'
-  | 'tos.local-names.before'
-  | 'tos.local-names.after'
-  | 'tos.local-names.replace'
-  | 'tos.save-any-story'
-  | 'tos.save-any-story.before'
-  | 'tos.save-any-story.after'
-  | 'tos.save-any-story.replace'
-  | 'tos.auto-save-stories'
-  | 'tos.auto-save-stories.before'
-  | 'tos.auto-save-stories.after'
-  | 'tos.auto-save-stories.replace'
-  | 'tos.allow-forward-restricted'
-  | 'tos.allow-forward-restricted.before'
-  | 'tos.allow-forward-restricted.after'
-  | 'tos.allow-forward-restricted.replace'
-  | 'tos.disable-flag-secure'
-  | 'tos.disable-flag-secure.before'
-  | 'tos.disable-flag-secure.after'
-  | 'tos.disable-flag-secure.replace'
-  | 'tos.suppress-screenshot-notification'
-  | 'tos.suppress-screenshot-notification.before'
-  | 'tos.suppress-screenshot-notification.after'
-  | 'tos.suppress-screenshot-notification.replace'
-  | 'tos.unlimited-pinned-chats'
-  | 'tos.unlimited-pinned-chats.before'
-  | 'tos.unlimited-pinned-chats.after'
-  | 'tos.unlimited-pinned-chats.replace'
-  | 'tos.unlimited-favorite-stickers'
-  | 'tos.unlimited-favorite-stickers.before'
-  | 'tos.unlimited-favorite-stickers.after'
-  | 'tos.unlimited-favorite-stickers.replace'
-  | 'tos.unlimited-folder-chats'
-  | 'tos.unlimited-folder-chats.before'
-  | 'tos.unlimited-folder-chats.after'
-  | 'tos.unlimited-folder-chats.replace'
-  | 'tos.local-folders'
-  | 'tos.local-folders.before'
-  | 'tos.local-folders.after'
-  | 'tos.local-folders.replace'
-  | 'tos.end'
+  | 'system.push-header'
+  | 'system.push-header.start'
+  | 'system.push-header.end'
+  | 'system.faster-downloads-section'
+  | 'system.faster-downloads-section.start'
+  | 'system.faster-downloads-section.end'
+  | 'system.downloads-and-network'
+  | 'system.downloads-and-network.start'
+  | 'system.downloads-and-network.end'
+  | 'system.device-section'
+  | 'system.device-section.start'
+  | 'system.device-section.end'
+  | 'system.cloud-sync'
+  | 'system.cloud-sync.before'
+  | 'system.cloud-sync.after'
+  | 'system.cloud-sync.replace'
+  | 'system.cache-management'
+  | 'system.cache-management.before'
+  | 'system.cache-management.after'
+  | 'system.cache-management.replace'
+  | 'system.datacenter-status'
+  | 'system.datacenter-status.before'
+  | 'system.datacenter-status.after'
+  | 'system.datacenter-status.replace'
+  | 'system.unified-push'
+  | 'system.unified-push.before'
+  | 'system.unified-push.after'
+  | 'system.unified-push.replace'
+  | 'system.additional-unified-push'
+  | 'system.additional-unified-push.before'
+  | 'system.additional-unified-push.after'
+  | 'system.additional-unified-push.replace'
+  | 'system.background-service'
+  | 'system.background-service.before'
+  | 'system.background-service.after'
+  | 'system.background-service.replace'
+  | 'system.additional-background-service'
+  | 'system.additional-background-service.before'
+  | 'system.additional-background-service.after'
+  | 'system.additional-background-service.replace'
+  | 'system.background-service-hide-notification'
+  | 'system.background-service-hide-notification.before'
+  | 'system.background-service-hide-notification.after'
+  | 'system.background-service-hide-notification.replace'
+  | 'system.background-service-channel'
+  | 'system.background-service-channel.before'
+  | 'system.background-service-channel.after'
+  | 'system.background-service-channel.replace'
+  | 'system.unified-push-distributor'
+  | 'system.unified-push-distributor.before'
+  | 'system.unified-push-distributor.after'
+  | 'system.unified-push-distributor.replace'
+  | 'system.unified-push-distributor'
+  | 'system.unified-push-distributor.before'
+  | 'system.unified-push-distributor.after'
+  | 'system.unified-push-distributor.replace'
+  | 'system.unified-push-gateway'
+  | 'system.unified-push-gateway.before'
+  | 'system.unified-push-gateway.after'
+  | 'system.unified-push-gateway.replace'
+  | 'system.additional-unified-push-gateway'
+  | 'system.additional-unified-push-gateway.before'
+  | 'system.additional-unified-push-gateway.after'
+  | 'system.additional-unified-push-gateway.replace'
+  | 'system.notif-channel-sync'
+  | 'system.notif-channel-sync.before'
+  | 'system.notif-channel-sync.after'
+  | 'system.notif-channel-sync.replace'
+  | 'system.per-chat-notif-channels'
+  | 'system.per-chat-notif-channels.before'
+  | 'system.per-chat-notif-channels.after'
+  | 'system.per-chat-notif-channels.replace'
+  | 'system.faster-downloads'
+  | 'system.faster-downloads.before'
+  | 'system.faster-downloads.after'
+  | 'system.faster-downloads.replace'
+  | 'system.faster-downloads'
+  | 'system.faster-downloads.before'
+  | 'system.faster-downloads.after'
+  | 'system.faster-downloads.replace'
+  | 'system.faster-uploads'
+  | 'system.faster-uploads.before'
+  | 'system.faster-uploads.after'
+  | 'system.faster-uploads.replace'
+  | 'system.auto-disable-proxy-on-vpn'
+  | 'system.auto-disable-proxy-on-vpn.before'
+  | 'system.auto-disable-proxy-on-vpn.after'
+  | 'system.auto-disable-proxy-on-vpn.replace'
+  | 'system.keep-downloads-in-background'
+  | 'system.keep-downloads-in-background.before'
+  | 'system.keep-downloads-in-background.after'
+  | 'system.keep-downloads-in-background.replace'
+  | 'system.block-sleep-while-downloading'
+  | 'system.block-sleep-while-downloading.before'
+  | 'system.block-sleep-while-downloading.after'
+  | 'system.block-sleep-while-downloading.replace'
+  | 'system.always-send-videos-hd'
+  | 'system.always-send-videos-hd.before'
+  | 'system.always-send-videos-hd.after'
+  | 'system.always-send-videos-hd.replace'
+  | 'system.download-directory'
+  | 'system.download-directory.before'
+  | 'system.download-directory.after'
+  | 'system.download-directory.replace'
+  | 'system.download-directory'
+  | 'system.download-directory.before'
+  | 'system.download-directory.after'
+  | 'system.download-directory.replace'
+  | 'system.save-filename-date'
+  | 'system.save-filename-date.before'
+  | 'system.save-filename-date.after'
+  | 'system.save-filename-date.replace'
+  | 'system.performance-class'
+  | 'system.performance-class.before'
+  | 'system.performance-class.after'
+  | 'system.performance-class.replace'
+  | 'system.performance-class'
+  | 'system.performance-class.before'
+  | 'system.performance-class.after'
+  | 'system.performance-class.replace'
+  | 'system.text-classifier-mode'
+  | 'system.text-classifier-mode.before'
+  | 'system.text-classifier-mode.after'
+  | 'system.text-classifier-mode.replace'
+  | 'system.text-classifier-mode'
+  | 'system.text-classifier-mode.before'
+  | 'system.text-classifier-mode.after'
+  | 'system.text-classifier-mode.replace'
+  | 'system.end'
   | 'translate-provider.translate-provider-section'
   | 'translate-provider.translate-provider-section.start'
   | 'translate-provider.translate-provider-section.end'
+  | 'translate-provider.ai-provider-detect'
+  | 'translate-provider.ai-provider-detect.before'
+  | 'translate-provider.ai-provider-detect.after'
+  | 'translate-provider.ai-provider-detect.replace'
+  | 'translate-provider.ai-model-picker-title'
+  | 'translate-provider.ai-model-picker-title.before'
+  | 'translate-provider.ai-model-picker-title.after'
+  | 'translate-provider.ai-model-picker-title.replace'
   | 'translate-provider.end'
   | 'translation-target.end'
   | 'translator.translation'
   | 'translator.translation.start'
   | 'translator.translation.end'
+  | 'translator.translate-section-sending'
+  | 'translator.translate-section-sending.start'
+  | 'translator.translate-section-sending.end'
   | 'translator.languages'
   | 'translator.languages.start'
   | 'translator.languages.end'
-  | 'translator.translate-provider-section'
-  | 'translator.translate-provider-section.start'
-  | 'translator.translate-provider-section.end'
-  | 'translator.advanced'
-  | 'translator.advanced.start'
-  | 'translator.advanced.end'
+  | 'translator.translate-section-display'
+  | 'translator.translate-section-display.start'
+  | 'translator.translate-section-display.end'
+  | 'translator.translate-section-engine'
+  | 'translator.translate-section-engine.start'
+  | 'translator.translate-section-engine.end'
   | 'translator.auto-translate-all'
   | 'translator.auto-translate-all.before'
   | 'translator.auto-translate-all.after'
   | 'translator.auto-translate-all.replace'
-  | 'translator.translation-target'
-  | 'translator.translation-target.before'
-  | 'translator.translation-target.after'
-  | 'translator.translation-target.replace'
-  | 'translator.translate-provider'
-  | 'translator.translate-provider.before'
-  | 'translator.translate-provider.after'
-  | 'translator.translate-provider.replace'
-  | 'translator.translate-auto-detect-lang'
-  | 'translator.translate-auto-detect-lang.before'
-  | 'translator.translate-auto-detect-lang.after'
-  | 'translator.translate-auto-detect-lang.replace'
   | 'translator.translate-outgoing'
   | 'translator.translate-outgoing.before'
   | 'translator.translate-outgoing.after'
   | 'translator.translate-outgoing.replace'
+  | 'translator.instant-translate-banner'
+  | 'translator.instant-translate-banner.before'
+  | 'translator.instant-translate-banner.after'
+  | 'translator.instant-translate-banner.replace'
   | 'translator.input-translate'
   | 'translator.input-translate.before'
   | 'translator.input-translate.after'
@@ -1962,18 +2614,42 @@ export type EntinySlot =
   | 'translator.translate-in-send-preview.before'
   | 'translator.translate-in-send-preview.after'
   | 'translator.translate-in-send-preview.replace'
+  | 'translator.translate-on-send'
+  | 'translator.translate-on-send.before'
+  | 'translator.translate-on-send.after'
+  | 'translator.translate-on-send.replace'
+  | 'translator.translation-target'
+  | 'translator.translation-target.before'
+  | 'translator.translation-target.after'
+  | 'translator.translation-target.replace'
+  | 'translator.translation-target-outgoing'
+  | 'translator.translation-target-outgoing.before'
+  | 'translator.translation-target-outgoing.after'
+  | 'translator.translation-target-outgoing.replace'
+  | 'translator.translate-auto-detect-lang'
+  | 'translator.translate-auto-detect-lang.before'
+  | 'translator.translate-auto-detect-lang.after'
+  | 'translator.translate-auto-detect-lang.replace'
   | 'translator.force-translate'
   | 'translator.force-translate.before'
   | 'translator.force-translate.after'
   | 'translator.force-translate.replace'
-  | 'translator.instant-translate-banner'
-  | 'translator.instant-translate-banner.before'
-  | 'translator.instant-translate-banner.after'
-  | 'translator.instant-translate-banner.replace'
   | 'translator.ignore-translations-disabled'
   | 'translator.ignore-translations-disabled.before'
   | 'translator.ignore-translations-disabled.after'
   | 'translator.ignore-translations-disabled.replace'
+  | 'translator.translate-provider'
+  | 'translator.translate-provider.before'
+  | 'translator.translate-provider.after'
+  | 'translator.translate-provider.replace'
+  | 'translator.translate-auto-fallback'
+  | 'translator.translate-auto-fallback.before'
+  | 'translator.translate-auto-fallback.after'
+  | 'translator.translate-auto-fallback.replace'
+  | 'translator.translate-new-google'
+  | 'translator.translate-new-google.before'
+  | 'translator.translate-new-google.after'
+  | 'translator.translate-new-google.replace'
   | 'translator.end'
   | 'typing-spoof-quick-list.typing-spoof-active'
   | 'typing-spoof-quick-list.typing-spoof-active.start'
@@ -1987,6 +2663,10 @@ export type EntinySlot =
   | 'weather-location.weather-location.start'
   | 'weather-location.weather-location.end'
   | 'weather-location.end'
+  | 'web-preview-replacements.web-preview-replace-on-paste'
+  | 'web-preview-replacements.web-preview-replace-on-paste.before'
+  | 'web-preview-replacements.web-preview-replace-on-paste.after'
+  | 'web-preview-replacements.web-preview-replace-on-paste.replace'
   | 'web-preview-replacements.web-preview-add'
   | 'web-preview-replacements.web-preview-add.before'
   | 'web-preview-replacements.web-preview-add.after'
@@ -2005,12 +2685,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'additional.logs',
   'additional.logs.start',
   'additional.logs.end',
-  'additional.push-header',
-  'additional.push-header.start',
-  'additional.push-header.end',
-  'additional.data-backup',
-  'additional.data-backup.start',
-  'additional.data-backup.end',
+  'additional.about-channel',
+  'additional.about-channel.before',
+  'additional.about-channel.after',
+  'additional.about-channel.replace',
+  'additional.about-git-hub',
+  'additional.about-git-hub.before',
+  'additional.about-git-hub.after',
+  'additional.about-git-hub.replace',
   'additional.donate-row',
   'additional.donate-row.before',
   'additional.donate-row.after',
@@ -2027,46 +2709,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'additional.updates-include-beta.before',
   'additional.updates-include-beta.after',
   'additional.updates-include-beta.replace',
-  'additional.force-no-vibration',
-  'additional.force-no-vibration.before',
-  'additional.force-no-vibration.after',
-  'additional.force-no-vibration.replace',
   'additional.logs-enabled',
   'additional.logs-enabled.before',
   'additional.logs-enabled.after',
   'additional.logs-enabled.replace',
-  'additional.unified-push',
-  'additional.unified-push.before',
-  'additional.unified-push.after',
-  'additional.unified-push.replace',
-  'additional.background-service',
-  'additional.background-service.before',
-  'additional.background-service.after',
-  'additional.background-service.replace',
-  'additional.background-service-hide-notification',
-  'additional.background-service-hide-notification.before',
-  'additional.background-service-hide-notification.after',
-  'additional.background-service-hide-notification.replace',
-  'additional.unified-push-distributor',
-  'additional.unified-push-distributor.before',
-  'additional.unified-push-distributor.after',
-  'additional.unified-push-distributor.replace',
-  'additional.unified-push-gateway',
-  'additional.unified-push-gateway.before',
-  'additional.unified-push-gateway.after',
-  'additional.unified-push-gateway.replace',
-  'additional.cloud-sync',
-  'additional.cloud-sync.before',
-  'additional.cloud-sync.after',
-  'additional.cloud-sync.replace',
-  'additional.cache-management',
-  'additional.cache-management.before',
-  'additional.cache-management.after',
-  'additional.cache-management.replace',
-  'additional.datacenter-status',
-  'additional.datacenter-status.before',
-  'additional.datacenter-status.after',
-  'additional.datacenter-status.replace',
+  'additional.logs-redact',
+  'additional.logs-redact.before',
+  'additional.logs-redact.after',
+  'additional.logs-redact.replace',
   'additional.end',
   'ai.ai-features',
   'ai.ai-features.start',
@@ -2250,6 +2900,9 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.annoyances-chats',
   'annoyances.annoyances-chats.start',
   'annoyances.annoyances-chats.end',
+  'annoyances.customize-messages',
+  'annoyances.customize-messages.start',
+  'annoyances.customize-messages.end',
   'annoyances.annoyances-stories',
   'annoyances.annoyances-stories.start',
   'annoyances.annoyances-stories.end',
@@ -2259,6 +2912,9 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.annoyances-gifts',
   'annoyances.annoyances-gifts.start',
   'annoyances.annoyances-gifts.end',
+  'annoyances.annoyances-premium',
+  'annoyances.annoyances-premium.start',
+  'annoyances.annoyances-premium.end',
   'annoyances.annoyances-interface',
   'annoyances.annoyances-interface.start',
   'annoyances.annoyances-interface.end',
@@ -2271,10 +2927,26 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.annoyances-hints',
   'annoyances.annoyances-hints.start',
   'annoyances.annoyances-hints.end',
+  'annoyances.hide-bottom-bar',
+  'annoyances.hide-bottom-bar.before',
+  'annoyances.hide-bottom-bar.after',
+  'annoyances.hide-bottom-bar.replace',
+  'annoyances.hide-bottom-bar',
+  'annoyances.hide-bottom-bar.before',
+  'annoyances.hide-bottom-bar.after',
+  'annoyances.hide-bottom-bar.replace',
   'annoyances.hide-join-bar',
   'annoyances.hide-join-bar.before',
   'annoyances.hide-join-bar.after',
   'annoyances.hide-join-bar.replace',
+  'annoyances.hide-bot-slash',
+  'annoyances.hide-bot-slash.before',
+  'annoyances.hide-bot-slash.after',
+  'annoyances.hide-bot-slash.replace',
+  'annoyances.hide-bot-slash',
+  'annoyances.hide-bot-slash.before',
+  'annoyances.hide-bot-slash.after',
+  'annoyances.hide-bot-slash.replace',
   'annoyances.hide-bot-web-view',
   'annoyances.hide-bot-web-view.before',
   'annoyances.hide-bot-web-view.after',
@@ -2291,6 +2963,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.hide-reaction-entry.before',
   'annoyances.hide-reaction-entry.after',
   'annoyances.hide-reaction-entry.replace',
+  'annoyances.hide-reply-background',
+  'annoyances.hide-reply-background.before',
+  'annoyances.hide-reply-background.after',
+  'annoyances.hide-reply-background.replace',
+  'annoyances.disable-reply-custom-colors',
+  'annoyances.disable-reply-custom-colors.before',
+  'annoyances.disable-reply-custom-colors.after',
+  'annoyances.disable-reply-custom-colors.replace',
+  'annoyances.hide-reply-background-emoji',
+  'annoyances.hide-reply-background-emoji.before',
+  'annoyances.hide-reply-background-emoji.after',
+  'annoyances.hide-reply-background-emoji.replace',
   'annoyances.hide-stories',
   'annoyances.hide-stories.before',
   'annoyances.hide-stories.after',
@@ -2307,14 +2991,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.hide-profile-menu-archived-stories.before',
   'annoyances.hide-profile-menu-archived-stories.after',
   'annoyances.hide-profile-menu-archived-stories.replace',
-  'annoyances.hide-premium-badge',
-  'annoyances.hide-premium-badge.before',
-  'annoyances.hide-premium-badge.after',
-  'annoyances.hide-premium-badge.replace',
-  'annoyances.hide-collectible-status',
-  'annoyances.hide-collectible-status.before',
-  'annoyances.hide-collectible-status.after',
-  'annoyances.hide-collectible-status.replace',
   'annoyances.hide-stars-rating',
   'annoyances.hide-stars-rating.before',
   'annoyances.hide-stars-rating.after',
@@ -2343,6 +3019,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.disable-profile-music-autoplay.before',
   'annoyances.disable-profile-music-autoplay.after',
   'annoyances.disable-profile-music-autoplay.replace',
+  'annoyances.disable-next-audio-preload',
+  'annoyances.disable-next-audio-preload.before',
+  'annoyances.disable-next-audio-preload.after',
+  'annoyances.disable-next-audio-preload.replace',
+  'annoyances.disable-next-music-autoplay',
+  'annoyances.disable-next-music-autoplay.before',
+  'annoyances.disable-next-music-autoplay.after',
+  'annoyances.disable-next-music-autoplay.replace',
+  'annoyances.disable-next-voice-autoplay',
+  'annoyances.disable-next-voice-autoplay.before',
+  'annoyances.disable-next-voice-autoplay.after',
+  'annoyances.disable-next-voice-autoplay.replace',
   'annoyances.hide-profile-gifts-tab',
   'annoyances.hide-profile-gifts-tab.before',
   'annoyances.hide-profile-gifts-tab.after',
@@ -2367,14 +3055,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.hide-gift-auctions-hint.before',
   'annoyances.hide-gift-auctions-hint.after',
   'annoyances.hide-gift-auctions-hint.replace',
-  'annoyances.hide-paid-reaction-upsell',
-  'annoyances.hide-paid-reaction-upsell.before',
-  'annoyances.hide-paid-reaction-upsell.after',
-  'annoyances.hide-paid-reaction-upsell.replace',
   'annoyances.hide-giveaways',
   'annoyances.hide-giveaways.before',
   'annoyances.hide-giveaways.after',
   'annoyances.hide-giveaways.replace',
+  'annoyances.hide-premium-badge',
+  'annoyances.hide-premium-badge.before',
+  'annoyances.hide-premium-badge.after',
+  'annoyances.hide-premium-badge.replace',
+  'annoyances.hide-collectible-status',
+  'annoyances.hide-collectible-status.before',
+  'annoyances.hide-collectible-status.after',
+  'annoyances.hide-collectible-status.replace',
   'annoyances.hide-attach-premium-badges',
   'annoyances.hide-attach-premium-badges.before',
   'annoyances.hide-attach-premium-badges.after',
@@ -2387,6 +3079,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.hide-caption-limit-upsell.before',
   'annoyances.hide-caption-limit-upsell.after',
   'annoyances.hide-caption-limit-upsell.replace',
+  'annoyances.hide-paid-reaction-upsell',
+  'annoyances.hide-paid-reaction-upsell.before',
+  'annoyances.hide-paid-reaction-upsell.after',
+  'annoyances.hide-paid-reaction-upsell.replace',
   'annoyances.hide-trending-stickers',
   'annoyances.hide-trending-stickers.before',
   'annoyances.hide-trending-stickers.after',
@@ -2419,6 +3115,22 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.hide-psa-promo-chat.before',
   'annoyances.hide-psa-promo-chat.after',
   'annoyances.hide-psa-promo-chat.replace',
+  'annoyances.hide-ai-features',
+  'annoyances.hide-ai-features.before',
+  'annoyances.hide-ai-features.after',
+  'annoyances.hide-ai-features.replace',
+  'annoyances.hide-ai-features',
+  'annoyances.hide-ai-features.before',
+  'annoyances.hide-ai-features.after',
+  'annoyances.hide-ai-features.replace',
+  'annoyances.hide-suggestions',
+  'annoyances.hide-suggestions.before',
+  'annoyances.hide-suggestions.after',
+  'annoyances.hide-suggestions.replace',
+  'annoyances.hide-suggestions',
+  'annoyances.hide-suggestions.before',
+  'annoyances.hide-suggestions.after',
+  'annoyances.hide-suggestions.replace',
   'annoyances.hide-cache-hint',
   'annoyances.hide-cache-hint.before',
   'annoyances.hide-cache-hint.after',
@@ -2439,38 +3151,35 @@ export const SLOTS: readonly EntinySlot[] = [
   'annoyances.clear-hints.before',
   'annoyances.clear-hints.after',
   'annoyances.clear-hints.replace',
+  'annoyances.clear-hints',
+  'annoyances.clear-hints.before',
+  'annoyances.clear-hints.after',
+  'annoyances.clear-hints.replace',
   'annoyances.end',
-  'anti-censorship.anti-censorship-transport',
-  'anti-censorship.anti-censorship-transport.start',
-  'anti-censorship.anti-censorship-transport.end',
-  'anti-censorship.anti-censorship-privacy',
-  'anti-censorship.anti-censorship-privacy.start',
-  'anti-censorship.anti-censorship-privacy.end',
-  'anti-censorship.ws-tunnel',
-  'anti-censorship.ws-tunnel.before',
-  'anti-censorship.ws-tunnel.after',
-  'anti-censorship.ws-tunnel.replace',
-  'anti-censorship.leak-guard',
-  'anti-censorship.leak-guard.before',
-  'anti-censorship.leak-guard.after',
-  'anti-censorship.leak-guard.replace',
-  'anti-censorship.end',
   'anti-deletion.save-deleted-messages',
-  'anti-deletion.save-deleted-messages.before',
-  'anti-deletion.save-deleted-messages.after',
-  'anti-deletion.save-deleted-messages.replace',
-  'anti-deletion.prompt-keep-local-on-delete',
-  'anti-deletion.prompt-keep-local-on-delete.before',
-  'anti-deletion.prompt-keep-local-on-delete.after',
-  'anti-deletion.prompt-keep-local-on-delete.replace',
+  'anti-deletion.save-deleted-messages.start',
+  'anti-deletion.save-deleted-messages.end',
+  'anti-deletion.edit-history',
+  'anti-deletion.edit-history.start',
+  'anti-deletion.edit-history.end',
+  'anti-deletion.archive-attachments',
+  'anti-deletion.archive-attachments.start',
+  'anti-deletion.archive-attachments.end',
+  'anti-deletion.one-time-header',
+  'anti-deletion.one-time-header.start',
+  'anti-deletion.one-time-header.end',
   'anti-deletion.deleted-messages-transparent',
   'anti-deletion.deleted-messages-transparent.before',
   'anti-deletion.deleted-messages-transparent.after',
   'anti-deletion.deleted-messages-transparent.replace',
-  'anti-deletion.deleted-mark',
-  'anti-deletion.deleted-mark.before',
-  'anti-deletion.deleted-mark.after',
-  'anti-deletion.deleted-mark.replace',
+  'anti-deletion.archive-scope',
+  'anti-deletion.archive-scope.before',
+  'anti-deletion.archive-scope.after',
+  'anti-deletion.archive-scope.replace',
+  'anti-deletion.save-deleted-own',
+  'anti-deletion.save-deleted-own.before',
+  'anti-deletion.save-deleted-own.after',
+  'anti-deletion.save-deleted-own.replace',
   'anti-deletion.save-edited-messages',
   'anti-deletion.save-edited-messages.before',
   'anti-deletion.save-edited-messages.after',
@@ -2479,6 +3188,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'anti-deletion.edit-history-diff.before',
   'anti-deletion.edit-history-diff.after',
   'anti-deletion.edit-history-diff.replace',
+  'anti-deletion.archive-attachments-save',
+  'anti-deletion.archive-attachments-save.before',
+  'anti-deletion.archive-attachments-save.after',
+  'anti-deletion.archive-attachments-save.replace',
+  'anti-deletion.archive-media-public',
+  'anti-deletion.archive-media-public.before',
+  'anti-deletion.archive-media-public.after',
+  'anti-deletion.archive-media-public.replace',
+  'anti-deletion.one-time-peek',
+  'anti-deletion.one-time-peek.before',
+  'anti-deletion.one-time-peek.after',
+  'anti-deletion.one-time-peek.replace',
   'anti-deletion.deleted-message-search',
   'anti-deletion.deleted-message-search.before',
   'anti-deletion.deleted-message-search.after',
@@ -2491,9 +3212,9 @@ export const SLOTS: readonly EntinySlot[] = [
   'appearance.typography-and-icons',
   'appearance.typography-and-icons.start',
   'appearance.typography-and-icons.end',
-  'appearance.interface-elements',
-  'appearance.interface-elements.start',
-  'appearance.interface-elements.end',
+  'appearance.design-style',
+  'appearance.design-style.start',
+  'appearance.design-style.end',
   'appearance.motion',
   'appearance.motion.start',
   'appearance.motion.end',
@@ -2512,50 +3233,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'appearance.ios-settings.before',
   'appearance.ios-settings.after',
   'appearance.ios-settings.replace',
-  'appearance.message-design',
-  'appearance.message-design.before',
-  'appearance.message-design.after',
-  'appearance.message-design.replace',
-  'appearance.side-menu',
-  'appearance.side-menu.before',
-  'appearance.side-menu.after',
-  'appearance.side-menu.replace',
-  'appearance.menus',
-  'appearance.menus.before',
-  'appearance.menus.after',
-  'appearance.menus.replace',
-  'appearance.monet-theme',
-  'appearance.monet-theme.before',
-  'appearance.monet-theme.after',
-  'appearance.monet-theme.replace',
+  'appearance.material3',
+  'appearance.material3.before',
+  'appearance.material3.after',
+  'appearance.material3.replace',
   'appearance.unified-corner-radius',
   'appearance.unified-corner-radius.before',
   'appearance.unified-corner-radius.after',
   'appearance.unified-corner-radius.replace',
-  'appearance.non-island-folders-bar',
-  'appearance.non-island-folders-bar.before',
-  'appearance.non-island-folders-bar.after',
-  'appearance.non-island-folders-bar.replace',
-  'appearance.non-island-shared-media-tabs',
-  'appearance.non-island-shared-media-tabs.before',
-  'appearance.non-island-shared-media-tabs.after',
-  'appearance.non-island-shared-media-tabs.replace',
-  'appearance.non-island-global-search',
-  'appearance.non-island-global-search.before',
-  'appearance.non-island-global-search.after',
-  'appearance.non-island-global-search.replace',
-  'appearance.non-island-chat-elements',
-  'appearance.non-island-chat-elements.before',
-  'appearance.non-island-chat-elements.after',
-  'appearance.non-island-chat-elements.replace',
-  'appearance.hide-fade-view',
-  'appearance.hide-fade-view.before',
-  'appearance.hide-fade-view.after',
-  'appearance.hide-fade-view.replace',
-  'appearance.disable-profile-avatar-blur',
-  'appearance.disable-profile-avatar-blur.before',
-  'appearance.disable-profile-avatar-blur.after',
-  'appearance.disable-profile-avatar-blur.replace',
+  'appearance.hide-dividers',
+  'appearance.hide-dividers.before',
+  'appearance.hide-dividers.after',
+  'appearance.hide-dividers.replace',
   'appearance.disable-scrim-blur',
   'appearance.disable-scrim-blur.before',
   'appearance.disable-scrim-blur.after',
@@ -2568,6 +3257,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'appearance.simple-attach-popup-animation.before',
   'appearance.simple-attach-popup-animation.after',
   'appearance.simple-attach-popup-animation.replace',
+  'appearance.optimized-attachment-menu',
+  'appearance.optimized-attachment-menu.before',
+  'appearance.optimized-attachment-menu.after',
+  'appearance.optimized-attachment-menu.replace',
   'appearance.predictive-back',
   'appearance.predictive-back.before',
   'appearance.predictive-back.after',
@@ -2585,6 +3278,22 @@ export const SLOTS: readonly EntinySlot[] = [
   'appearance.disable-bg-parallax.after',
   'appearance.disable-bg-parallax.replace',
   'appearance.end',
+  'archive-scope.archive-scope-mode',
+  'archive-scope.archive-scope-mode.start',
+  'archive-scope.archive-scope-mode.end',
+  'archive-scope.archive-scope-add',
+  'archive-scope.archive-scope-add.before',
+  'archive-scope.archive-scope-add.after',
+  'archive-scope.archive-scope-add.replace',
+  'archive-scope.archive-scope-secret',
+  'archive-scope.archive-scope-secret.before',
+  'archive-scope.archive-scope-secret.after',
+  'archive-scope.archive-scope-secret.replace',
+  'archive-scope.archive-scope-bots-in-groups',
+  'archive-scope.archive-scope-bots-in-groups.before',
+  'archive-scope.archive-scope-bots-in-groups.after',
+  'archive-scope.archive-scope-bots-in-groups.replace',
+  'archive-scope.end',
   'backup.cloud-sync-now',
   'backup.cloud-sync-now.before',
   'backup.cloud-sync-now.after',
@@ -2610,186 +3319,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'backup.backup-reset.after',
   'backup.backup-reset.replace',
   'backup.end',
-  'behavior.user-profile',
-  'behavior.user-profile.start',
-  'behavior.user-profile.end',
-  'behavior.accounts-section',
-  'behavior.accounts-section.start',
-  'behavior.accounts-section.end',
-  'behavior.calls-section',
-  'behavior.calls-section.start',
-  'behavior.calls-section.end',
-  'behavior.formatting',
-  'behavior.formatting.start',
-  'behavior.formatting.end',
-  'behavior.chat-actions',
-  'behavior.chat-actions.start',
-  'behavior.chat-actions.end',
-  'behavior.media-section',
-  'behavior.media-section.start',
-  'behavior.media-section.end',
-  'behavior.links-and-browser',
-  'behavior.links-and-browser.start',
-  'behavior.links-and-browser.end',
-  'behavior.maps-header',
-  'behavior.maps-header.start',
-  'behavior.maps-header.end',
-  'behavior.device-section',
-  'behavior.device-section.start',
-  'behavior.device-section.end',
-  'behavior.profile-photo-gradient-fade',
-  'behavior.profile-photo-gradient-fade.before',
-  'behavior.profile-photo-gradient-fade.after',
-  'behavior.profile-photo-gradient-fade.replace',
-  'behavior.reduce-profile-motion',
-  'behavior.reduce-profile-motion.before',
-  'behavior.reduce-profile-motion.after',
-  'behavior.reduce-profile-motion.replace',
-  'behavior.disable-profile-scroll-snap',
-  'behavior.disable-profile-scroll-snap.before',
-  'behavior.disable-profile-scroll-snap.after',
-  'behavior.disable-profile-scroll-snap.replace',
-  'behavior.profile-prefer-media-tab',
-  'behavior.profile-prefer-media-tab.before',
-  'behavior.profile-prefer-media-tab.after',
-  'behavior.profile-prefer-media-tab.replace',
-  'behavior.profile-id-mode',
-  'behavior.profile-id-mode.before',
-  'behavior.profile-id-mode.after',
-  'behavior.profile-id-mode.replace',
-  'behavior.show-profile-reg-date',
-  'behavior.show-profile-reg-date.before',
-  'behavior.show-profile-reg-date.after',
-  'behavior.show-profile-reg-date.replace',
-  'behavior.disable-chat-title-phone',
-  'behavior.disable-chat-title-phone.before',
-  'behavior.disable-chat-title-phone.after',
-  'behavior.disable-chat-title-phone.replace',
-  'behavior.open-by-user-id',
-  'behavior.open-by-user-id.before',
-  'behavior.open-by-user-id.after',
-  'behavior.open-by-user-id.replace',
-  'behavior.settings-show-accounts',
-  'behavior.settings-show-accounts.before',
-  'behavior.settings-show-accounts.after',
-  'behavior.settings-show-accounts.replace',
-  'behavior.account-switch-shortcut',
-  'behavior.account-switch-shortcut.before',
-  'behavior.account-switch-shortcut.after',
-  'behavior.account-switch-shortcut.replace',
-  'behavior.call-confirmation',
-  'behavior.call-confirmation.before',
-  'behavior.call-confirmation.after',
-  'behavior.call-confirmation.replace',
-  'behavior.hd-bluetooth-call-audio',
-  'behavior.hd-bluetooth-call-audio.before',
-  'behavior.hd-bluetooth-call-audio.after',
-  'behavior.hd-bluetooth-call-audio.replace',
-  'behavior.call-rotation',
-  'behavior.call-rotation.before',
-  'behavior.call-rotation.after',
-  'behavior.call-rotation.replace',
-  'behavior.clock-format',
-  'behavior.clock-format.before',
-  'behavior.clock-format.after',
-  'behavior.clock-format.replace',
-  'behavior.show-seconds',
-  'behavior.show-seconds.before',
-  'behavior.show-seconds.after',
-  'behavior.show-seconds.replace',
-  'behavior.disable-rounding',
-  'behavior.disable-rounding.before',
-  'behavior.disable-rounding.after',
-  'behavior.disable-rounding.replace',
-  'behavior.chat-export',
-  'behavior.chat-export.before',
-  'behavior.chat-export.after',
-  'behavior.chat-export.replace',
-  'behavior.gif-seekbar',
-  'behavior.gif-seekbar.before',
-  'behavior.gif-seekbar.after',
-  'behavior.gif-seekbar.replace',
-  'behavior.send-mp4-document-as-video',
-  'behavior.send-mp4-document-as-video.before',
-  'behavior.send-mp4-document-as-video.after',
-  'behavior.send-mp4-document-as-video.replace',
-  'behavior.disable-motion-photos',
-  'behavior.disable-motion-photos.before',
-  'behavior.disable-motion-photos.after',
-  'behavior.disable-motion-photos.replace',
-  'behavior.disable-intro-sticker',
-  'behavior.disable-intro-sticker.before',
-  'behavior.disable-intro-sticker.after',
-  'behavior.disable-intro-sticker.replace',
-  'behavior.disable-volume-play-video',
-  'behavior.disable-volume-play-video.before',
-  'behavior.disable-volume-play-video.after',
-  'behavior.disable-volume-play-video.replace',
-  'behavior.disable-quick-share',
-  'behavior.disable-quick-share.before',
-  'behavior.disable-quick-share.after',
-  'behavior.disable-quick-share.replace',
-  'behavior.memory-trim',
-  'behavior.memory-trim.before',
-  'behavior.memory-trim.after',
-  'behavior.memory-trim.replace',
-  'behavior.save-selected-files',
-  'behavior.save-selected-files.before',
-  'behavior.save-selected-files.after',
-  'behavior.save-selected-files.replace',
-  'behavior.confirm-internal-links',
-  'behavior.confirm-internal-links.before',
-  'behavior.confirm-internal-links.after',
-  'behavior.confirm-internal-links.replace',
-  'behavior.disable-browser-swipe-collapse',
-  'behavior.disable-browser-swipe-collapse.before',
-  'behavior.disable-browser-swipe-collapse.after',
-  'behavior.disable-browser-swipe-collapse.replace',
-  'behavior.web-preview-replacements',
-  'behavior.web-preview-replacements.before',
-  'behavior.web-preview-replacements.after',
-  'behavior.web-preview-replacements.replace',
-  'behavior.auto-disable-proxy-on-vpn',
-  'behavior.auto-disable-proxy-on-vpn.before',
-  'behavior.auto-disable-proxy-on-vpn.after',
-  'behavior.auto-disable-proxy-on-vpn.replace',
-  'behavior.keep-downloads-in-background',
-  'behavior.keep-downloads-in-background.before',
-  'behavior.keep-downloads-in-background.after',
-  'behavior.keep-downloads-in-background.replace',
-  'behavior.block-sleep-while-downloading',
-  'behavior.block-sleep-while-downloading.before',
-  'behavior.block-sleep-while-downloading.after',
-  'behavior.block-sleep-while-downloading.replace',
-  'behavior.faster-downloads',
-  'behavior.faster-downloads.before',
-  'behavior.faster-downloads.after',
-  'behavior.faster-downloads.replace',
-  'behavior.faster-uploads',
-  'behavior.faster-uploads.before',
-  'behavior.faster-uploads.after',
-  'behavior.faster-uploads.replace',
-  'behavior.download-directory',
-  'behavior.download-directory.before',
-  'behavior.download-directory.after',
-  'behavior.download-directory.replace',
-  'behavior.map-provider',
-  'behavior.map-provider.before',
-  'behavior.map-provider.after',
-  'behavior.map-provider.replace',
-  'behavior.map-preview-provider',
-  'behavior.map-preview-provider.before',
-  'behavior.map-preview-provider.after',
-  'behavior.map-preview-provider.replace',
-  'behavior.performance-class',
-  'behavior.performance-class.before',
-  'behavior.performance-class.after',
-  'behavior.performance-class.replace',
-  'behavior.text-classifier-mode',
-  'behavior.text-classifier-mode.before',
-  'behavior.text-classifier-mode.after',
-  'behavior.text-classifier-mode.replace',
-  'behavior.end',
   'cache-management.cache-ttl',
   'cache-management.cache-ttl.before',
   'cache-management.cache-ttl.after',
@@ -2798,11 +3327,85 @@ export const SLOTS: readonly EntinySlot[] = [
   'cache-management.presence-logs-ttl.before',
   'cache-management.presence-logs-ttl.after',
   'cache-management.presence-logs-ttl.replace',
-  'cache-management.clear-deleted-cache',
-  'cache-management.clear-deleted-cache.before',
-  'cache-management.clear-deleted-cache.after',
-  'cache-management.clear-deleted-cache.replace',
   'cache-management.end',
+  'camera-sound.round-videos',
+  'camera-sound.round-videos.start',
+  'camera-sound.round-videos.end',
+  'camera-sound.attach-camera',
+  'camera-sound.attach-camera.start',
+  'camera-sound.attach-camera.end',
+  'camera-sound.voice-messages',
+  'camera-sound.voice-messages.start',
+  'camera-sound.voice-messages.end',
+  'camera-sound.round-default-camera',
+  'camera-sound.round-default-camera.before',
+  'camera-sound.round-default-camera.after',
+  'camera-sound.round-default-camera.replace',
+  'camera-sound.round-recorder-zoom-slider',
+  'camera-sound.round-recorder-zoom-slider.before',
+  'camera-sound.round-recorder-zoom-slider.after',
+  'camera-sound.round-recorder-zoom-slider.replace',
+  'camera-sound.round-recorder-zoom-buttons',
+  'camera-sound.round-recorder-zoom-buttons.before',
+  'camera-sound.round-recorder-zoom-buttons.after',
+  'camera-sound.round-recorder-zoom-buttons.replace',
+  'camera-sound.round-recorder-keep-zoom',
+  'camera-sound.round-recorder-keep-zoom.before',
+  'camera-sound.round-recorder-keep-zoom.after',
+  'camera-sound.round-recorder-keep-zoom.replace',
+  'camera-sound.round-recorder-exponential-zoom',
+  'camera-sound.round-recorder-exponential-zoom.before',
+  'camera-sound.round-recorder-exponential-zoom.after',
+  'camera-sound.round-recorder-exponential-zoom.replace',
+  'camera-sound.round-recorder-dual-camera',
+  'camera-sound.round-recorder-dual-camera.before',
+  'camera-sound.round-recorder-dual-camera.after',
+  'camera-sound.round-recorder-dual-camera.replace',
+  'camera-sound.round-recorder60-fps',
+  'camera-sound.round-recorder60-fps.before',
+  'camera-sound.round-recorder60-fps.after',
+  'camera-sound.round-recorder60-fps.replace',
+  'camera-sound.round-recorder-lock-exposure',
+  'camera-sound.round-recorder-lock-exposure.before',
+  'camera-sound.round-recorder-lock-exposure.after',
+  'camera-sound.round-recorder-lock-exposure.replace',
+  'camera-sound.round-recorder-exposure-button',
+  'camera-sound.round-recorder-exposure-button.before',
+  'camera-sound.round-recorder-exposure-button.after',
+  'camera-sound.round-recorder-exposure-button.replace',
+  'camera-sound.round-recorder-exposure-levels',
+  'camera-sound.round-recorder-exposure-levels.before',
+  'camera-sound.round-recorder-exposure-levels.after',
+  'camera-sound.round-recorder-exposure-levels.replace',
+  'camera-sound.attach-camera-mode',
+  'camera-sound.attach-camera-mode.before',
+  'camera-sound.attach-camera-mode.after',
+  'camera-sound.attach-camera-mode.replace',
+  'camera-sound.attach-camera-square',
+  'camera-sound.attach-camera-square.before',
+  'camera-sound.attach-camera-square.after',
+  'camera-sound.attach-camera-square.replace',
+  'camera-sound.keep-screen-on-recording',
+  'camera-sound.keep-screen-on-recording.before',
+  'camera-sound.keep-screen-on-recording.after',
+  'camera-sound.keep-screen-on-recording.replace',
+  'camera-sound.chat-voice-in-attach',
+  'camera-sound.chat-voice-in-attach.before',
+  'camera-sound.chat-voice-in-attach.after',
+  'camera-sound.chat-voice-in-attach.replace',
+  'camera-sound.confirm-send-voice',
+  'camera-sound.confirm-send-voice.before',
+  'camera-sound.confirm-send-voice.after',
+  'camera-sound.confirm-send-voice.replace',
+  'camera-sound.round-audio-bitrate',
+  'camera-sound.round-audio-bitrate.before',
+  'camera-sound.round-audio-bitrate.after',
+  'camera-sound.round-audio-bitrate.replace',
+  'camera-sound.round-audio-source',
+  'camera-sound.round-audio-source.before',
+  'camera-sound.round-audio-source.after',
+  'camera-sound.round-audio-source.replace',
+  'camera-sound.end',
   'chat-header.center-title-chats',
   'chat-header.center-title-chats.before',
   'chat-header.center-title-chats.after',
@@ -2819,6 +3422,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'chat-header.ios-chat-header-avatar-slot.before',
   'chat-header.ios-chat-header-avatar-slot.after',
   'chat-header.ios-chat-header-avatar-slot.replace',
+  'chat-header.ios-chat-header-avatar-swap',
+  'chat-header.ios-chat-header-avatar-swap.before',
+  'chat-header.ios-chat-header-avatar-swap.after',
+  'chat-header.ios-chat-header-avatar-swap.replace',
   'chat-header.ios-chat-header-avatar-static',
   'chat-header.ios-chat-header-avatar-static.before',
   'chat-header.ios-chat-header-avatar-static.after',
@@ -2835,11 +3442,390 @@ export const SLOTS: readonly EntinySlot[] = [
   'chat-header.chat-title-marquee.before',
   'chat-header.chat-title-marquee.after',
   'chat-header.chat-title-marquee.replace',
+  'chat-header.unread-badge-on-back-button',
+  'chat-header.unread-badge-on-back-button.before',
+  'chat-header.unread-badge-on-back-button.after',
+  'chat-header.unread-badge-on-back-button.replace',
+  'chat-header.unread-badge-on-back-button-ios',
+  'chat-header.unread-badge-on-back-button-ios.before',
+  'chat-header.unread-badge-on-back-button-ios.after',
+  'chat-header.unread-badge-on-back-button-ios.replace',
   'chat-header.center-title-main',
   'chat-header.center-title-main.before',
   'chat-header.center-title-main.after',
   'chat-header.center-title-main.replace',
   'chat-header.end',
+  'chats-messages.message-input',
+  'chats-messages.message-input.start',
+  'chats-messages.message-input.end',
+  'chats-messages.chat-navigation',
+  'chats-messages.chat-navigation.start',
+  'chats-messages.chat-navigation.end',
+  'chats-messages.mentions-and-search',
+  'chats-messages.mentions-and-search.start',
+  'chats-messages.mentions-and-search.end',
+  'chats-messages.stickers',
+  'chats-messages.stickers.start',
+  'chats-messages.stickers.end',
+  'chats-messages.chat-decor',
+  'chats-messages.chat-decor.start',
+  'chats-messages.chat-decor.end',
+  'chats-messages.links-and-browser',
+  'chats-messages.links-and-browser.start',
+  'chats-messages.links-and-browser.end',
+  'chats-messages.maps-header',
+  'chats-messages.maps-header.start',
+  'chats-messages.maps-header.end',
+  'chats-messages.reactions',
+  'chats-messages.reactions.start',
+  'chats-messages.reactions.end',
+  'chats-messages.confirmations-section',
+  'chats-messages.confirmations-section.start',
+  'chats-messages.confirmations-section.end',
+  'chats-messages.spoilers',
+  'chats-messages.spoilers.start',
+  'chats-messages.spoilers.end',
+  'chats-messages.blocked-messages-section',
+  'chats-messages.blocked-messages-section.start',
+  'chats-messages.blocked-messages-section.end',
+  'chats-messages.clown-avatars-section',
+  'chats-messages.clown-avatars-section.start',
+  'chats-messages.clown-avatars-section.end',
+  'chats-messages.forward-and-replies',
+  'chats-messages.forward-and-replies.start',
+  'chats-messages.forward-and-replies.end',
+  'chats-messages.double-tap-actions',
+  'chats-messages.double-tap-actions.start',
+  'chats-messages.double-tap-actions.end',
+  'chats-messages.side-button-action',
+  'chats-messages.side-button-action.start',
+  'chats-messages.side-button-action.end',
+  'chats-messages.chat-actions',
+  'chats-messages.chat-actions.start',
+  'chats-messages.chat-actions.end',
+  'chats-messages.formatting',
+  'chats-messages.formatting.start',
+  'chats-messages.formatting.end',
+  'chats-messages.media-section',
+  'chats-messages.media-section.start',
+  'chats-messages.media-section.end',
+  'chats-messages.ai-compose',
+  'chats-messages.ai-compose.before',
+  'chats-messages.ai-compose.after',
+  'chats-messages.ai-compose.replace',
+  'chats-messages.translator',
+  'chats-messages.translator.before',
+  'chats-messages.translator.after',
+  'chats-messages.translator.replace',
+  'chats-messages.message-design',
+  'chats-messages.message-design.before',
+  'chats-messages.message-design.after',
+  'chats-messages.message-design.replace',
+  'chats-messages.camera-sound',
+  'chats-messages.camera-sound.before',
+  'chats-messages.camera-sound.after',
+  'chats-messages.camera-sound.replace',
+  'chats-messages.formatting-popup',
+  'chats-messages.formatting-popup.before',
+  'chats-messages.formatting-popup.after',
+  'chats-messages.formatting-popup.replace',
+  'chats-messages.formatting-popup',
+  'chats-messages.formatting-popup.before',
+  'chats-messages.formatting-popup.after',
+  'chats-messages.formatting-popup.replace',
+  'chats-messages.chat-input-max-lines',
+  'chats-messages.chat-input-max-lines.before',
+  'chats-messages.chat-input-max-lines.after',
+  'chats-messages.chat-input-max-lines.replace',
+  'chats-messages.hide-keyboard-on-scroll',
+  'chats-messages.hide-keyboard-on-scroll.before',
+  'chats-messages.hide-keyboard-on-scroll.after',
+  'chats-messages.hide-keyboard-on-scroll.replace',
+  'chats-messages.keep-keyboard-while-typing',
+  'chats-messages.keep-keyboard-while-typing.before',
+  'chats-messages.keep-keyboard-while-typing.after',
+  'chats-messages.keep-keyboard-while-typing.replace',
+  'chats-messages.disable-bot-draft-top',
+  'chats-messages.disable-bot-draft-top.before',
+  'chats-messages.disable-bot-draft-top.after',
+  'chats-messages.disable-bot-draft-top.replace',
+  'chats-messages.disable-pull-to-next',
+  'chats-messages.disable-pull-to-next.before',
+  'chats-messages.disable-pull-to-next.after',
+  'chats-messages.disable-pull-to-next.replace',
+  'chats-messages.chat-always-show-down',
+  'chats-messages.chat-always-show-down.before',
+  'chats-messages.chat-always-show-down.after',
+  'chats-messages.chat-always-show-down.replace',
+  'chats-messages.chat-two-finger-select',
+  'chats-messages.chat-two-finger-select.before',
+  'chats-messages.chat-two-finger-select.after',
+  'chats-messages.chat-two-finger-select.replace',
+  'chats-messages.selection-bottom-no-quote',
+  'chats-messages.selection-bottom-no-quote.before',
+  'chats-messages.selection-bottom-no-quote.after',
+  'chats-messages.selection-bottom-no-quote.replace',
+  'chats-messages.mention-separator',
+  'chats-messages.mention-separator.before',
+  'chats-messages.mention-separator.after',
+  'chats-messages.mention-separator.replace',
+  'chats-messages.mention-separator',
+  'chats-messages.mention-separator.before',
+  'chats-messages.mention-separator.after',
+  'chats-messages.mention-separator.replace',
+  'chats-messages.mention-separator-bots',
+  'chats-messages.mention-separator-bots.before',
+  'chats-messages.mention-separator-bots.after',
+  'chats-messages.mention-separator-bots.replace',
+  'chats-messages.search-from-global',
+  'chats-messages.search-from-global.before',
+  'chats-messages.search-from-global.after',
+  'chats-messages.search-from-global.replace',
+  'chats-messages.send-to-discuss-without-join',
+  'chats-messages.send-to-discuss-without-join.before',
+  'chats-messages.send-to-discuss-without-join.after',
+  'chats-messages.send-to-discuss-without-join.replace',
+  'chats-messages.show-all-recent-stickers',
+  'chats-messages.show-all-recent-stickers.before',
+  'chats-messages.show-all-recent-stickers.after',
+  'chats-messages.show-all-recent-stickers.replace',
+  'chats-messages.suggest-custom-emoji-after',
+  'chats-messages.suggest-custom-emoji-after.before',
+  'chats-messages.suggest-custom-emoji-after.after',
+  'chats-messages.suggest-custom-emoji-after.replace',
+  'chats-messages.sort-albums-by-size',
+  'chats-messages.sort-albums-by-size.before',
+  'chats-messages.sort-albums-by-size.after',
+  'chats-messages.sort-albums-by-size.replace',
+  'chats-messages.chat-snowflakes',
+  'chats-messages.chat-snowflakes.before',
+  'chats-messages.chat-snowflakes.after',
+  'chats-messages.chat-snowflakes.replace',
+  'chats-messages.action-bar-snowflakes',
+  'chats-messages.action-bar-snowflakes.before',
+  'chats-messages.action-bar-snowflakes.after',
+  'chats-messages.action-bar-snowflakes.replace',
+  'chats-messages.confirm-internal-links',
+  'chats-messages.confirm-internal-links.before',
+  'chats-messages.confirm-internal-links.after',
+  'chats-messages.confirm-internal-links.replace',
+  'chats-messages.skip-link-confirm',
+  'chats-messages.skip-link-confirm.before',
+  'chats-messages.skip-link-confirm.after',
+  'chats-messages.skip-link-confirm.replace',
+  'chats-messages.disable-browser-swipe-collapse',
+  'chats-messages.disable-browser-swipe-collapse.before',
+  'chats-messages.disable-browser-swipe-collapse.after',
+  'chats-messages.disable-browser-swipe-collapse.replace',
+  'chats-messages.web-preview-replacements',
+  'chats-messages.web-preview-replacements.before',
+  'chats-messages.web-preview-replacements.after',
+  'chats-messages.web-preview-replacements.replace',
+  'chats-messages.map-provider',
+  'chats-messages.map-provider.before',
+  'chats-messages.map-provider.after',
+  'chats-messages.map-provider.replace',
+  'chats-messages.map-preview-provider',
+  'chats-messages.map-preview-provider.before',
+  'chats-messages.map-preview-provider.after',
+  'chats-messages.map-preview-provider.replace',
+  'chats-messages.pinned-reactions',
+  'chats-messages.pinned-reactions.before',
+  'chats-messages.pinned-reactions.after',
+  'chats-messages.pinned-reactions.replace',
+  'chats-messages.instant-mark-reactions-read',
+  'chats-messages.instant-mark-reactions-read.before',
+  'chats-messages.instant-mark-reactions-read.after',
+  'chats-messages.instant-mark-reactions-read.replace',
+  'chats-messages.hide-reactions-display',
+  'chats-messages.hide-reactions-display.before',
+  'chats-messages.hide-reactions-display.after',
+  'chats-messages.hide-reactions-display.replace',
+  'chats-messages.hide-reactions-set',
+  'chats-messages.hide-reactions-set.before',
+  'chats-messages.hide-reactions-set.after',
+  'chats-messages.hide-reactions-set.replace',
+  'chats-messages.hide-reactions-badges',
+  'chats-messages.hide-reactions-badges.before',
+  'chats-messages.hide-reactions-badges.after',
+  'chats-messages.hide-reactions-badges.replace',
+  'chats-messages.confirm-reaction-non-member',
+  'chats-messages.confirm-reaction-non-member.before',
+  'chats-messages.confirm-reaction-non-member.after',
+  'chats-messages.confirm-reaction-non-member.replace',
+  'chats-messages.confirm-before-sending',
+  'chats-messages.confirm-before-sending.before',
+  'chats-messages.confirm-before-sending.after',
+  'chats-messages.confirm-before-sending.replace',
+  'chats-messages.confirm-before-sending',
+  'chats-messages.confirm-before-sending.before',
+  'chats-messages.confirm-before-sending.after',
+  'chats-messages.confirm-before-sending.replace',
+  'chats-messages.show-spoilers-directly',
+  'chats-messages.show-spoilers-directly.before',
+  'chats-messages.show-spoilers-directly.after',
+  'chats-messages.show-spoilers-directly.replace',
+  'chats-messages.text-spoiler-mode',
+  'chats-messages.text-spoiler-mode.before',
+  'chats-messages.text-spoiler-mode.after',
+  'chats-messages.text-spoiler-mode.replace',
+  'chats-messages.spoiler-extend-to-line-end',
+  'chats-messages.spoiler-extend-to-line-end.before',
+  'chats-messages.spoiler-extend-to-line-end.after',
+  'chats-messages.spoiler-extend-to-line-end.replace',
+  'chats-messages.media-spoiler-mode',
+  'chats-messages.media-spoiler-mode.before',
+  'chats-messages.media-spoiler-mode.after',
+  'chats-messages.media-spoiler-mode.replace',
+  'chats-messages.link-preview-spoiler',
+  'chats-messages.link-preview-spoiler.before',
+  'chats-messages.link-preview-spoiler.after',
+  'chats-messages.link-preview-spoiler.replace',
+  'chats-messages.blocked-messages-mode',
+  'chats-messages.blocked-messages-mode.before',
+  'chats-messages.blocked-messages-mode.after',
+  'chats-messages.blocked-messages-mode.replace',
+  'chats-messages.blocked-messages-extra',
+  'chats-messages.blocked-messages-extra.before',
+  'chats-messages.blocked-messages-extra.after',
+  'chats-messages.blocked-messages-extra.replace',
+  'chats-messages.blocked-messages-extra',
+  'chats-messages.blocked-messages-extra.before',
+  'chats-messages.blocked-messages-extra.after',
+  'chats-messages.blocked-messages-extra.replace',
+  'chats-messages.blocked-messages-hide-replies',
+  'chats-messages.blocked-messages-hide-replies.before',
+  'chats-messages.blocked-messages-hide-replies.after',
+  'chats-messages.blocked-messages-hide-replies.replace',
+  'chats-messages.clown-avatar-blocked',
+  'chats-messages.clown-avatar-blocked.before',
+  'chats-messages.clown-avatar-blocked.after',
+  'chats-messages.clown-avatar-blocked.replace',
+  'chats-messages.clown-avatar-blocked-me',
+  'chats-messages.clown-avatar-blocked-me.before',
+  'chats-messages.clown-avatar-blocked-me.after',
+  'chats-messages.clown-avatar-blocked-me.replace',
+  'chats-messages.clown-avatar-emoji',
+  'chats-messages.clown-avatar-emoji.before',
+  'chats-messages.clown-avatar-emoji.after',
+  'chats-messages.clown-avatar-emoji.replace',
+  'chats-messages.chat-remember-all-replies',
+  'chats-messages.chat-remember-all-replies.before',
+  'chats-messages.chat-remember-all-replies.after',
+  'chats-messages.chat-remember-all-replies.replace',
+  'chats-messages.forward-pro',
+  'chats-messages.forward-pro.before',
+  'chats-messages.forward-pro.after',
+  'chats-messages.forward-pro.replace',
+  'chats-messages.forward-pro-replace',
+  'chats-messages.forward-pro-replace.before',
+  'chats-messages.forward-pro-replace.after',
+  'chats-messages.forward-pro-replace.replace',
+  'chats-messages.incoming-messages',
+  'chats-messages.incoming-messages.before',
+  'chats-messages.incoming-messages.after',
+  'chats-messages.incoming-messages.replace',
+  'chats-messages.double-tap-incoming',
+  'chats-messages.double-tap-incoming.before',
+  'chats-messages.double-tap-incoming.after',
+  'chats-messages.double-tap-incoming.replace',
+  'chats-messages.outgoing-messages',
+  'chats-messages.outgoing-messages.before',
+  'chats-messages.outgoing-messages.after',
+  'chats-messages.outgoing-messages.replace',
+  'chats-messages.double-tap-outgoing',
+  'chats-messages.double-tap-outgoing.before',
+  'chats-messages.double-tap-outgoing.after',
+  'chats-messages.double-tap-outgoing.replace',
+  'chats-messages.channel-messages',
+  'chats-messages.channel-messages.before',
+  'chats-messages.channel-messages.after',
+  'chats-messages.channel-messages.replace',
+  'chats-messages.double-tap-channel',
+  'chats-messages.double-tap-channel.before',
+  'chats-messages.double-tap-channel.after',
+  'chats-messages.double-tap-channel.replace',
+  'chats-messages.delay',
+  'chats-messages.delay.before',
+  'chats-messages.delay.after',
+  'chats-messages.delay.replace',
+  'chats-messages.side-button-action',
+  'chats-messages.side-button-action.before',
+  'chats-messages.side-button-action.after',
+  'chats-messages.side-button-action.replace',
+  'chats-messages.side-button-action',
+  'chats-messages.side-button-action.before',
+  'chats-messages.side-button-action.after',
+  'chats-messages.side-button-action.replace',
+  'chats-messages.delete-for-both',
+  'chats-messages.delete-for-both.before',
+  'chats-messages.delete-for-both.after',
+  'chats-messages.delete-for-both.replace',
+  'chats-messages.delete-for-both',
+  'chats-messages.delete-for-both.before',
+  'chats-messages.delete-for-both.after',
+  'chats-messages.delete-for-both.replace',
+  'chats-messages.chat-export',
+  'chats-messages.chat-export.before',
+  'chats-messages.chat-export.after',
+  'chats-messages.chat-export.replace',
+  'chats-messages.notify-bell-in-menu',
+  'chats-messages.notify-bell-in-menu.before',
+  'chats-messages.notify-bell-in-menu.after',
+  'chats-messages.notify-bell-in-menu.replace',
+  'chats-messages.clock-format',
+  'chats-messages.clock-format.before',
+  'chats-messages.clock-format.after',
+  'chats-messages.clock-format.replace',
+  'chats-messages.show-seconds',
+  'chats-messages.show-seconds.before',
+  'chats-messages.show-seconds.after',
+  'chats-messages.show-seconds.replace',
+  'chats-messages.disable-rounding',
+  'chats-messages.disable-rounding.before',
+  'chats-messages.disable-rounding.after',
+  'chats-messages.disable-rounding.replace',
+  'chats-messages.keep-chats-in-stack',
+  'chats-messages.keep-chats-in-stack.before',
+  'chats-messages.keep-chats-in-stack.after',
+  'chats-messages.keep-chats-in-stack.replace',
+  'chats-messages.gif-seekbar',
+  'chats-messages.gif-seekbar.before',
+  'chats-messages.gif-seekbar.after',
+  'chats-messages.gif-seekbar.replace',
+  'chats-messages.send-mp4-document-as-video',
+  'chats-messages.send-mp4-document-as-video.before',
+  'chats-messages.send-mp4-document-as-video.after',
+  'chats-messages.send-mp4-document-as-video.replace',
+  'chats-messages.disable-motion-photos',
+  'chats-messages.disable-motion-photos.before',
+  'chats-messages.disable-motion-photos.after',
+  'chats-messages.disable-motion-photos.replace',
+  'chats-messages.disable-intro-sticker',
+  'chats-messages.disable-intro-sticker.before',
+  'chats-messages.disable-intro-sticker.after',
+  'chats-messages.disable-intro-sticker.replace',
+  'chats-messages.disable-volume-play-video',
+  'chats-messages.disable-volume-play-video.before',
+  'chats-messages.disable-volume-play-video.after',
+  'chats-messages.disable-volume-play-video.replace',
+  'chats-messages.disable-quick-share',
+  'chats-messages.disable-quick-share.before',
+  'chats-messages.disable-quick-share.after',
+  'chats-messages.disable-quick-share.replace',
+  'chats-messages.memory-trim',
+  'chats-messages.memory-trim.before',
+  'chats-messages.memory-trim.after',
+  'chats-messages.memory-trim.replace',
+  'chats-messages.save-selected-files',
+  'chats-messages.save-selected-files.before',
+  'chats-messages.save-selected-files.after',
+  'chats-messages.save-selected-files.replace',
+  'chats-messages.hdr-images',
+  'chats-messages.hdr-images.before',
+  'chats-messages.hdr-images.after',
+  'chats-messages.hdr-images.replace',
+  'chats-messages.end',
   'currency-picker.end',
   'datacenter-status.datacenter-status',
   'datacenter-status.datacenter-status.start',
@@ -2862,26 +3848,22 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.dialogs-fab',
   'dialogs.dialogs-fab.start',
   'dialogs.dialogs-fab.end',
-  'dialogs.pill-stack',
-  'dialogs.pill-stack.before',
-  'dialogs.pill-stack.after',
-  'dialogs.pill-stack.replace',
-  'dialogs.recent-chats',
-  'dialogs.recent-chats.before',
-  'dialogs.recent-chats.after',
-  'dialogs.recent-chats.replace',
-  'dialogs.feed',
-  'dialogs.feed.before',
-  'dialogs.feed.after',
-  'dialogs.feed.replace',
-  'dialogs.feed-manage-channels',
-  'dialogs.feed-manage-channels.before',
-  'dialogs.feed-manage-channels.after',
-  'dialogs.feed-manage-channels.replace',
+  'dialogs.folders',
+  'dialogs.folders.before',
+  'dialogs.folders.after',
+  'dialogs.folders.replace',
+  'dialogs.folders-preview',
+  'dialogs.folders-preview.before',
+  'dialogs.folders-preview.after',
+  'dialogs.folders-preview.replace',
   'dialogs.show-on-tabs',
   'dialogs.show-on-tabs.before',
   'dialogs.show-on-tabs.after',
   'dialogs.show-on-tabs.replace',
+  'dialogs.folders-display-mode',
+  'dialogs.folders-display-mode.before',
+  'dialogs.folders-display-mode.after',
+  'dialogs.folders-display-mode.replace',
   'dialogs.tab-indicator-stroke',
   'dialogs.tab-indicator-stroke.before',
   'dialogs.tab-indicator-stroke.after',
@@ -2898,6 +3880,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.remember-selected-folder.before',
   'dialogs.remember-selected-folder.after',
   'dialogs.remember-selected-folder.replace',
+  'dialogs.folders-infinite-swipe',
+  'dialogs.folders-infinite-swipe.before',
+  'dialogs.folders-infinite-swipe.after',
+  'dialogs.folders-infinite-swipe.replace',
   'dialogs.folders-at-bottom',
   'dialogs.folders-at-bottom.before',
   'dialogs.folders-at-bottom.after',
@@ -2906,10 +3892,22 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.hide-archive.before',
   'dialogs.hide-archive.after',
   'dialogs.hide-archive.replace',
+  'dialogs.unread-chats-first',
+  'dialogs.unread-chats-first.before',
+  'dialogs.unread-chats-first.after',
+  'dialogs.unread-chats-first.replace',
+  'dialogs.unread-chats-first-pinned',
+  'dialogs.unread-chats-first-pinned.before',
+  'dialogs.unread-chats-first-pinned.after',
+  'dialogs.unread-chats-first-pinned.replace',
   'dialogs.title-text',
   'dialogs.title-text.before',
   'dialogs.title-text.after',
   'dialogs.title-text.replace',
+  'dialogs.dialogs-title-text',
+  'dialogs.dialogs-title-text.before',
+  'dialogs.dialogs-title-text.after',
+  'dialogs.dialogs-title-text.replace',
   'dialogs.title-text-override-archive',
   'dialogs.title-text-override-archive.before',
   'dialogs.title-text-override-archive.after',
@@ -2918,6 +3916,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.old-mention-indicator.before',
   'dialogs.old-mention-indicator.after',
   'dialogs.old-mention-indicator.replace',
+  'dialogs.pull-down-action',
+  'dialogs.pull-down-action.before',
+  'dialogs.pull-down-action.after',
+  'dialogs.pull-down-action.replace',
   'dialogs.pull-down-action',
   'dialogs.pull-down-action.before',
   'dialogs.pull-down-action.after',
@@ -2942,6 +3944,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.community-display-mode.before',
   'dialogs.community-display-mode.after',
   'dialogs.community-display-mode.replace',
+  'dialogs.community-display-mode',
+  'dialogs.community-display-mode.before',
+  'dialogs.community-display-mode.after',
+  'dialogs.community-display-mode.replace',
   'dialogs.dialog-avatar-opens-profile',
   'dialogs.dialog-avatar-opens-profile.before',
   'dialogs.dialog-avatar-opens-profile.after',
@@ -2950,6 +3956,18 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.always-show-downloads.before',
   'dialogs.always-show-downloads.after',
   'dialogs.always-show-downloads.replace',
+  'dialogs.always-show-downloads',
+  'dialogs.always-show-downloads.before',
+  'dialogs.always-show-downloads.after',
+  'dialogs.always-show-downloads.replace',
+  'dialogs.hide-downloads-button',
+  'dialogs.hide-downloads-button.before',
+  'dialogs.hide-downloads-button.after',
+  'dialogs.hide-downloads-button.replace',
+  'dialogs.hide-dialog-preview',
+  'dialogs.hide-dialog-preview.before',
+  'dialogs.hide-dialog-preview.after',
+  'dialogs.hide-dialog-preview.replace',
   'dialogs.bottom-tabs-hide',
   'dialogs.bottom-tabs-hide.before',
   'dialogs.bottom-tabs-hide.after',
@@ -2958,30 +3976,66 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.compact-mode.before',
   'dialogs.compact-mode.after',
   'dialogs.compact-mode.replace',
+  'dialogs.bottom-tabs-lift',
+  'dialogs.bottom-tabs-lift.before',
+  'dialogs.bottom-tabs-lift.after',
+  'dialogs.bottom-tabs-lift.replace',
   'dialogs.show-tab-titles',
   'dialogs.show-tab-titles.before',
   'dialogs.show-tab-titles.after',
   'dialogs.show-tab-titles.replace',
+  'dialogs.bottom-tabs',
+  'dialogs.bottom-tabs.before',
+  'dialogs.bottom-tabs.after',
+  'dialogs.bottom-tabs.replace',
+  'dialogs.bottom-tabs-preview',
+  'dialogs.bottom-tabs-preview.before',
+  'dialogs.bottom-tabs-preview.after',
+  'dialogs.bottom-tabs-preview.replace',
   'dialogs.bottom-tabs-separate-search',
   'dialogs.bottom-tabs-separate-search.before',
   'dialogs.bottom-tabs-separate-search.after',
   'dialogs.bottom-tabs-separate-search.replace',
-  'dialogs.bottom-tabs-hide-top-search',
-  'dialogs.bottom-tabs-hide-top-search.before',
-  'dialogs.bottom-tabs-hide-top-search.after',
-  'dialogs.bottom-tabs-hide-top-search.replace',
+  'dialogs.bottom-tabs-hide-on-scroll',
+  'dialogs.bottom-tabs-hide-on-scroll.before',
+  'dialogs.bottom-tabs-hide-on-scroll.after',
+  'dialogs.bottom-tabs-hide-on-scroll.replace',
+  'dialogs.start-tab',
+  'dialogs.start-tab.before',
+  'dialogs.start-tab.after',
+  'dialogs.start-tab.replace',
+  'dialogs.start-tab',
+  'dialogs.start-tab.before',
+  'dialogs.start-tab.after',
+  'dialogs.start-tab.replace',
   'dialogs.main-tabs-customize-reset',
   'dialogs.main-tabs-customize-reset.before',
   'dialogs.main-tabs-customize-reset.after',
   'dialogs.main-tabs-customize-reset.replace',
+  'dialogs.bottom-tabs-reset',
+  'dialogs.bottom-tabs-reset.before',
+  'dialogs.bottom-tabs-reset.after',
+  'dialogs.bottom-tabs-reset.replace',
+  'dialogs.bottom-tabs-hide-top-search',
+  'dialogs.bottom-tabs-hide-top-search.before',
+  'dialogs.bottom-tabs-hide-top-search.after',
+  'dialogs.bottom-tabs-hide-top-search.replace',
   'dialogs.dialogs-fab-main-action',
   'dialogs.dialogs-fab-main-action.before',
   'dialogs.dialogs-fab-main-action.after',
   'dialogs.dialogs-fab-main-action.replace',
+  'dialogs.fab-main-action',
+  'dialogs.fab-main-action.before',
+  'dialogs.fab-main-action.after',
+  'dialogs.fab-main-action.replace',
   'dialogs.dialogs-fab-secondary-action',
   'dialogs.dialogs-fab-secondary-action.before',
   'dialogs.dialogs-fab-secondary-action.after',
   'dialogs.dialogs-fab-secondary-action.replace',
+  'dialogs.fab-secondary-action',
+  'dialogs.fab-secondary-action.before',
+  'dialogs.fab-secondary-action.after',
+  'dialogs.fab-secondary-action.replace',
   'dialogs.dialogs-fab-hide-on-scroll',
   'dialogs.dialogs-fab-hide-on-scroll.before',
   'dialogs.dialogs-fab-hide-on-scroll.after',
@@ -2994,50 +4048,11 @@ export const SLOTS: readonly EntinySlot[] = [
   'dialogs.dialogs-fab-left-side.before',
   'dialogs.dialogs-fab-left-side.after',
   'dialogs.dialogs-fab-left-side.replace',
+  'dialogs.dialogs-fab-raise',
+  'dialogs.dialogs-fab-raise.before',
+  'dialogs.dialogs-fab-raise.after',
+  'dialogs.dialogs-fab-raise.replace',
   'dialogs.end',
-  'drawer.side-menu',
-  'drawer.side-menu.start',
-  'drawer.side-menu.end',
-  'drawer.navigation-drawer',
-  'drawer.navigation-drawer.before',
-  'drawer.navigation-drawer.after',
-  'drawer.navigation-drawer.replace',
-  'drawer.drawer-back-gesture',
-  'drawer.drawer-back-gesture.before',
-  'drawer.drawer-back-gesture.after',
-  'drawer.drawer-back-gesture.replace',
-  'drawer.drawer-m3-sections',
-  'drawer.drawer-m3-sections.before',
-  'drawer.drawer-m3-sections.after',
-  'drawer.drawer-m3-sections.replace',
-  'drawer.show-drawer-accounts',
-  'drawer.show-drawer-accounts.before',
-  'drawer.show-drawer-accounts.after',
-  'drawer.show-drawer-accounts.replace',
-  'drawer.bottom-tabs-hide',
-  'drawer.bottom-tabs-hide.before',
-  'drawer.bottom-tabs-hide.after',
-  'drawer.bottom-tabs-hide.replace',
-  'drawer.drawer-menu-order',
-  'drawer.drawer-menu-order.before',
-  'drawer.drawer-menu-order.after',
-  'drawer.drawer-menu-order.replace',
-  'drawer.end',
-  'drawer-menu-order.drawer-menu-items',
-  'drawer-menu-order.drawer-menu-items.start',
-  'drawer-menu-order.drawer-menu-items.end',
-  'drawer-menu-order.drawer-menu-hidden',
-  'drawer-menu-order.drawer-menu-hidden.start',
-  'drawer-menu-order.drawer-menu-hidden.end',
-  'drawer-menu-order.drawer-menu-add-divider',
-  'drawer-menu-order.drawer-menu-add-divider.before',
-  'drawer-menu-order.drawer-menu-add-divider.after',
-  'drawer-menu-order.drawer-menu-add-divider.replace',
-  'drawer-menu-order.drawer-menu-reset',
-  'drawer-menu-order.drawer-menu-reset.before',
-  'drawer-menu-order.drawer-menu-reset.after',
-  'drawer-menu-order.drawer-menu-reset.replace',
-  'drawer-menu-order.end',
   'feed-excluded-channels.feed-shown-channels',
   'feed-excluded-channels.feed-shown-channels.start',
   'feed-excluded-channels.feed-shown-channels.end',
@@ -3076,6 +4091,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'fonts.font-include-system.before',
   'fonts.font-include-system.after',
   'fonts.font-include-system.replace',
+  'fonts.font-synthetic-bold',
+  'fonts.font-synthetic-bold.before',
+  'fonts.font-synthetic-bold.after',
+  'fonts.font-synthetic-bold.replace',
   'fonts.font-add',
   'fonts.font-add.before',
   'fonts.font-add.after',
@@ -3106,10 +4125,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'ghost-mode.ghost-presence-mode.before',
   'ghost-mode.ghost-presence-mode.after',
   'ghost-mode.ghost-presence-mode.replace',
-  'ghost-mode.ghost-auto-offline',
-  'ghost-mode.ghost-auto-offline.before',
-  'ghost-mode.ghost-auto-offline.after',
-  'ghost-mode.ghost-auto-offline.replace',
   'ghost-mode.ghost-hide-app-bar-icon',
   'ghost-mode.ghost-hide-app-bar-icon.before',
   'ghost-mode.ghost-hide-app-bar-icon.after',
@@ -3130,17 +4145,151 @@ export const SLOTS: readonly EntinySlot[] = [
   'ghost-mode.ghost-mark-read-locally.before',
   'ghost-mode.ghost-mark-read-locally.after',
   'ghost-mode.ghost-mark-read-locally.replace',
+  'ghost-mode.ghost-hide-seen-mentions',
+  'ghost-mode.ghost-hide-seen-mentions.before',
+  'ghost-mode.ghost-hide-seen-mentions.after',
+  'ghost-mode.ghost-hide-seen-mentions.replace',
   'ghost-mode.end',
-  'icon-packs.icon-replacement',
-  'icon-packs.icon-replacement.start',
-  'icon-packs.icon-replacement.end',
-  'icon-packs.notification-icon',
-  'icon-packs.notification-icon.start',
-  'icon-packs.notification-icon.end',
+  'home.recent-chats',
+  'home.recent-chats.start',
+  'home.recent-chats.end',
+  'home.online-dots-section',
+  'home.online-dots-section.start',
+  'home.online-dots-section.end',
+  'home.mutual-contact-section',
+  'home.mutual-contact-section.start',
+  'home.mutual-contact-section.end',
+  'home.side-menu',
+  'home.side-menu.start',
+  'home.side-menu.end',
+  'home.menus',
+  'home.menus.start',
+  'home.menus.end',
+  'home.chat-list',
+  'home.chat-list.before',
+  'home.chat-list.after',
+  'home.chat-list.replace',
+  'home.pill-stack',
+  'home.pill-stack.before',
+  'home.pill-stack.after',
+  'home.pill-stack.replace',
+  'home.bookmarks',
+  'home.bookmarks.before',
+  'home.bookmarks.after',
+  'home.bookmarks.replace',
+  'home.feed',
+  'home.feed.before',
+  'home.feed.after',
+  'home.feed.replace',
+  'home.recent-chats',
+  'home.recent-chats.before',
+  'home.recent-chats.after',
+  'home.recent-chats.replace',
+  'home.recent-chats-style',
+  'home.recent-chats-style.before',
+  'home.recent-chats-style.after',
+  'home.recent-chats-style.replace',
+  'home.recent-chats-limit',
+  'home.recent-chats-limit.before',
+  'home.recent-chats-limit.after',
+  'home.recent-chats-limit.replace',
+  'home.recent-chats-limit',
+  'home.recent-chats-limit.before',
+  'home.recent-chats-limit.after',
+  'home.recent-chats-limit.replace',
+  'home.hide-recent-chats-shortcuts',
+  'home.hide-recent-chats-shortcuts.before',
+  'home.hide-recent-chats-shortcuts.after',
+  'home.hide-recent-chats-shortcuts.replace',
+  'home.clear-recent-chats',
+  'home.clear-recent-chats.before',
+  'home.clear-recent-chats.after',
+  'home.clear-recent-chats.replace',
+  'home.clear-recent-chats',
+  'home.clear-recent-chats.before',
+  'home.clear-recent-chats.after',
+  'home.clear-recent-chats.replace',
+  'home.show-online-indicator',
+  'home.show-online-indicator.before',
+  'home.show-online-indicator.after',
+  'home.show-online-indicator.replace',
+  'home.online-dots',
+  'home.online-dots.before',
+  'home.online-dots.after',
+  'home.online-dots.replace',
+  'home.chat-online-dots',
+  'home.chat-online-dots.before',
+  'home.chat-online-dots.after',
+  'home.chat-online-dots.replace',
+  'home.show-mutual-contact-icon',
+  'home.show-mutual-contact-icon.before',
+  'home.show-mutual-contact-icon.after',
+  'home.show-mutual-contact-icon.replace',
+  'home.show-mutual-contact-in-chats',
+  'home.show-mutual-contact-in-chats.before',
+  'home.show-mutual-contact-in-chats.after',
+  'home.show-mutual-contact-in-chats.replace',
+  'home.mutual-contact-icon-left',
+  'home.mutual-contact-icon-left.before',
+  'home.mutual-contact-icon-left.after',
+  'home.mutual-contact-icon-left.replace',
+  'home.navigation-drawer',
+  'home.navigation-drawer.before',
+  'home.navigation-drawer.after',
+  'home.navigation-drawer.replace',
+  'home.drawer-back-gesture',
+  'home.drawer-back-gesture.before',
+  'home.drawer-back-gesture.after',
+  'home.drawer-back-gesture.replace',
+  'home.drawer-keep-options-menu',
+  'home.drawer-keep-options-menu.before',
+  'home.drawer-keep-options-menu.after',
+  'home.drawer-keep-options-menu.replace',
+  'home.drawer-m3-sections',
+  'home.drawer-m3-sections.before',
+  'home.drawer-m3-sections.after',
+  'home.drawer-m3-sections.replace',
+  'home.show-drawer-accounts',
+  'home.show-drawer-accounts.before',
+  'home.show-drawer-accounts.after',
+  'home.show-drawer-accounts.replace',
+  'home.drawer-show-badge',
+  'home.drawer-show-badge.before',
+  'home.drawer-show-badge.after',
+  'home.drawer-show-badge.replace',
+  'home.side-menu',
+  'home.side-menu.before',
+  'home.side-menu.after',
+  'home.side-menu.replace',
+  'home.dialogs-menu-order',
+  'home.dialogs-menu-order.before',
+  'home.dialogs-menu-order.after',
+  'home.dialogs-menu-order.replace',
+  'home.chat-menu-order',
+  'home.chat-menu-order.before',
+  'home.chat-menu-order.after',
+  'home.chat-menu-order.replace',
+  'home.message-menu-order',
+  'home.message-menu-order.before',
+  'home.message-menu-order.after',
+  'home.message-menu-order.replace',
+  'home.profile-settings-rows-order',
+  'home.profile-settings-rows-order.before',
+  'home.profile-settings-rows-order.after',
+  'home.profile-settings-rows-order.replace',
+  'home.profile-info-rows-order',
+  'home.profile-info-rows-order.before',
+  'home.profile-info-rows-order.after',
+  'home.profile-info-rows-order.replace',
+  'home.end',
+  'icon-packs.icon-packs-installed',
+  'icon-packs.icon-packs-installed.start',
+  'icon-packs.icon-packs-installed.end',
+  'icon-packs.icon-pack-load-from-file',
+  'icon-packs.icon-pack-load-from-file.before',
+  'icon-packs.icon-pack-load-from-file.after',
+  'icon-packs.icon-pack-load-from-file.replace',
   'icon-packs.end',
-  'ios-style.ios-style',
-  'ios-style.ios-style.start',
-  'ios-style.ios-style.end',
   'ios-style.message-input',
   'ios-style.message-input.start',
   'ios-style.message-input.end',
@@ -3151,10 +4300,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'ios-style.chat-header-settings.before',
   'ios-style.chat-header-settings.after',
   'ios-style.chat-header-settings.replace',
-  'ios-style.ios-bottom-bar',
-  'ios-style.ios-bottom-bar.before',
-  'ios-style.ios-bottom-bar.after',
-  'ios-style.ios-bottom-bar.replace',
   'ios-style.ios-chats-tab-first-folder',
   'ios-style.ios-chats-tab-first-folder.before',
   'ios-style.ios-chats-tab-first-folder.after',
@@ -3163,18 +4308,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'ios-style.action-button-style.before',
   'ios-style.action-button-style.after',
   'ios-style.action-button-style.replace',
-  'ios-style.ios-button-placement',
-  'ios-style.ios-button-placement.before',
-  'ios-style.ios-button-placement.after',
-  'ios-style.ios-button-placement.replace',
-  'ios-style.ios-input-appearance',
-  'ios-style.ios-input-appearance.before',
-  'ios-style.ios-input-appearance.after',
-  'ios-style.ios-input-appearance.replace',
   'ios-style.compact-input-size',
   'ios-style.compact-input-size.before',
   'ios-style.compact-input-size.after',
   'ios-style.compact-input-size.replace',
+  'ios-style.commands-near-stickers',
+  'ios-style.commands-near-stickers.before',
+  'ios-style.commands-near-stickers.after',
+  'ios-style.commands-near-stickers.replace',
   'ios-style.disable-glass-glare',
   'ios-style.disable-glass-glare.before',
   'ios-style.disable-glass-glare.after',
@@ -3187,6 +4328,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'local-names.local-names.before',
   'local-names.local-names.after',
   'local-names.local-names.replace',
+  'local-names.local-message-edit',
+  'local-names.local-message-edit.before',
+  'local-names.local-message-edit.after',
+  'local-names.local-message-edit.replace',
+  'local-names.local-edits-clear',
+  'local-names.local-edits-clear.before',
+  'local-names.local-edits-clear.after',
+  'local-names.local-edits-clear.replace',
   'local-names.local-names-add',
   'local-names.local-names-add.before',
   'local-names.local-names-add.after',
@@ -3204,24 +4353,27 @@ export const SLOTS: readonly EntinySlot[] = [
   'local-names.local-names-clear.after',
   'local-names.local-names-clear.replace',
   'local-names.end',
-  'marketplace.marketplace',
-  'marketplace.marketplace.start',
-  'marketplace.marketplace.end',
-  'marketplace.marketplace-versions',
-  'marketplace.marketplace-versions.start',
-  'marketplace.marketplace-versions.end',
-  'marketplace.end',
+  'material3.monet-theme',
+  'material3.monet-theme.before',
+  'material3.monet-theme.after',
+  'material3.monet-theme.replace',
+  'material3.monet-style',
+  'material3.monet-style.before',
+  'material3.monet-style.after',
+  'material3.monet-style.replace',
+  'material3.material3-headers-in-card',
+  'material3.material3-headers-in-card.before',
+  'material3.material3-headers-in-card.after',
+  'material3.material3-headers-in-card.replace',
+  'material3.forum-sections-cards',
+  'material3.forum-sections-cards.before',
+  'material3.forum-sections-cards.after',
+  'material3.forum-sections-cards.replace',
+  'material3.end',
   'menu-order.plugin-actions',
   'menu-order.plugin-actions.start',
   'menu-order.plugin-actions.end',
   'menu-order.end',
-  'menus.menus',
-  'menus.menus.start',
-  'menus.menus.end',
-  'menus.user-profile',
-  'menus.user-profile.start',
-  'menus.user-profile.end',
-  'menus.end',
   'message-design.stickers',
   'message-design.stickers.start',
   'message-design.stickers.end',
@@ -3257,6 +4409,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'message-design.compact-edited.before',
   'message-design.compact-edited.after',
   'message-design.compact-edited.replace',
+  'message-design.edited-message-date-mode',
+  'message-design.edited-message-date-mode.before',
+  'message-design.edited-message-date-mode.after',
+  'message-design.edited-message-date-mode.replace',
   'message-design.show-forward-time',
   'message-design.show-forward-time.before',
   'message-design.show-forward-time.after',
@@ -3286,101 +4442,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'message-design.chat-views-bottom.after',
   'message-design.chat-views-bottom.replace',
   'message-design.end',
-  'messages.reactions',
-  'messages.reactions.start',
-  'messages.reactions.end',
-  'messages.confirmations-section',
-  'messages.confirmations-section.start',
-  'messages.confirmations-section.end',
-  'messages.spoilers',
-  'messages.spoilers.start',
-  'messages.spoilers.end',
-  'messages.blocked-messages-section',
-  'messages.blocked-messages-section.start',
-  'messages.blocked-messages-section.end',
-  'messages.clown-avatars-section',
-  'messages.clown-avatars-section.start',
-  'messages.clown-avatars-section.end',
-  'messages.category-behavior',
-  'messages.category-behavior.start',
-  'messages.category-behavior.end',
-  'messages.double-tap-actions',
-  'messages.double-tap-actions.start',
-  'messages.double-tap-actions.end',
-  'messages.pinned-reactions',
-  'messages.pinned-reactions.before',
-  'messages.pinned-reactions.after',
-  'messages.pinned-reactions.replace',
-  'messages.instant-mark-reactions-read',
-  'messages.instant-mark-reactions-read.before',
-  'messages.instant-mark-reactions-read.after',
-  'messages.instant-mark-reactions-read.replace',
-  'messages.confirm-reaction-non-member',
-  'messages.confirm-reaction-non-member.before',
-  'messages.confirm-reaction-non-member.after',
-  'messages.confirm-reaction-non-member.replace',
-  'messages.show-spoilers-directly',
-  'messages.show-spoilers-directly.before',
-  'messages.show-spoilers-directly.after',
-  'messages.show-spoilers-directly.replace',
-  'messages.text-spoiler-mode',
-  'messages.text-spoiler-mode.before',
-  'messages.text-spoiler-mode.after',
-  'messages.text-spoiler-mode.replace',
-  'messages.spoiler-extend-to-line-end',
-  'messages.spoiler-extend-to-line-end.before',
-  'messages.spoiler-extend-to-line-end.after',
-  'messages.spoiler-extend-to-line-end.replace',
-  'messages.media-spoiler-mode',
-  'messages.media-spoiler-mode.before',
-  'messages.media-spoiler-mode.after',
-  'messages.media-spoiler-mode.replace',
-  'messages.link-preview-spoiler',
-  'messages.link-preview-spoiler.before',
-  'messages.link-preview-spoiler.after',
-  'messages.link-preview-spoiler.replace',
-  'messages.blocked-messages-mode',
-  'messages.blocked-messages-mode.before',
-  'messages.blocked-messages-mode.after',
-  'messages.blocked-messages-mode.replace',
-  'messages.blocked-messages-extra',
-  'messages.blocked-messages-extra.before',
-  'messages.blocked-messages-extra.after',
-  'messages.blocked-messages-extra.replace',
-  'messages.clown-avatar-blocked',
-  'messages.clown-avatar-blocked.before',
-  'messages.clown-avatar-blocked.after',
-  'messages.clown-avatar-blocked.replace',
-  'messages.clown-avatar-blocked-me',
-  'messages.clown-avatar-blocked-me.before',
-  'messages.clown-avatar-blocked-me.after',
-  'messages.clown-avatar-blocked-me.replace',
-  'messages.clown-avatar-emoji',
-  'messages.clown-avatar-emoji.before',
-  'messages.clown-avatar-emoji.after',
-  'messages.clown-avatar-emoji.replace',
-  'messages.chat-remember-all-replies',
-  'messages.chat-remember-all-replies.before',
-  'messages.chat-remember-all-replies.after',
-  'messages.chat-remember-all-replies.replace',
-  'messages.forward-pro',
-  'messages.forward-pro.before',
-  'messages.forward-pro.after',
-  'messages.forward-pro.replace',
-  'messages.incoming-messages',
-  'messages.incoming-messages.before',
-  'messages.incoming-messages.after',
-  'messages.incoming-messages.replace',
-  'messages.outgoing-messages',
-  'messages.outgoing-messages.before',
-  'messages.outgoing-messages.after',
-  'messages.outgoing-messages.replace',
-  'messages.channel-messages',
-  'messages.channel-messages.before',
-  'messages.channel-messages.after',
-  'messages.channel-messages.replace',
-  'messages.end',
-  'niche.end',
   'paranoia.paranoia-whitelist',
   'paranoia.paranoia-whitelist.before',
   'paranoia.paranoia-whitelist.after',
@@ -3401,6 +4462,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'paranoia.paranoia-hide-my-stories.before',
   'paranoia.paranoia-hide-my-stories.after',
   'paranoia.paranoia-hide-my-stories.replace',
+  'paranoia.paranoia-hide-stars',
+  'paranoia.paranoia-hide-stars.before',
+  'paranoia.paranoia-hide-stars.after',
+  'paranoia.paranoia-hide-stars.replace',
+  'paranoia.paranoia-hide-gram',
+  'paranoia.paranoia-hide-gram.before',
+  'paranoia.paranoia-hide-gram.after',
+  'paranoia.paranoia-hide-gram.replace',
   'paranoia.paranoia-disable-notifications',
   'paranoia.paranoia-disable-notifications.before',
   'paranoia.paranoia-disable-notifications.after',
@@ -3452,10 +4521,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'pill-stack.pill-stack-hidden-pills',
   'pill-stack.pill-stack-hidden-pills.start',
   'pill-stack.pill-stack-hidden-pills.end',
-  'pill-stack.pill-stack',
-  'pill-stack.pill-stack.before',
-  'pill-stack.pill-stack.after',
-  'pill-stack.pill-stack.replace',
   'pill-stack.pill-stack-infinite-scrolling',
   'pill-stack.pill-stack-infinite-scrolling.before',
   'pill-stack.pill-stack-infinite-scrolling.after',
@@ -3500,6 +4565,14 @@ export const SLOTS: readonly EntinySlot[] = [
   'plugin-info.plugins-permissions',
   'plugin-info.plugins-permissions.start',
   'plugin-info.plugins-permissions.end',
+  'plugin-info.plugins-memory-usage',
+  'plugin-info.plugins-memory-usage.before',
+  'plugin-info.plugins-memory-usage.after',
+  'plugin-info.plugins-memory-usage.replace',
+  'plugin-info.plugin-assets',
+  'plugin-info.plugin-assets.before',
+  'plugin-info.plugin-assets.after',
+  'plugin-info.plugin-assets.replace',
   'plugin-info.plugins-view-source',
   'plugin-info.plugins-view-source.before',
   'plugin-info.plugins-view-source.after',
@@ -3513,6 +4586,59 @@ export const SLOTS: readonly EntinySlot[] = [
   'plugin-info.plugins-remove.after',
   'plugin-info.plugins-remove.replace',
   'plugin-info.end',
+  'plugin-repo.plugin-repo-sort',
+  'plugin-repo.plugin-repo-sort.before',
+  'plugin-repo.plugin-repo-sort.after',
+  'plugin-repo.plugin-repo-sort.replace',
+  'plugin-repo.plugin-repo-retry',
+  'plugin-repo.plugin-repo-retry.before',
+  'plugin-repo.plugin-repo-retry.after',
+  'plugin-repo.plugin-repo-retry.replace',
+  'plugin-repo.end',
+  'plugin-repo-plugin.plugin-repo-description',
+  'plugin-repo-plugin.plugin-repo-description.before',
+  'plugin-repo-plugin.plugin-repo-description.after',
+  'plugin-repo-plugin.plugin-repo-description.replace',
+  'plugin-repo-plugin.plugin-repo-author',
+  'plugin-repo-plugin.plugin-repo-author.before',
+  'plugin-repo-plugin.plugin-repo-author.after',
+  'plugin-repo-plugin.plugin-repo-author.replace',
+  'plugin-repo-plugin.plugin-repo-source',
+  'plugin-repo-plugin.plugin-repo-source.before',
+  'plugin-repo-plugin.plugin-repo-source.after',
+  'plugin-repo-plugin.plugin-repo-source.replace',
+  'plugin-repo-plugin.plugin-repo-id',
+  'plugin-repo-plugin.plugin-repo-id.before',
+  'plugin-repo-plugin.plugin-repo-id.after',
+  'plugin-repo-plugin.plugin-repo-id.replace',
+  'plugin-repo-plugin.plugin-repo-dependencies',
+  'plugin-repo-plugin.plugin-repo-dependencies.before',
+  'plugin-repo-plugin.plugin-repo-dependencies.after',
+  'plugin-repo-plugin.plugin-repo-dependencies.replace',
+  'plugin-repo-plugin.plugin-repo-install',
+  'plugin-repo-plugin.plugin-repo-install.before',
+  'plugin-repo-plugin.plugin-repo-install.after',
+  'plugin-repo-plugin.plugin-repo-install.replace',
+  'plugin-repo-plugin.plugin-repo-update',
+  'plugin-repo-plugin.plugin-repo-update.before',
+  'plugin-repo-plugin.plugin-repo-update.after',
+  'plugin-repo-plugin.plugin-repo-update.replace',
+  'plugin-repo-plugin.plugins-installed',
+  'plugin-repo-plugin.plugins-installed.before',
+  'plugin-repo-plugin.plugins-installed.after',
+  'plugin-repo-plugin.plugins-installed.replace',
+  'plugin-repo-plugin.end',
+  'plugin-repos.plugin-repos-updates',
+  'plugin-repos.plugin-repos-updates.start',
+  'plugin-repos.plugin-repos-updates.end',
+  'plugin-repos.plugin-repos',
+  'plugin-repos.plugin-repos.start',
+  'plugin-repos.plugin-repos.end',
+  'plugin-repos.plugin-repos-add',
+  'plugin-repos.plugin-repos-add.before',
+  'plugin-repos.plugin-repos-add.after',
+  'plugin-repos.plugin-repos-add.replace',
+  'plugin-repos.end',
   'plugins.plugins-installed',
   'plugins.plugins-installed.start',
   'plugins.plugins-installed.end',
@@ -3520,10 +4646,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'plugins.plugins-enable-engine.before',
   'plugins.plugins-enable-engine.after',
   'plugins.plugins-enable-engine.replace',
-  'plugins.marketplace',
-  'plugins.marketplace.before',
-  'plugins.marketplace.after',
-  'plugins.marketplace.replace',
+  'plugins.plugin-repos',
+  'plugins.plugin-repos.before',
+  'plugins.plugin-repos.after',
+  'plugins.plugin-repos.replace',
   'plugins.plugins-load-from-disk',
   'plugins.plugins-load-from-disk.before',
   'plugins.plugins-load-from-disk.after',
@@ -3545,65 +4671,275 @@ export const SLOTS: readonly EntinySlot[] = [
   'presence-watch-list.presence-watch-add.after',
   'presence-watch-list.presence-watch-add.replace',
   'presence-watch-list.end',
-  'privacy-security.strip-tracking-params',
-  'privacy-security.strip-tracking-params.start',
-  'privacy-security.strip-tracking-params.end',
-  'privacy-security.biometric-confirm',
-  'privacy-security.biometric-confirm.start',
-  'privacy-security.biometric-confirm.end',
-  'privacy-security.per-account-passcode',
-  'privacy-security.per-account-passcode.before',
-  'privacy-security.per-account-passcode.after',
-  'privacy-security.per-account-passcode.replace',
-  'privacy-security.paranoia-mode',
-  'privacy-security.paranoia-mode.before',
-  'privacy-security.paranoia-mode.after',
-  'privacy-security.paranoia-mode.replace',
-  'privacy-security.anti-censorship',
-  'privacy-security.anti-censorship.before',
-  'privacy-security.anti-censorship.after',
-  'privacy-security.anti-censorship.replace',
-  'privacy-security.hide-my-phone-number',
-  'privacy-security.hide-my-phone-number.before',
-  'privacy-security.hide-my-phone-number.after',
-  'privacy-security.hide-my-phone-number.replace',
-  'privacy-security.disable-draft-upload',
-  'privacy-security.disable-draft-upload.before',
-  'privacy-security.disable-draft-upload.after',
-  'privacy-security.disable-draft-upload.replace',
-  'privacy-security.disable-sensitive',
-  'privacy-security.disable-sensitive.before',
-  'privacy-security.disable-sensitive.after',
-  'privacy-security.disable-sensitive.replace',
-  'privacy-security.strip-tracking-params-on-open',
-  'privacy-security.strip-tracking-params-on-open.before',
-  'privacy-security.strip-tracking-params-on-open.after',
-  'privacy-security.strip-tracking-params-on-open.replace',
-  'privacy-security.strip-tracking-params-on-paste',
-  'privacy-security.strip-tracking-params-on-paste.before',
-  'privacy-security.strip-tracking-params-on-paste.after',
-  'privacy-security.strip-tracking-params-on-paste.replace',
-  'privacy-security.biometric-confirm-delete-chat',
-  'privacy-security.biometric-confirm-delete-chat.before',
-  'privacy-security.biometric-confirm-delete-chat.after',
-  'privacy-security.biometric-confirm-delete-chat.replace',
-  'privacy-security.biometric-confirm-logout',
-  'privacy-security.biometric-confirm-logout.before',
-  'privacy-security.biometric-confirm-logout.after',
-  'privacy-security.biometric-confirm-logout.replace',
-  'privacy-security.biometric-allow-device-credential',
-  'privacy-security.biometric-allow-device-credential.before',
-  'privacy-security.biometric-allow-device-credential.after',
-  'privacy-security.biometric-allow-device-credential.replace',
-  'privacy-security.biometric-lock-archive',
-  'privacy-security.biometric-lock-archive.before',
-  'privacy-security.biometric-lock-archive.after',
-  'privacy-security.biometric-lock-archive.replace',
-  'privacy-security.biometric-lock-archive-every-time',
-  'privacy-security.biometric-lock-archive-every-time.before',
-  'privacy-security.biometric-lock-archive-every-time.after',
-  'privacy-security.biometric-lock-archive-every-time.replace',
-  'privacy-security.end',
+  'privacy-freedom.strip-tracking-params',
+  'privacy-freedom.strip-tracking-params.start',
+  'privacy-freedom.strip-tracking-params.end',
+  'privacy-freedom.biometric-confirm',
+  'privacy-freedom.biometric-confirm.start',
+  'privacy-freedom.biometric-confirm.end',
+  'privacy-freedom.stalker-saved',
+  'privacy-freedom.stalker-saved.start',
+  'privacy-freedom.stalker-saved.end',
+  'privacy-freedom.stalker-presence',
+  'privacy-freedom.stalker-presence.start',
+  'privacy-freedom.stalker-presence.end',
+  'privacy-freedom.stalker-tools',
+  'privacy-freedom.stalker-tools.start',
+  'privacy-freedom.stalker-tools.end',
+  'privacy-freedom.premium-unlock',
+  'privacy-freedom.premium-unlock.start',
+  'privacy-freedom.premium-unlock.end',
+  'privacy-freedom.content-protection-bypass',
+  'privacy-freedom.content-protection-bypass.start',
+  'privacy-freedom.content-protection-bypass.end',
+  'privacy-freedom.unlimited-limits',
+  'privacy-freedom.unlimited-limits.start',
+  'privacy-freedom.unlimited-limits.end',
+  'privacy-freedom.anti-censorship-transport',
+  'privacy-freedom.anti-censorship-transport.start',
+  'privacy-freedom.anti-censorship-transport.end',
+  'privacy-freedom.anti-censorship-privacy',
+  'privacy-freedom.anti-censorship-privacy.start',
+  'privacy-freedom.anti-censorship-privacy.end',
+  'privacy-freedom.ghost-mode',
+  'privacy-freedom.ghost-mode.before',
+  'privacy-freedom.ghost-mode.after',
+  'privacy-freedom.ghost-mode.replace',
+  'privacy-freedom.anti-deletion',
+  'privacy-freedom.anti-deletion.before',
+  'privacy-freedom.anti-deletion.after',
+  'privacy-freedom.anti-deletion.replace',
+  'privacy-freedom.regex-filter',
+  'privacy-freedom.regex-filter.before',
+  'privacy-freedom.regex-filter.after',
+  'privacy-freedom.regex-filter.replace',
+  'privacy-freedom.device-spoof',
+  'privacy-freedom.device-spoof.before',
+  'privacy-freedom.device-spoof.after',
+  'privacy-freedom.device-spoof.replace',
+  'privacy-freedom.per-account-passcode',
+  'privacy-freedom.per-account-passcode.before',
+  'privacy-freedom.per-account-passcode.after',
+  'privacy-freedom.per-account-passcode.replace',
+  'privacy-freedom.paranoia-mode',
+  'privacy-freedom.paranoia-mode.before',
+  'privacy-freedom.paranoia-mode.after',
+  'privacy-freedom.paranoia-mode.replace',
+  'privacy-freedom.hide-my-phone-number',
+  'privacy-freedom.hide-my-phone-number.before',
+  'privacy-freedom.hide-my-phone-number.after',
+  'privacy-freedom.hide-my-phone-number.replace',
+  'privacy-freedom.disable-draft-upload',
+  'privacy-freedom.disable-draft-upload.before',
+  'privacy-freedom.disable-draft-upload.after',
+  'privacy-freedom.disable-draft-upload.replace',
+  'privacy-freedom.disable-sensitive',
+  'privacy-freedom.disable-sensitive.before',
+  'privacy-freedom.disable-sensitive.after',
+  'privacy-freedom.disable-sensitive.replace',
+  'privacy-freedom.strip-tracking-params-on-open',
+  'privacy-freedom.strip-tracking-params-on-open.before',
+  'privacy-freedom.strip-tracking-params-on-open.after',
+  'privacy-freedom.strip-tracking-params-on-open.replace',
+  'privacy-freedom.strip-tracking-params-on-paste',
+  'privacy-freedom.strip-tracking-params-on-paste.before',
+  'privacy-freedom.strip-tracking-params-on-paste.after',
+  'privacy-freedom.strip-tracking-params-on-paste.replace',
+  'privacy-freedom.resolve-trackable-redirects',
+  'privacy-freedom.resolve-trackable-redirects.before',
+  'privacy-freedom.resolve-trackable-redirects.after',
+  'privacy-freedom.resolve-trackable-redirects.replace',
+  'privacy-freedom.strip-tracking-params-source-row',
+  'privacy-freedom.strip-tracking-params-source-row.before',
+  'privacy-freedom.strip-tracking-params-source-row.after',
+  'privacy-freedom.strip-tracking-params-source-row.replace',
+  'privacy-freedom.strip-tracking-params-source',
+  'privacy-freedom.strip-tracking-params-source.before',
+  'privacy-freedom.strip-tracking-params-source.after',
+  'privacy-freedom.strip-tracking-params-source.replace',
+  'privacy-freedom.biometric-confirm-delete-chat',
+  'privacy-freedom.biometric-confirm-delete-chat.before',
+  'privacy-freedom.biometric-confirm-delete-chat.after',
+  'privacy-freedom.biometric-confirm-delete-chat.replace',
+  'privacy-freedom.biometric-confirm-logout',
+  'privacy-freedom.biometric-confirm-logout.before',
+  'privacy-freedom.biometric-confirm-logout.after',
+  'privacy-freedom.biometric-confirm-logout.replace',
+  'privacy-freedom.biometric-allow-device-credential',
+  'privacy-freedom.biometric-allow-device-credential.before',
+  'privacy-freedom.biometric-allow-device-credential.after',
+  'privacy-freedom.biometric-allow-device-credential.replace',
+  'privacy-freedom.biometric-lock-archive',
+  'privacy-freedom.biometric-lock-archive.before',
+  'privacy-freedom.biometric-lock-archive.after',
+  'privacy-freedom.biometric-lock-archive.replace',
+  'privacy-freedom.biometric-lock-archive-every-time',
+  'privacy-freedom.biometric-lock-archive-every-time.before',
+  'privacy-freedom.biometric-lock-archive-every-time.after',
+  'privacy-freedom.biometric-lock-archive-every-time.replace',
+  'privacy-freedom.biometric-explicit-confirmation',
+  'privacy-freedom.biometric-explicit-confirmation.before',
+  'privacy-freedom.biometric-explicit-confirmation.after',
+  'privacy-freedom.biometric-explicit-confirmation.replace',
+  'privacy-freedom.biometric-require-confirmation',
+  'privacy-freedom.biometric-require-confirmation.before',
+  'privacy-freedom.biometric-require-confirmation.after',
+  'privacy-freedom.biometric-require-confirmation.replace',
+  'privacy-freedom.save-read-time',
+  'privacy-freedom.save-read-time.before',
+  'privacy-freedom.save-read-time.after',
+  'privacy-freedom.save-read-time.replace',
+  'privacy-freedom.save-last-seen',
+  'privacy-freedom.save-last-seen.before',
+  'privacy-freedom.save-last-seen.after',
+  'privacy-freedom.save-last-seen.replace',
+  'privacy-freedom.presence-watch-list',
+  'privacy-freedom.presence-watch-list.before',
+  'privacy-freedom.presence-watch-list.after',
+  'privacy-freedom.presence-watch-list.replace',
+  'privacy-freedom.presence-logger-notify',
+  'privacy-freedom.presence-logger-notify.before',
+  'privacy-freedom.presence-logger-notify.after',
+  'privacy-freedom.presence-logger-notify.replace',
+  'privacy-freedom.force-relay-calls',
+  'privacy-freedom.force-relay-calls.before',
+  'privacy-freedom.force-relay-calls.after',
+  'privacy-freedom.force-relay-calls.replace',
+  'privacy-freedom.typing-spoof',
+  'privacy-freedom.typing-spoof.before',
+  'privacy-freedom.typing-spoof.after',
+  'privacy-freedom.typing-spoof.replace',
+  'privacy-freedom.local-premium',
+  'privacy-freedom.local-premium.before',
+  'privacy-freedom.local-premium.after',
+  'privacy-freedom.local-premium.replace',
+  'privacy-freedom.local-custom-emoji',
+  'privacy-freedom.local-custom-emoji.before',
+  'privacy-freedom.local-custom-emoji.after',
+  'privacy-freedom.local-custom-emoji.replace',
+  'privacy-freedom.local-names',
+  'privacy-freedom.local-names.before',
+  'privacy-freedom.local-names.after',
+  'privacy-freedom.local-names.replace',
+  'privacy-freedom.save-any-story',
+  'privacy-freedom.save-any-story.before',
+  'privacy-freedom.save-any-story.after',
+  'privacy-freedom.save-any-story.replace',
+  'privacy-freedom.auto-save-stories',
+  'privacy-freedom.auto-save-stories.before',
+  'privacy-freedom.auto-save-stories.after',
+  'privacy-freedom.auto-save-stories.replace',
+  'privacy-freedom.allow-forward-restricted',
+  'privacy-freedom.allow-forward-restricted.before',
+  'privacy-freedom.allow-forward-restricted.after',
+  'privacy-freedom.allow-forward-restricted.replace',
+  'privacy-freedom.disable-flag-secure',
+  'privacy-freedom.disable-flag-secure.before',
+  'privacy-freedom.disable-flag-secure.after',
+  'privacy-freedom.disable-flag-secure.replace',
+  'privacy-freedom.suppress-screenshot-notification',
+  'privacy-freedom.suppress-screenshot-notification.before',
+  'privacy-freedom.suppress-screenshot-notification.after',
+  'privacy-freedom.suppress-screenshot-notification.replace',
+  'privacy-freedom.unlimited-pinned-chats',
+  'privacy-freedom.unlimited-pinned-chats.before',
+  'privacy-freedom.unlimited-pinned-chats.after',
+  'privacy-freedom.unlimited-pinned-chats.replace',
+  'privacy-freedom.unlimited-pinned-chats-count',
+  'privacy-freedom.unlimited-pinned-chats-count.before',
+  'privacy-freedom.unlimited-pinned-chats-count.after',
+  'privacy-freedom.unlimited-pinned-chats-count.replace',
+  'privacy-freedom.unlimited-favorite-stickers',
+  'privacy-freedom.unlimited-favorite-stickers.before',
+  'privacy-freedom.unlimited-favorite-stickers.after',
+  'privacy-freedom.unlimited-favorite-stickers.replace',
+  'privacy-freedom.unlimited-folder-chats',
+  'privacy-freedom.unlimited-folder-chats.before',
+  'privacy-freedom.unlimited-folder-chats.after',
+  'privacy-freedom.unlimited-folder-chats.replace',
+  'privacy-freedom.local-folders',
+  'privacy-freedom.local-folders.before',
+  'privacy-freedom.local-folders.after',
+  'privacy-freedom.local-folders.replace',
+  'privacy-freedom.ws-tunnel',
+  'privacy-freedom.ws-tunnel.before',
+  'privacy-freedom.ws-tunnel.after',
+  'privacy-freedom.ws-tunnel.replace',
+  'privacy-freedom.leak-guard',
+  'privacy-freedom.leak-guard.before',
+  'privacy-freedom.leak-guard.after',
+  'privacy-freedom.leak-guard.replace',
+  'privacy-freedom.end',
+  'profile-accounts.user-profile',
+  'profile-accounts.user-profile.start',
+  'profile-accounts.user-profile.end',
+  'profile-accounts.accounts-section',
+  'profile-accounts.accounts-section.start',
+  'profile-accounts.accounts-section.end',
+  'profile-accounts.calls-section',
+  'profile-accounts.calls-section.start',
+  'profile-accounts.calls-section.end',
+  'profile-accounts.profile-photo-gradient-fade',
+  'profile-accounts.profile-photo-gradient-fade.before',
+  'profile-accounts.profile-photo-gradient-fade.after',
+  'profile-accounts.profile-photo-gradient-fade.replace',
+  'profile-accounts.reduce-profile-motion',
+  'profile-accounts.reduce-profile-motion.before',
+  'profile-accounts.reduce-profile-motion.after',
+  'profile-accounts.reduce-profile-motion.replace',
+  'profile-accounts.disable-profile-scroll-snap',
+  'profile-accounts.disable-profile-scroll-snap.before',
+  'profile-accounts.disable-profile-scroll-snap.after',
+  'profile-accounts.disable-profile-scroll-snap.replace',
+  'profile-accounts.profile-prefer-media-tab',
+  'profile-accounts.profile-prefer-media-tab.before',
+  'profile-accounts.profile-prefer-media-tab.after',
+  'profile-accounts.profile-prefer-media-tab.replace',
+  'profile-accounts.show-profile-gift-button',
+  'profile-accounts.show-profile-gift-button.before',
+  'profile-accounts.show-profile-gift-button.after',
+  'profile-accounts.show-profile-gift-button.replace',
+  'profile-accounts.profile-id-mode',
+  'profile-accounts.profile-id-mode.before',
+  'profile-accounts.profile-id-mode.after',
+  'profile-accounts.profile-id-mode.replace',
+  'profile-accounts.show-profile-reg-date',
+  'profile-accounts.show-profile-reg-date.before',
+  'profile-accounts.show-profile-reg-date.after',
+  'profile-accounts.show-profile-reg-date.replace',
+  'profile-accounts.disable-chat-title-phone',
+  'profile-accounts.disable-chat-title-phone.before',
+  'profile-accounts.disable-chat-title-phone.after',
+  'profile-accounts.disable-chat-title-phone.replace',
+  'profile-accounts.open-by-user-id',
+  'profile-accounts.open-by-user-id.before',
+  'profile-accounts.open-by-user-id.after',
+  'profile-accounts.open-by-user-id.replace',
+  'profile-accounts.settings-show-accounts',
+  'profile-accounts.settings-show-accounts.before',
+  'profile-accounts.settings-show-accounts.after',
+  'profile-accounts.settings-show-accounts.replace',
+  'profile-accounts.account-switch-shortcut',
+  'profile-accounts.account-switch-shortcut.before',
+  'profile-accounts.account-switch-shortcut.after',
+  'profile-accounts.account-switch-shortcut.replace',
+  'profile-accounts.call-confirmation',
+  'profile-accounts.call-confirmation.before',
+  'profile-accounts.call-confirmation.after',
+  'profile-accounts.call-confirmation.replace',
+  'profile-accounts.hd-bluetooth-call-audio',
+  'profile-accounts.hd-bluetooth-call-audio.before',
+  'profile-accounts.hd-bluetooth-call-audio.after',
+  'profile-accounts.hd-bluetooth-call-audio.replace',
+  'profile-accounts.call-rotation',
+  'profile-accounts.call-rotation.before',
+  'profile-accounts.call-rotation.after',
+  'profile-accounts.call-rotation.replace',
+  'profile-accounts.disable-call-proximity',
+  'profile-accounts.disable-call-proximity.before',
+  'profile-accounts.disable-call-proximity.after',
+  'profile-accounts.disable-call-proximity.replace',
+  'profile-accounts.end',
   'rate-pair-edit.pill-stack-rate-target',
   'rate-pair-edit.pill-stack-rate-target.before',
   'rate-pair-edit.pill-stack-rate-target.after',
@@ -3613,23 +4949,6 @@ export const SLOTS: readonly EntinySlot[] = [
   'rate-pair-edit.pill-stack-rate-preview.after',
   'rate-pair-edit.pill-stack-rate-preview.replace',
   'rate-pair-edit.end',
-  'recent-chats.recent-chats-style',
-  'recent-chats.recent-chats-style.before',
-  'recent-chats.recent-chats-style.after',
-  'recent-chats.recent-chats-style.replace',
-  'recent-chats.recent-chats-limit',
-  'recent-chats.recent-chats-limit.before',
-  'recent-chats.recent-chats-limit.after',
-  'recent-chats.recent-chats-limit.replace',
-  'recent-chats.hide-recent-chats-shortcuts',
-  'recent-chats.hide-recent-chats-shortcuts.before',
-  'recent-chats.hide-recent-chats-shortcuts.after',
-  'recent-chats.hide-recent-chats-shortcuts.replace',
-  'recent-chats.clear-recent-chats',
-  'recent-chats.clear-recent-chats.before',
-  'recent-chats.clear-recent-chats.after',
-  'recent-chats.clear-recent-chats.replace',
-  'recent-chats.end',
   'regex-chat-filter.regex-chat-filters-own',
   'regex-chat-filter.regex-chat-filters-own.start',
   'regex-chat-filter.regex-chat-filters-own.end',
@@ -3659,6 +4978,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'regex-filter.hide-proxy-sponsor-chat.before',
   'regex-filter.hide-proxy-sponsor-chat.after',
   'regex-filter.hide-proxy-sponsor-chat.replace',
+  'regex-filter.hide-business-bot-banner',
+  'regex-filter.hide-business-bot-banner.before',
+  'regex-filter.hide-business-bot-banner.after',
+  'regex-filter.hide-business-bot-banner.replace',
   'regex-filter.regex-filter-enabled',
   'regex-filter.regex-filter-enabled.before',
   'regex-filter.regex-filter-enabled.after',
@@ -3705,207 +5028,212 @@ export const SLOTS: readonly EntinySlot[] = [
   'regex-filter-edit.regex-reversed.after',
   'regex-filter-edit.regex-reversed.replace',
   'regex-filter-edit.end',
-  'root.root-interface',
-  'root.root-interface.start',
-  'root.root-interface.end',
-  'root.root-privacy',
-  'root.root-privacy.start',
-  'root.root-privacy.end',
-  'root.root-system',
-  'root.root-system.start',
-  'root.root-system.end',
   'root.category-appearance',
   'root.category-appearance.before',
   'root.category-appearance.after',
   'root.category-appearance.replace',
-  'root.category-chats',
-  'root.category-chats.before',
-  'root.category-chats.after',
-  'root.category-chats.replace',
-  'root.messages',
-  'root.messages.before',
-  'root.messages.after',
-  'root.messages.replace',
+  'root.home-and-chat-list',
+  'root.home-and-chat-list.before',
+  'root.home-and-chat-list.after',
+  'root.home-and-chat-list.replace',
+  'root.chats-and-messages',
+  'root.chats-and-messages.before',
+  'root.chats-and-messages.after',
+  'root.chats-and-messages.replace',
+  'root.profile-and-accounts',
+  'root.profile-and-accounts.before',
+  'root.profile-and-accounts.after',
+  'root.profile-and-accounts.replace',
+  'root.privacy-and-freedom',
+  'root.privacy-and-freedom.before',
+  'root.privacy-and-freedom.after',
+  'root.privacy-and-freedom.replace',
   'root.annoyances',
   'root.annoyances.before',
   'root.annoyances.after',
   'root.annoyances.replace',
-  'root.ai-compose',
-  'root.ai-compose.before',
-  'root.ai-compose.after',
-  'root.ai-compose.replace',
-  'root.translator',
-  'root.translator.before',
-  'root.translator.after',
-  'root.translator.replace',
-  'root.category-behavior',
-  'root.category-behavior.before',
-  'root.category-behavior.after',
-  'root.category-behavior.replace',
-  'root.category-privacy',
-  'root.category-privacy.before',
-  'root.category-privacy.after',
-  'root.category-privacy.replace',
-  'root.tos',
-  'root.tos.before',
-  'root.tos.after',
-  'root.tos.replace',
+  'root.root-system',
+  'root.root-system.before',
+  'root.root-system.after',
+  'root.root-system.replace',
   'root.plugins',
   'root.plugins.before',
   'root.plugins.after',
   'root.plugins.replace',
-  'root.category-backup',
-  'root.category-backup.before',
-  'root.category-backup.after',
-  'root.category-backup.replace',
-  'root.niche-settings',
-  'root.niche-settings.before',
-  'root.niche-settings.after',
-  'root.niche-settings.replace',
-  'root.about-channel',
-  'root.about-channel.before',
-  'root.about-channel.after',
-  'root.about-channel.replace',
-  'root.about-git-hub',
-  'root.about-git-hub.before',
-  'root.about-git-hub.after',
-  'root.about-git-hub.replace',
+  'root.about',
+  'root.about.before',
+  'root.about.after',
+  'root.about.replace',
   'root.end',
-  'stalker-pack.stalker-pack',
-  'stalker-pack.stalker-pack.start',
-  'stalker-pack.stalker-pack.end',
-  'stalker-pack.presence-logger-notify',
-  'stalker-pack.presence-logger-notify.before',
-  'stalker-pack.presence-logger-notify.after',
-  'stalker-pack.presence-logger-notify.replace',
-  'stalker-pack.force-relay-calls',
-  'stalker-pack.force-relay-calls.before',
-  'stalker-pack.force-relay-calls.after',
-  'stalker-pack.force-relay-calls.replace',
-  'stalker-pack.presence-watch-list',
-  'stalker-pack.presence-watch-list.before',
-  'stalker-pack.presence-watch-list.after',
-  'stalker-pack.presence-watch-list.replace',
-  'stalker-pack.typing-spoof',
-  'stalker-pack.typing-spoof.before',
-  'stalker-pack.typing-spoof.after',
-  'stalker-pack.typing-spoof.replace',
-  'stalker-pack.end',
-  'tos.premium-unlock',
-  'tos.premium-unlock.start',
-  'tos.premium-unlock.end',
-  'tos.content-protection-bypass',
-  'tos.content-protection-bypass.start',
-  'tos.content-protection-bypass.end',
-  'tos.unlimited-limits',
-  'tos.unlimited-limits.start',
-  'tos.unlimited-limits.end',
-  'tos.ghost-mode',
-  'tos.ghost-mode.before',
-  'tos.ghost-mode.after',
-  'tos.ghost-mode.replace',
-  'tos.anti-deletion',
-  'tos.anti-deletion.before',
-  'tos.anti-deletion.after',
-  'tos.anti-deletion.replace',
-  'tos.stalker-pack',
-  'tos.stalker-pack.before',
-  'tos.stalker-pack.after',
-  'tos.stalker-pack.replace',
-  'tos.regex-filter',
-  'tos.regex-filter.before',
-  'tos.regex-filter.after',
-  'tos.regex-filter.replace',
-  'tos.device-spoof',
-  'tos.device-spoof.before',
-  'tos.device-spoof.after',
-  'tos.device-spoof.replace',
-  'tos.local-premium',
-  'tos.local-premium.before',
-  'tos.local-premium.after',
-  'tos.local-premium.replace',
-  'tos.local-custom-emoji',
-  'tos.local-custom-emoji.before',
-  'tos.local-custom-emoji.after',
-  'tos.local-custom-emoji.replace',
-  'tos.local-names',
-  'tos.local-names.before',
-  'tos.local-names.after',
-  'tos.local-names.replace',
-  'tos.save-any-story',
-  'tos.save-any-story.before',
-  'tos.save-any-story.after',
-  'tos.save-any-story.replace',
-  'tos.auto-save-stories',
-  'tos.auto-save-stories.before',
-  'tos.auto-save-stories.after',
-  'tos.auto-save-stories.replace',
-  'tos.allow-forward-restricted',
-  'tos.allow-forward-restricted.before',
-  'tos.allow-forward-restricted.after',
-  'tos.allow-forward-restricted.replace',
-  'tos.disable-flag-secure',
-  'tos.disable-flag-secure.before',
-  'tos.disable-flag-secure.after',
-  'tos.disable-flag-secure.replace',
-  'tos.suppress-screenshot-notification',
-  'tos.suppress-screenshot-notification.before',
-  'tos.suppress-screenshot-notification.after',
-  'tos.suppress-screenshot-notification.replace',
-  'tos.unlimited-pinned-chats',
-  'tos.unlimited-pinned-chats.before',
-  'tos.unlimited-pinned-chats.after',
-  'tos.unlimited-pinned-chats.replace',
-  'tos.unlimited-favorite-stickers',
-  'tos.unlimited-favorite-stickers.before',
-  'tos.unlimited-favorite-stickers.after',
-  'tos.unlimited-favorite-stickers.replace',
-  'tos.unlimited-folder-chats',
-  'tos.unlimited-folder-chats.before',
-  'tos.unlimited-folder-chats.after',
-  'tos.unlimited-folder-chats.replace',
-  'tos.local-folders',
-  'tos.local-folders.before',
-  'tos.local-folders.after',
-  'tos.local-folders.replace',
-  'tos.end',
+  'system.push-header',
+  'system.push-header.start',
+  'system.push-header.end',
+  'system.faster-downloads-section',
+  'system.faster-downloads-section.start',
+  'system.faster-downloads-section.end',
+  'system.downloads-and-network',
+  'system.downloads-and-network.start',
+  'system.downloads-and-network.end',
+  'system.device-section',
+  'system.device-section.start',
+  'system.device-section.end',
+  'system.cloud-sync',
+  'system.cloud-sync.before',
+  'system.cloud-sync.after',
+  'system.cloud-sync.replace',
+  'system.cache-management',
+  'system.cache-management.before',
+  'system.cache-management.after',
+  'system.cache-management.replace',
+  'system.datacenter-status',
+  'system.datacenter-status.before',
+  'system.datacenter-status.after',
+  'system.datacenter-status.replace',
+  'system.unified-push',
+  'system.unified-push.before',
+  'system.unified-push.after',
+  'system.unified-push.replace',
+  'system.additional-unified-push',
+  'system.additional-unified-push.before',
+  'system.additional-unified-push.after',
+  'system.additional-unified-push.replace',
+  'system.background-service',
+  'system.background-service.before',
+  'system.background-service.after',
+  'system.background-service.replace',
+  'system.additional-background-service',
+  'system.additional-background-service.before',
+  'system.additional-background-service.after',
+  'system.additional-background-service.replace',
+  'system.background-service-hide-notification',
+  'system.background-service-hide-notification.before',
+  'system.background-service-hide-notification.after',
+  'system.background-service-hide-notification.replace',
+  'system.background-service-channel',
+  'system.background-service-channel.before',
+  'system.background-service-channel.after',
+  'system.background-service-channel.replace',
+  'system.unified-push-distributor',
+  'system.unified-push-distributor.before',
+  'system.unified-push-distributor.after',
+  'system.unified-push-distributor.replace',
+  'system.unified-push-distributor',
+  'system.unified-push-distributor.before',
+  'system.unified-push-distributor.after',
+  'system.unified-push-distributor.replace',
+  'system.unified-push-gateway',
+  'system.unified-push-gateway.before',
+  'system.unified-push-gateway.after',
+  'system.unified-push-gateway.replace',
+  'system.additional-unified-push-gateway',
+  'system.additional-unified-push-gateway.before',
+  'system.additional-unified-push-gateway.after',
+  'system.additional-unified-push-gateway.replace',
+  'system.notif-channel-sync',
+  'system.notif-channel-sync.before',
+  'system.notif-channel-sync.after',
+  'system.notif-channel-sync.replace',
+  'system.per-chat-notif-channels',
+  'system.per-chat-notif-channels.before',
+  'system.per-chat-notif-channels.after',
+  'system.per-chat-notif-channels.replace',
+  'system.faster-downloads',
+  'system.faster-downloads.before',
+  'system.faster-downloads.after',
+  'system.faster-downloads.replace',
+  'system.faster-downloads',
+  'system.faster-downloads.before',
+  'system.faster-downloads.after',
+  'system.faster-downloads.replace',
+  'system.faster-uploads',
+  'system.faster-uploads.before',
+  'system.faster-uploads.after',
+  'system.faster-uploads.replace',
+  'system.auto-disable-proxy-on-vpn',
+  'system.auto-disable-proxy-on-vpn.before',
+  'system.auto-disable-proxy-on-vpn.after',
+  'system.auto-disable-proxy-on-vpn.replace',
+  'system.keep-downloads-in-background',
+  'system.keep-downloads-in-background.before',
+  'system.keep-downloads-in-background.after',
+  'system.keep-downloads-in-background.replace',
+  'system.block-sleep-while-downloading',
+  'system.block-sleep-while-downloading.before',
+  'system.block-sleep-while-downloading.after',
+  'system.block-sleep-while-downloading.replace',
+  'system.always-send-videos-hd',
+  'system.always-send-videos-hd.before',
+  'system.always-send-videos-hd.after',
+  'system.always-send-videos-hd.replace',
+  'system.download-directory',
+  'system.download-directory.before',
+  'system.download-directory.after',
+  'system.download-directory.replace',
+  'system.download-directory',
+  'system.download-directory.before',
+  'system.download-directory.after',
+  'system.download-directory.replace',
+  'system.save-filename-date',
+  'system.save-filename-date.before',
+  'system.save-filename-date.after',
+  'system.save-filename-date.replace',
+  'system.performance-class',
+  'system.performance-class.before',
+  'system.performance-class.after',
+  'system.performance-class.replace',
+  'system.performance-class',
+  'system.performance-class.before',
+  'system.performance-class.after',
+  'system.performance-class.replace',
+  'system.text-classifier-mode',
+  'system.text-classifier-mode.before',
+  'system.text-classifier-mode.after',
+  'system.text-classifier-mode.replace',
+  'system.text-classifier-mode',
+  'system.text-classifier-mode.before',
+  'system.text-classifier-mode.after',
+  'system.text-classifier-mode.replace',
+  'system.end',
   'translate-provider.translate-provider-section',
   'translate-provider.translate-provider-section.start',
   'translate-provider.translate-provider-section.end',
+  'translate-provider.ai-provider-detect',
+  'translate-provider.ai-provider-detect.before',
+  'translate-provider.ai-provider-detect.after',
+  'translate-provider.ai-provider-detect.replace',
+  'translate-provider.ai-model-picker-title',
+  'translate-provider.ai-model-picker-title.before',
+  'translate-provider.ai-model-picker-title.after',
+  'translate-provider.ai-model-picker-title.replace',
   'translate-provider.end',
   'translation-target.end',
   'translator.translation',
   'translator.translation.start',
   'translator.translation.end',
+  'translator.translate-section-sending',
+  'translator.translate-section-sending.start',
+  'translator.translate-section-sending.end',
   'translator.languages',
   'translator.languages.start',
   'translator.languages.end',
-  'translator.translate-provider-section',
-  'translator.translate-provider-section.start',
-  'translator.translate-provider-section.end',
-  'translator.advanced',
-  'translator.advanced.start',
-  'translator.advanced.end',
+  'translator.translate-section-display',
+  'translator.translate-section-display.start',
+  'translator.translate-section-display.end',
+  'translator.translate-section-engine',
+  'translator.translate-section-engine.start',
+  'translator.translate-section-engine.end',
   'translator.auto-translate-all',
   'translator.auto-translate-all.before',
   'translator.auto-translate-all.after',
   'translator.auto-translate-all.replace',
-  'translator.translation-target',
-  'translator.translation-target.before',
-  'translator.translation-target.after',
-  'translator.translation-target.replace',
-  'translator.translate-provider',
-  'translator.translate-provider.before',
-  'translator.translate-provider.after',
-  'translator.translate-provider.replace',
-  'translator.translate-auto-detect-lang',
-  'translator.translate-auto-detect-lang.before',
-  'translator.translate-auto-detect-lang.after',
-  'translator.translate-auto-detect-lang.replace',
   'translator.translate-outgoing',
   'translator.translate-outgoing.before',
   'translator.translate-outgoing.after',
   'translator.translate-outgoing.replace',
+  'translator.instant-translate-banner',
+  'translator.instant-translate-banner.before',
+  'translator.instant-translate-banner.after',
+  'translator.instant-translate-banner.replace',
   'translator.input-translate',
   'translator.input-translate.before',
   'translator.input-translate.after',
@@ -3914,18 +5242,42 @@ export const SLOTS: readonly EntinySlot[] = [
   'translator.translate-in-send-preview.before',
   'translator.translate-in-send-preview.after',
   'translator.translate-in-send-preview.replace',
+  'translator.translate-on-send',
+  'translator.translate-on-send.before',
+  'translator.translate-on-send.after',
+  'translator.translate-on-send.replace',
+  'translator.translation-target',
+  'translator.translation-target.before',
+  'translator.translation-target.after',
+  'translator.translation-target.replace',
+  'translator.translation-target-outgoing',
+  'translator.translation-target-outgoing.before',
+  'translator.translation-target-outgoing.after',
+  'translator.translation-target-outgoing.replace',
+  'translator.translate-auto-detect-lang',
+  'translator.translate-auto-detect-lang.before',
+  'translator.translate-auto-detect-lang.after',
+  'translator.translate-auto-detect-lang.replace',
   'translator.force-translate',
   'translator.force-translate.before',
   'translator.force-translate.after',
   'translator.force-translate.replace',
-  'translator.instant-translate-banner',
-  'translator.instant-translate-banner.before',
-  'translator.instant-translate-banner.after',
-  'translator.instant-translate-banner.replace',
   'translator.ignore-translations-disabled',
   'translator.ignore-translations-disabled.before',
   'translator.ignore-translations-disabled.after',
   'translator.ignore-translations-disabled.replace',
+  'translator.translate-provider',
+  'translator.translate-provider.before',
+  'translator.translate-provider.after',
+  'translator.translate-provider.replace',
+  'translator.translate-auto-fallback',
+  'translator.translate-auto-fallback.before',
+  'translator.translate-auto-fallback.after',
+  'translator.translate-auto-fallback.replace',
+  'translator.translate-new-google',
+  'translator.translate-new-google.before',
+  'translator.translate-new-google.after',
+  'translator.translate-new-google.replace',
   'translator.end',
   'typing-spoof-quick-list.typing-spoof-active',
   'typing-spoof-quick-list.typing-spoof-active.start',
@@ -3939,6 +5291,10 @@ export const SLOTS: readonly EntinySlot[] = [
   'weather-location.weather-location.start',
   'weather-location.weather-location.end',
   'weather-location.end',
+  'web-preview-replacements.web-preview-replace-on-paste',
+  'web-preview-replacements.web-preview-replace-on-paste.before',
+  'web-preview-replacements.web-preview-replace-on-paste.after',
+  'web-preview-replacements.web-preview-replace-on-paste.replace',
   'web-preview-replacements.web-preview-add',
   'web-preview-replacements.web-preview-add.before',
   'web-preview-replacements.web-preview-add.after',

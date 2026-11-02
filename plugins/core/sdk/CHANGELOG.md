@@ -1,3 +1,9 @@
+## 0.5.0
+
+- the app tells the SDK which page and which slot each settings row has, so nothing is read back from texts or resources: no more "execution budget exceeded", and one less thing to run while plugins start
+- slots follow the new settings structure: `chats-messages`, `profile-accounts`, `system`, `privacy-freedom`, `dialogs`, `home`, `annoyances` (the old `behavior` page is gone)
+- needs the app build that carries EmbedSlots
+
 ## 0.4.1
 
 - fix plugins landing in safe mode (CRASHED): reading the settings strings no longer runs over the routine's execution budget

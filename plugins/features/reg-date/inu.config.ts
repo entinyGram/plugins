@@ -1,10 +1,11 @@
 import { defineConfig } from '@inugram/cli'
+import { withTags } from '@entiny/sdk'
 
 export default defineConfig({
   plugins: {
     'reg-date': {
       entry: 'src/index.ts',
-      manifest: {
+      manifest: withTags({
         id: 'entinygram.reg-date',
         name: 'Registration Date',
         author: 'entinyGram',
@@ -16,7 +17,7 @@ export default defineConfig({
         },
         icon: 'inu://settings',
         grants: [],
-      },
+      }, 'chat', 'tools'),
     },
   },
 })

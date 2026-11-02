@@ -1,3 +1,7 @@
+## 0.1.1
+
+- the settings slot follows the new settings structure; needs SDK 0.5.0
+
 ## 0.1.0
 
 - first release: deep, high, girl and robot voice

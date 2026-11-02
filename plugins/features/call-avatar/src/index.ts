@@ -110,6 +110,7 @@ function sync(fragment: any): void {
     const layer = new FrameLayout(context)
     const image = new BackupImageView(context)
     image.call('setRoundRadius', 0)
+    image.call('getImageReceiver').call('setCurrentAccount', fragment.getField('currentAccount'))
     image.call('getImageReceiver').call('setAspectFit', false)
     image.call('setImage(Lorg/telegram/messenger/ImageLocation;Ljava/lang/String;Landroid/graphics/drawable/Drawable;Ljava/lang/Object;)V', location, null, null, user)
     layer.call('addView', image, new LayoutParams(-1, -1))

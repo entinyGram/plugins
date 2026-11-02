@@ -18,12 +18,12 @@ export default defineConfig({
       manifest: withEntiny({ name: 'Yandex', author: 'you', version: '1.0.0' }, {
         // 1. Controls drawn into a section or beside an item:
         inline: [
-          'behavior.formatting',
+          'chats-messages.formatting',
           { slot: 'translate-provider.end', rows: ['key'], when: 'translation-provider' },
         ],
         // 2. Check-rows become options in modal radio lists:
         choice: [
-          { slot: 'behavior.map-preview-provider', rows: ['maps'] },
+          { slot: 'chats-messages.map-preview-provider', rows: ['maps'] },
         ],
         // 3. A row that opens the whole page as a separate screen:
         screen: ['root.root-system'],
@@ -36,12 +36,12 @@ export default defineConfig({
 This writes `@entiny-inline`, `@entiny-choice` and `@entiny-menu` lines into the plugin header.
 
 - **inline**: the page's `check`, `button`, `select` and `slider` rows are drawn into the section or directly after/before an item. Headers and dividers are omitted.
-- **choice**: check-rows of the page appear as options inside the target picker/radio dialog (e.g. `behavior.map-preview-provider`). Selecting the plugin option activates the check; selecting any stock option unchecks it.
+- **choice**: check-rows of the page appear as options inside the target picker/radio dialog (e.g. `chats-messages.map-preview-provider`). Selecting the plugin option activates the check; selecting any stock option unchecks it.
 - **screen**: a row with the plugin's name opens the page.
 
 ### Slots
 
-- `<screen>.<section>`: the end of that section, before its divider (e.g. `behavior.formatting`).
+- `<screen>.<section>`: the end of that section, before its divider (e.g. `chats-messages.formatting`).
 - `<screen>.<section>.start`: at the very top of that section, right after the header.
 - `<screen>.<item>.after` / `<screen>.<item>`: directly after that setting row.
 - `<screen>.<item>.before`: directly before that setting row.
@@ -80,7 +80,7 @@ embed({
   name: 'My plugin',
   placements: {
     screen: ['root.root-system'],                                     // a row that opens the plugin's page
-    inline: [{ slot: 'behavior.formatting', rows: ['switch'] }],      // controls drawn into a section
+    inline: [{ slot: 'chats-messages.formatting', rows: ['switch'] }],      // controls drawn into a section
   },
   rows: slot => [{ id: 'switch', type: 'check', text: 'Do the thing', checked: on }],
   onEvent: (row, value) => { if (row === 'switch') on = value === 'true' },
@@ -88,10 +88,9 @@ embed({
 })
 ```
 
-- A **slot** is `<screen>.<name>`: the screen is the class name in kebab case without `Settings`/`Activity`
-  (`behavior`, `category-chats`, `root`), the name is a string resource without the `Inu` prefix (`formatting`).
-  Add `.start`, `.end`, `.before`, `.after` or `.replace`. The engine reads the strings of the running app, so a new
-  row or section of the app is a slot as soon as it exists; [`slots.json`](slots.json) is only the typed list.
+- A **slot** is `<screen>.<name>`: the screen is the page id the app gives it (`chats-messages`, `profile-accounts`, `system`, `privacy-freedom`, `dialogs`, `home`, `annoyances`; a screen that is not one of them goes by its class name in kebab case without `Settings`/`Activity`), the name is a string resource without the `Inu` prefix (`formatting`).
+  Add `.start`, `.end`, `.before`, `.after` or `.replace`. The app tells the SDK which slot each row has, so a new
+  row or section of a settings page is a slot as soon as it exists; [`slots.json`](slots.json) is only the typed list.
 - Rows are `check`, `button` or `select`; each can carry `subtitle`, `value` and `danger`. `rows(slot)` is called every
   time the screen is built, `onEvent(rowId, value)` on a tap (a check passes `'true'` or `'false'`, a select the chosen
   index, a button `''`).
@@ -102,7 +101,7 @@ embed({
   embed({
     id: 'entinygram.my-maps',
     name: 'My maps',
-    placements: { choice: ['behavior.map-preview-provider'] },
+    placements: { choice: ['chats-messages.map-preview-provider'] },
     rows: () => [],
     onEvent: () => {},
     choices: () => [{ id: 'maps', title: 'My maps', subtitle: 'Previews from my service', checked: on }],
