@@ -7,8 +7,6 @@
 import { embedKeys, embedRegistry } from '@entiny/sdk/embed'
 import type { EmbedChoice, EmbedPlacements, EmbedRow } from '@entiny/sdk/embed'
 
-const FIELD_SEP = '\u0001'
-const ITEM_SEP = '\u0002'
 // at most this many rows of one plugin in one slot, so a plugin cannot bury a screen
 const MAX_ROWS = 4
 
@@ -19,7 +17,6 @@ const VIEW_TYPE_CUSTOM_SHADOW = -4
 const UItem: any = inu.jvm.cls('org.telegram.ui.Components.UItem')
 const UniversalFragment: any = inu.jvm.cls('org.telegram.ui.Components.UniversalFragment')
 const ArrayCls: any = inu.jvm.cls('java.lang.reflect.Array')
-const EmbedSlots: any = inu.jvm.cls('desu.inugram.helpers.plugins.EmbedSlots')
 const ButtonCell: any = inu.jvm.cls('desu.inugram.ui.settings.ButtonCellFactory').getStaticField('Companion')
 const CheckCell: any = inu.jvm.cls('desu.inugram.ui.settings.CheckCellFactory').getStaticField('Companion')
 const ICON_CUSTOMIZE: number = inu.jvm.cls('org.telegram.messenger.R$drawable').getStaticField('msg_customize')
@@ -37,18 +34,85 @@ interface Screen {
   entries: Entry[]
 }
 
-/** the app tells which page this is and which slots its rows have, so nothing is read back from texts */
+const entryNames = new Map<number, string | null>()
+
+function kebab(name: string): string {
+  return name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
+function slotName(resourceId: number): string | null {
+  if (!resourceId) return null
+  if (entryNames.has(resourceId)) return entryNames.get(resourceId) ?? null
+  let name: string | null = null
+  try {
+    const app = inu.jvm.cls('org.telegram.messenger.ApplicationLoader').getStaticField('applicationContext')
+    const resources = app.call('getResources')
+    const entry = String(resources.call('getResourceEntryName(I)Ljava/lang/String;', resourceId))
+    name = kebab(entry.replace(/^Inu/, ''))
+  } catch {}
+  entryNames.set(resourceId, name)
+  return name
+}
+
+function legacyPage(fragment: any): string {
+  if (fragment === null) return ''
+  const simpleName = String(fragment.call('getClass').call('getSimpleName'))
+  const name = simpleName.replace(/Activity$/, '').replace(/Settings$/, '')
+  return name === 'Inu' ? 'root' : kebab(name)
+}
+
+function schemaScreen(fragment: any): { page: string, slots: Map<number, string> } | null {
+  if (fragment === null) return null
+  try {
+    const schema = fragment.call('getSchema')
+    const page = String(schema.call('getSlug'))
+    const slots = new Map<number, string>()
+    const sections: any = schema.call('getSections')
+    const sectionCount = Number(sections.call('size'))
+    for (let i = 0; i < sectionCount; i++) {
+      const section: any = sections.call('get(I)Ljava/lang/Object;', i)
+      const header = slotName(Number(section.call('getHeaderRes')))
+      if (header) slots.set(Number(section.call('getId')), header)
+      const rows: any = section.call('getRows')
+      const rowCount = Number(rows.call('size'))
+      for (let j = 0; j < rowCount; j++) {
+        const row: any = rows.call('get(I)Ljava/lang/Object;', j)
+        const names: string[] = []
+        const title = slotName(Number(row.call('getTitleRes')))
+        if (title) names.push(title)
+        const kind = String(row.call('getClass').call('getSimpleName'))
+        if (kind === 'Group' || kind === 'Custom') {
+          const slug = String(row.call('getSlug'))
+          if (slug) names.push(slug)
+        }
+        if (names.length) slots.set(Number(row.call('getId')), [...new Set(names)].join(','))
+      }
+    }
+    return { page, slots }
+  } catch {
+    return null
+  }
+}
+
 function describe(fragment: any, items: any): Screen {
-  const [pages, ...rest] = String(EmbedSlots.callStatic('describe', fragment, items)).split(ITEM_SEP)
-  const entries = rest.map((line) => {
-    const [type, id, names] = line.split(FIELD_SEP)
-    return { type: Number(type), id: Number(id), names: names ? names.split(',') : [] }
-  })
-  return { pages: pages.split(','), entries }
+  const schema = schemaScreen(fragment)
+  const pages = [schema?.page ?? legacyPage(fragment)]
+  const entries: Entry[] = []
+  const count = Number(items.call('size'))
+  for (let i = 0; i < count; i++) {
+    const item: any = items.call('get(I)Ljava/lang/Object;', i)
+    const id = Number(item.getField('id'))
+    entries.push({
+      type: Number(item.getField('viewType')),
+      id,
+      names: schema?.slots.get(id)?.split(',') ?? [],
+    })
+  }
+  return { pages, entries }
 }
 
 function pagesOf(fragment: any): string[] {
-  return String(EmbedSlots.callStatic('pages', fragment)).split(',')
+  return [schemaScreen(fragment)?.page ?? legacyPage(fragment)]
 }
 
 /** `<page>.<name>` for every page the screen goes by */
@@ -390,8 +454,9 @@ function pickerSlots(fragment: any, anchor: any): string[] {
   if (position < 0) return []
   const item: any = listView.getField('adapter').call('getItem', position)
   if (item === null) return []
-  const names = String(EmbedSlots.callStatic('slotsOfId', fragment, item.getField('id')))
-  return names === '' ? [] : slotsAt(pagesOf(fragment), names.split(','))
+  const schema = schemaScreen(fragment)
+  const names = schema?.slots.get(Number(item.getField('id')))
+  return names ? slotsAt([schema!.page], names.split(',')) : []
 }
 
 // An argument the hook replaces has to be an object that outlives the hook: whatever is created inside it is

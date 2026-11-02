@@ -1,3 +1,7 @@
+## 0.5.1
+
+- fix SDK startup on app builds that block the internal EmbedSlots bridge
+
 ## 0.5.0
 
 - the app tells the SDK which page and which slot each settings row has, so nothing is read back from texts or resources: no more "execution budget exceeded", and one less thing to run while plugins start
