@@ -7,6 +7,8 @@ const root = join(import.meta.dir, '..')
 const cli = join(root, 'sdk/cli/src/cli.ts')
 const out = join(root, 'release')
 const only = new Set(process.argv.slice(2))
+// deprecated plugins stay in the repo but are not packed, unless named on the command line
+const skipped = new Set(['sdk'])
 
 function header(source: string, key: string): string | undefined {
   for (const line of source.split('\n')) {
@@ -23,7 +25,7 @@ for (const group of ['core', 'features']) {
   for (const entry of readdirSync(base, { withFileTypes: true })) {
     const dir = join(base, entry.name)
     if (!entry.isDirectory() || !existsSync(join(dir, 'inu.config.ts'))) continue
-    if (only.size > 0 && !only.has(entry.name)) continue
+    if (only.size > 0 ? !only.has(entry.name) : skipped.has(entry.name)) continue
     const built = Bun.spawnSync(['bun', cli, 'build'], { cwd: dir, stdout: 'pipe', stderr: 'pipe' })
     if (built.exitCode !== 0) throw new Error(`${entry.name}: build failed\n${built.stderr.toString()}`)
     for (const file of readdirSync(join(dir, 'dist')).filter(name => name.endsWith('.inu.js'))) {

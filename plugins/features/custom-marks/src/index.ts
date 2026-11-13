@@ -17,7 +17,8 @@ const ids = new Map<string, string>()
 
 function resId(key: string): number | null {
   try {
-    return Number(inu.jvm.cls('org.telegram.messenger.R$string').getStaticField(key))
+    const value = Number(inu.jvm.cls('org.telegram.messenger.R$string').getStaticField(key))
+    return Number.isNaN(value) ? null : value
   } catch (error) {
     console.warn(`no resource ${key}`, error)
     return null
@@ -30,8 +31,8 @@ function apply(mark: typeof MARKS[number]): void {
   const text = stored(mark.id).trim()
   const res = ids.get(mark.key)
   for (const key of [mark.key, ...(res ? [res] : [])]) {
-    if (text === '') texts.remove(key)
-    else texts.put(key, text)
+    if (text === '') texts.call('remove', key)
+    else texts.call('put', key, text)
   }
 }
 

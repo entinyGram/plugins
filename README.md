@@ -22,7 +22,6 @@ every plugin is a standalone `.inu.js` bundle with its own settings page under `
 | [yandex](plugins/features/yandex/) | `entinygram.yandex` | `1.2.0` | active | yandex cloud translate and static map previews |
 | [no vibration](plugins/features/no-vibration/) | `entinygram.no-vibration` | `1.2.0` | deprecated | haptics, vibration and notification vibration, each on its own switch |
 | [registration date](plugins/features/reg-date/) | `entinygram.reg-date` | `1.0.0` | deprecated | estimated account registration date in the profile menu |
-| [entinyGram sdk](plugins/core/sdk/) | `entinygram.sdk` | `0.5.1` | deprecated | settings embedding for other plugins, no plugin needs it anymore |
 | [custom marks](plugins/features/custom-marks/) | `entinygram.custom-marks` | `1.0.0` | active | your own text for the edited and deleted marks |
 | [voice changer](plugins/features/voice-changer/) | `entinygram.voice-changer` | `1.2.0` | active | changes your voice in voice and video messages and calls |
 
@@ -74,7 +73,7 @@ the `Build plugins` workflow does the same on demand and can replace files in th
 
 | path | status |
 | :--- | :--- |
-| [`plugins/core/sdk`](plugins/core/sdk/) | deprecated, do not install |
+| [`plugins/core/sdk`](plugins/core/sdk/) | deprecated, kept in the repo but not built into `release/` or the catalog |
 | [`sdk/entiny`](sdk/entiny/) | deprecated, do not depend on it |
 | `sdk/cli`, `sdk/types`, `sdk/docs` | inugram tooling, in use |
 
