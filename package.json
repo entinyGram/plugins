@@ -15,8 +15,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@inugram/plugin-types": "workspace:*",
-    "@entiny/sdk": "workspace:*"
+    "@inugram/plugin-types": "workspace:*"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^8.1.0",

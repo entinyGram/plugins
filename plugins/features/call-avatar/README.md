@@ -1,40 +1,46 @@
-# Call avatar
+# call avatar
 
-Повноекранне фото співрозмовника замість круглого аватара під час голосового
-дзвінка в entinyGram. Потрібен увімкнений `entinygram.sdk` та дозволи
-`unsafe.jvm`, `unsafe.xposed`. Звичайний Telegram плагінів не підтримує.
+full-screen caller photo instead of the round avatar in voice calls.
 
-- Використовує велику аватарку через штатний ImageLoader, без сторонніх запитів.
-- Фото заповнює екран з обрізанням країв, без розтягування пропорцій.
-- Затемнення 40% зберігає читабельність кнопок і тексту.
-- При ввімкненні будь-якої камери повертається штатний вигляд.
-- Якщо фото відсутнє або приховане приватністю, залишається штатний екран.
-- Перемикач у налаштуваннях плагіна; за замовчуванням увімкнено.
-- На фото неактивні кнопки мають напівпрозорий чорний фон замість синього.
-  Активні білі кнопки та червона кнопка завершення лишаються штатними.
-  Без повноекранного фото повертається штатне оформлення кнопок.
-- Режими фото: «Завжди» (типово), «До відповіді», «Після відповіді».
-  Відповідь визначається встановленням з’єднання; перепідключення не скидає її.
-  Коли режим ховає фото, повертаються штатний аватар і розташування тексту.
-- Ім’я та статус розміщено зверху, на 72 dp нижче системного відступу.
-- Налаштування та повідомлення підтримують українську, англійську й російську
-  відповідно до мови застосунку; інші мови використовують англійську.
+| | |
+| :--- | :--- |
+| id | `entinygram.call-avatar` |
+| version | `1.2.0` |
+| status | active |
+| grants | `unsafe.jvm`, `unsafe.xposed` |
 
-## Збірка та перевірка
+## highlights
 
-З кореня репозиторію:
+- [behavior](#behavior)
+- [settings](#settings)
+- [check](#check)
+
+## behavior
+
+- the photo is the big avatar from the app's `ImageLoader`, cropped to fill the screen, with a 40% dim
+- name and status sit at the top, 72 dp below the system inset
+- inactive buttons get a translucent black background, active white buttons and the red end button stay stock
+- any camera turns the stock look back, so does a missing or privacy-hidden photo
+
+## settings
+
+page: `Settings → Plugins → Call avatar`. on by default.
+
+| photo mode | shows the photo |
+| :--- | :--- |
+| always (default) | the whole call |
+| until answered | before the connection is made |
+| after answered | after the connection is made |
+
+answered means connected, a reconnect does not reset it. ui and messages: uk, en, ru, other languages use en.
+
+## check
 
 ```sh
 bun install --ignore-scripts
-bun run inu check --config plugins/call-avatar/inu.config.ts
-bun run inu build --config plugins/call-avatar/inu.config.ts
-bun test plugins/call-avatar/tests
+bun run inu check --config plugins/features/call-avatar/inu.config.ts
+bun run inu build --config plugins/features/call-avatar/inu.config.ts
+bun test plugins/features/call-avatar/tests
 ```
 
-Плагін прив'язаний до полів і методів `org.telegram.ui.VoIPFragment` у поточному
-entinyGram. Інші/старі клієнти можуть мати інший екран дзвінка. Версія 1.1:
-збірка та автоматичні тести не замінюють перевірку на Android.
-
-На телефоні перевірити вихідний і вхідний голосовий дзвінок, відсутність фото,
-перехід до відео й назад, поворот екрана, згортання/повторне відкриття дзвінка,
-панель емодзі ключа, вимкнення перемикача та вивантаження плагіна під час дзвінка.
+the plugin depends on the fields and methods of `org.telegram.ui.VoIPFragment` in the current entinyGram. tests do not replace a check on android: incoming and outgoing call, no photo, switch to video and back, rotation, minimize and reopen, the key emoji panel, the switch off, unloading during a call.

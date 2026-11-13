@@ -1,9 +1,30 @@
-# Voice Changer
+# voice changer
 
-Changes your voice in voice messages, video messages and calls: deep, high, girl or robot.
+changes your voice in voice messages, video messages and calls.
 
-`entinygram.voice-changer` · version `0.1.0` · requires `entinygram.sdk >=0.4.1`
+| | |
+| :--- | :--- |
+| id | `entinygram.voice-changer` |
+| version | `1.2.0` |
+| status | active |
+| grants | `unsafe.jvm`, `unsafe.xposed` |
 
-The preset is in **Settings → Behavior → Calls**, or on the plugin's own page. It is off by default, and while it is off nothing is hooked.
+## settings
 
-Hooks `AudioRecord.read(ByteBuffer, …)`, which every recording and call path reads the microphone through, and changes the PCM chunk in place inside a routine, so no JS runs per audio chunk. Deep and high use a two-tap delay-line pitch shifter, robot is a ring modulator.
+page: `Settings → Plugins → Voice Changer`. off by default, nothing is hooked while it is off.
+
+| preset | method |
+| :--- | :--- |
+| deep, high | two-tap delay-line pitch shifter |
+| girl | pitch shift |
+| robot | ring modulator |
+
+| scope | applies to |
+| :--- | :--- |
+| everywhere | messages and calls |
+| messages | voice and video messages only |
+| calls | calls only |
+
+## how it works
+
+a routine hooks `AudioRecord.read(ByteBuffer, …)`, which every recording and call path reads the microphone through, and changes the pcm chunk in place. no js runs per audio chunk.

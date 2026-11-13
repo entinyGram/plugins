@@ -1,4 +1,3 @@
-import { embed, embedChanged } from '@entiny/sdk/embed'
 import { particleStyleNames, t } from './i18n.js'
 
 // ─── JVM class references ────────────────────────────────────────────────────
@@ -1183,27 +1182,3 @@ const page = inu.ui.settingsPage({
 inu.registerSettings(page)
 
 // ─── Embed toggle into Chats settings ───────────────────────────────────────
-
-embed({
-  id: 'entinygram.text-animation',
-  name: 'Text animation',
-  placements: {
-    screen: ['category-chats'],
-    inline: [{ slot: 'chats-messages.end', rows: ['enable'] }],
-  },
-  rows: () => [{
-    id: 'enable',
-    type: 'check' as const,
-    text: t('title'),
-    subtitle: cfgBool('enable') ? t('enabled') : undefined,
-    checked: cfgBool('enable'),
-  }],
-  onEvent: (_row, value) => {
-    cfgSet('enable', value)
-    embedChanged()
-  },
-  open: () => {
-    inu.ui.openPage(page)
-  },
-})
-

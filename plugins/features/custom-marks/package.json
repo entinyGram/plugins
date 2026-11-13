@@ -1,0 +1,13 @@
+{
+  "name": "@entiny-plugins/custom-marks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "inu build",
+    "check": "inu check"
+  },
+  "devDependencies": {
+    "@inugram/cli": "workspace:*",
+    "@inugram/plugin-types": "workspace:*"
+  }
+}

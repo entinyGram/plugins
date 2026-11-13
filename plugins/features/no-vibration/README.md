@@ -1,13 +1,26 @@
-# No Vibration
+# no vibration (deprecated)
 
-Turns off the vibration the app can ask for, with a switch for each kind: haptic feedback, vibrator calls (calls and everything that asks the vibrator directly) and vibration on notifications and notification channels.
+**deprecated: no longer maintained, no more releases.** it keeps working as is.
 
-`entinygram.no-vibration` · version `1.0.0` · requires `entinygram.sdk >=0.1.0-alpha`
+| | |
+| :--- | :--- |
+| id | `entinygram.no-vibration` |
+| version | `1.2.0` |
+| status | deprecated |
+| grants | `unsafe.jvm`, `unsafe.xposed` |
 
-The switches are in **Settings → Behavior → Device**. All three are on by default.
+## settings
 
-Hooks `View.performHapticFeedback`, every `Vibrator.vibrate`, `Notification.Builder.setVibrate/setDefaults` and `NotificationChannel.enableVibration/setVibrationPattern`. Android keeps the vibration of a notification channel that already exists, so channels created before the plugin was installed may still vibrate until they are reset in the app's notification settings.
+page: `Settings → Plugins → No Vibration`. all three are on by default.
 
-## Credits
+| switch | blocks |
+| :--- | :--- |
+| haptics | `View.performHapticFeedback` |
+| vibration | every `Vibrator.vibrate` |
+| notifications | `Notification.Builder.setVibrate/setDefaults`, `NotificationChannel.enableVibration/setVibrationPattern` |
 
-Based on **No Vibration** by [@akresik](https://t.me/akresik). The list of hooks comes from that plugin; entinyGram added the switches, the SDK placement and the translations.
+android keeps the vibration of notification channels that already exist, reset them in the app's notification settings if they still vibrate.
+
+## credits
+
+based on **No Vibration** by [@akresik](https://t.me/akresik): the hook list is his, entinyGram added the switches and translations.

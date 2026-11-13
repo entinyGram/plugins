@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       plugin:
-        description: 'Plugin folder to build (e.g. 2gis, sdk). Empty builds every plugin.'
+        description: 'Plugin folder to build (e.g. 2gis). Empty builds every plugin.'
         required: false
         default: ''
         type: string

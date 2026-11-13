@@ -1,8 +1,7 @@
 import { defineConfig } from '@inugram/cli'
 import { SDK_ID, SDK_VERSION, withTags } from '@entiny/sdk'
 
-// What other plugins require. The app reads the SDK's directives from the plugins that depend on this one,
-// so without it they neither install nor run.
+// deprecated: kept for reference, no plugin requires it anymore
 export default defineConfig({
   plugins: {
     sdk: {
@@ -12,7 +11,7 @@ export default defineConfig({
         name: 'entinyGram SDK',
         author: 'entinyGram',
         version: SDK_VERSION,
-        description: 'Needed by plugins that use the entinyGram SDK',
+        description: 'Deprecated: no plugin needs it anymore, uninstall',
         grants: ['unsafe.jvm', 'unsafe.xposed'],
       }, 'dev'),
     },

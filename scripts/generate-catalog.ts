@@ -3,7 +3,7 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { MAX_TAGS, TAGS } from '../sdk/entiny/src/tags.ts'
+import { MAX_TAGS, TAGS } from './tags.ts'
 
 const root = join(import.meta.dir, '..')
 const out = join(root, 'release')

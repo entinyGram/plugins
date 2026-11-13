@@ -1,6 +1,8 @@
 {
   "name": "@entiny-plugins/sdk",
   "private": true,
+  "description": "DEPRECATED: entinygram.sdk is no longer needed by any plugin",
+  "deprecated": "entinyGram sdk is deprecated",
   "type": "module",
   "scripts": {
     "build": "inu build",

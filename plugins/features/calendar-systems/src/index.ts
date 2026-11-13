@@ -1,4 +1,3 @@
-import { embed, embedChanged } from '@entiny/sdk/embed'
 import { calendarTitle, t } from './i18n.js'
 
 // Dates in the app go through FastDateFormat. For a date pattern (one that holds a month or a year) the
@@ -158,26 +157,6 @@ function profilePattern(): string {
   }
 }
 
-// The SDK puts this picker directly in Behavior & Tools → Formatting.
-embed({
-  id: 'entinygram.calendar-systems',
-  name: 'Calendar systems',
-  placements: { inline: [{ slot: 'chats-messages.formatting', rows: ['calendar'] }] },
-  rows: () => [{
-    id: 'calendar',
-    type: 'select',
-    text: t('calendar_system'),
-    subtitle: current() === '' ? undefined : preview('d MMMM y', current()),
-    options: CALENDAR_IDS.map(calendarTitle),
-    selected: Math.max(0, CALENDAR_IDS.indexOf(current())),
-  }],
-  onEvent: (_row, value) => {
-    const id = CALENDAR_IDS[Number(value)] ?? ''
-    selected.call('set', id)
-    localStorage.setItem(STORAGE_KEY, id)
-    embedChanged()
-  },
-})
 
 inu.registerSettings(inu.ui.settingsPage({
   title: 'Calendar systems',
@@ -203,4 +182,3 @@ inu.registerSettings(inu.ui.settingsPage({
       : t('note_unsupported')),
   ],
 }))
-

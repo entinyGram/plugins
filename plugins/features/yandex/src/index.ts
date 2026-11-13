@@ -1,4 +1,3 @@
-import { embed, embedChanged } from '@entiny/sdk/embed'
 import { t, tf } from './i18n.js'
 
 const KEY = 'apiKey'
@@ -86,7 +85,7 @@ try {
   console.warn('hooking is not available', error)
 }
 
-// --- settings: the rows are placed by id, see inu.config.ts ------------------------------------------------------
+// --- settings ---------------------------------------------------------------------------------------------------
 
 const page = inu.ui.settingsPage({
   title: 'Yandex',
@@ -116,34 +115,3 @@ const page = inu.ui.settingsPage({
 })
 
 inu.registerSettings(page)
-
-// the key field sits under the translator's provider list while Yandex is the chosen provider
-const InuConfig: any = inu.jvm.cls('desu.inugram.InuConfig')
-function yandexChosen(): boolean {
-  return String(InuConfig.getStaticField('TRANSLATION_PROVIDER').call('getValue')).endsWith(':yandex')
-}
-
-embed({
-  id: 'entinygram.yandex',
-  name: 'Yandex',
-  placements: { inline: [{ slot: 'translate-provider.end', rows: ['key'] }], choice: ['chats-messages.map-preview-provider'] },
-  rows: slot => slot === 'translate-provider.end' && yandexChosen()
-    ? [{ id: 'key', type: 'button', text: t('key_title'), value: apiKey() === '' ? t('not_set') : '••••••••' }]
-    : [],
-  onEvent: (row) => {
-    if (row !== 'key') return
-    // a dialog needs the plugin thread, which the screen's hook is not on
-    setTimeout(async () => {
-      const value = await inu.ui.prompt({ title: t('key_title'), value: apiKey(), selectAll: true })
-      if (value === null) return
-      localStorage.setItem(KEY, value.trim())
-      embedChanged()
-    }, 0)
-  },
-  choices: () => [{ id: 'maps', title: t('maps_title'), subtitle: t('maps_choice_subtitle'), checked: useMaps.call('get') }],
-  onChoice: (_id, picked) => {
-    useMaps.call('set', picked)
-    localStorage.setItem(MAPS, picked ? '1' : '0')
-    embedChanged()
-  },
-})

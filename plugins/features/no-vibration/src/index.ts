@@ -1,5 +1,4 @@
 // Based on No Vibration by @akresik: the hooks below are his list, grouped by what they silence and put behind switches.
-import { embed, embedChanged } from '@entiny/sdk/embed'
 import { type StringKey, t } from './i18n.js'
 
 type Kind = 'haptics' | 'vibrator' | 'notifications'
@@ -8,7 +7,6 @@ const KINDS: Kind[] = ['haptics', 'vibrator', 'notifications']
 
 // everything is blocked until the user says otherwise, which is what the original plugin does
 const blocked = (kind: Kind): boolean => localStorage.getItem(`block.${kind}`) !== 'false'
-const isKind = (value: string): value is Kind => (KINDS as string[]).includes(value)
 
 let hooked = 0
 const failed: string[] = []
@@ -54,20 +52,13 @@ hook('notifications', 'android.app.NotificationChannel', 'setVibrationPattern', 
 console.log(`no-vibration: hooked ${hooked}, skipped ${failed.length}`)
 for (const f of failed) console.log(`  skipped ${f}`)
 
-embed({
-  id: 'entinygram.no-vibration',
-  name: 'No Vibration',
-  placements: { inline: [{ slot: 'system.device-section.end', rows: KINDS }] },
-  rows: () => KINDS.map(kind => ({
+inu.registerSettings(inu.ui.settingsPage({
+  title: 'No Vibration',
+  items: () => KINDS.map(kind => inu.ui.check({
     id: kind,
-    type: 'check' as const,
     text: t(kind),
     subtitle: t(`${kind}Info` as StringKey),
     checked: blocked(kind),
+    onChange: (checked) => { localStorage.setItem(`block.${kind}`, String(checked)) },
   })),
-  onEvent: (row, value) => {
-    if (!isKind(row)) return
-    localStorage.setItem(`block.${row}`, value)
-    embedChanged()
-  },
-})
+}))

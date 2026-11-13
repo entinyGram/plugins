@@ -5,7 +5,6 @@
     "": {
       "name": "entinygram",
       "dependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
       "devDependencies": {
@@ -27,7 +26,6 @@
     "plugins/features/2gis": {
       "name": "@entiny-plugins/2gis",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -35,7 +33,6 @@
     "plugins/features/calendar-systems": {
       "name": "@entiny-plugins/calendar-systems",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -43,7 +40,13 @@
     "plugins/features/call-avatar": {
       "name": "@entiny-plugins/call-avatar",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
+        "@inugram/cli": "workspace:*",
+        "@inugram/plugin-types": "workspace:*",
+      },
+    },
+    "plugins/features/custom-marks": {
+      "name": "@entiny-plugins/custom-marks",
+      "devDependencies": {
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -51,7 +54,6 @@
     "plugins/features/doc-viewer": {
       "name": "@entiny-plugins/doc-viewer",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -59,7 +61,6 @@
     "plugins/features/no-vibration": {
       "name": "@entiny-plugins/no-vibration",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -74,7 +75,6 @@
     "plugins/features/text-animation": {
       "name": "@entiny-plugins/text-animation",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -82,7 +82,6 @@
     "plugins/features/voice-changer": {
       "name": "@entiny-plugins/voice-changer",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -90,7 +89,6 @@
     "plugins/features/yandex": {
       "name": "@entiny-plugins/yandex",
       "devDependencies": {
-        "@entiny/sdk": "workspace:*",
         "@inugram/cli": "workspace:*",
         "@inugram/plugin-types": "workspace:*",
       },
@@ -167,6 +165,8 @@
     "@entiny-plugins/calendar-systems": ["@entiny-plugins/calendar-systems@workspace:plugins/features/calendar-systems"],
 
     "@entiny-plugins/call-avatar": ["@entiny-plugins/call-avatar@workspace:plugins/features/call-avatar"],
+
+    "@entiny-plugins/custom-marks": ["@entiny-plugins/custom-marks@workspace:plugins/features/custom-marks"],
 
     "@entiny-plugins/doc-viewer": ["@entiny-plugins/doc-viewer@workspace:plugins/features/doc-viewer"],
 

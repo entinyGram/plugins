@@ -1,8 +1,9 @@
 {
   "name": "@entiny/sdk",
+  "deprecated": "entinyGram sdk is deprecated: too much responsibility, plugins register their own settings pages",
   "type": "module",
   "version": "0.1.2-beta",
-  "description": "entinyGram helpers for Inugram-engine plugins",
+  "description": "DEPRECATED: no longer used by entinyGram plugins, see README",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",

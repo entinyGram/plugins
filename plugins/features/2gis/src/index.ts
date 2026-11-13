@@ -1,5 +1,4 @@
-import { embed, embedChanged } from '@entiny/sdk/embed'
-import { clearTileSource, setTileSource } from '@entiny/sdk/maps'
+import { clearTileSource, setTileSource } from './tiles.js'
 import { t, tf } from './i18n.js'
 
 const KEY = 'apiKey'
@@ -89,7 +88,7 @@ try {
   console.warn('hooking is not available', error)
 }
 
-// --- settings: the rows are placed by id, see inu.config.ts ------------------------------------------------------
+// --- settings ---------------------------------------------------------------------------------------------------
 
 const page = inu.ui.settingsPage({
   title: '2GIS',
@@ -134,26 +133,3 @@ const page = inu.ui.settingsPage({
 })
 
 inu.registerSettings(page)
-
-// the options in the app's map pickers; the SDK plugin puts them there
-embed({
-  id: 'entinygram.2gis',
-  name: '2GIS',
-  placements: { choice: ['chats-messages.map-provider', 'chats-messages.map-preview-provider'] },
-  rows: () => [],
-  onEvent: () => {},
-  choices: slot => slot === 'chats-messages.map-provider'
-    ? [{ id: 'tiles', title: t('tiles_title'), subtitle: t('tiles_desc'), checked: tilesOn }]
-    : [{ id: 'maps', title: t('maps_title'), subtitle: t('maps_choice_desc'), checked: useMaps.call('get') }],
-  onChoice: (id, picked) => {
-    if (id === 'tiles') {
-      tilesOn = picked
-      localStorage.setItem(TILES, picked ? '1' : '0')
-      applyTiles()
-    } else {
-      useMaps.call('set', picked)
-      localStorage.setItem(MAPS, picked ? '1' : '0')
-    }
-    embedChanged()
-  },
-})

@@ -1,4 +1,3 @@
-import { embed, embedChanged } from '@entiny/sdk/embed'
 import { type StringKey, t } from './i18n.js'
 
 const PRESETS: Array<{ id: string, mode: number, step: number }> = [
@@ -148,31 +147,6 @@ apply()
 const titles = (): string[] => PRESETS.map(p => t(p.id as StringKey))
 const scopeTitles = (): string[] => SCOPES.map(id => t(id as StringKey))
 
-embed({
-  id: 'entinygram.voice-changer',
-  name: 'Voice Changer',
-  placements: { inline: [{ slot: 'profile-accounts.calls-section.end', rows: ['preset', 'scope'] }] },
-  rows: () => [{
-    id: 'preset',
-    type: 'select',
-    text: t('title'),
-    subtitle: t('info'),
-    options: titles(),
-    selected: chosen(),
-  }, {
-    id: 'scope',
-    type: 'select',
-    text: t('where'),
-    options: scopeTitles(),
-    selected: scopeIndex(),
-  }],
-  onEvent: (row, value) => {
-    if (row === 'scope') localStorage.setItem('scope', SCOPES[Number(value)] ?? 'everywhere')
-    else localStorage.setItem('preset', PRESETS[Number(value)]?.id ?? 'off')
-    apply()
-    embedChanged()
-  },
-})
 
 inu.registerSettings(inu.ui.settingsPage({
   title: t('title'),
